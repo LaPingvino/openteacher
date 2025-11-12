@@ -3,9 +3,8 @@ package modules
 import (
 	"context"
 	"fmt"
-	"time"
-
 	"github.com/LaPingvino/openteacher/internal/core"
+	"time"
 )
 
 // ExecuteModule controls the main application lifecycle and execution flow.

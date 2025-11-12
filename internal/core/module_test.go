@@ -2,10 +2,9 @@ package core
 
 import (
 	"context"
-	"testing"
-
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"testing"
 )
 
 // TestModule is a simple test implementation of the Module interface

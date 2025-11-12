@@ -157,7 +157,8 @@ func (e *EventModule) Subscribe(eventName string, handler core.EventHandler) err
 	e.mu.RUnlock()
 
 	if !exists {
-		return fmt.Errorf("event %s does not exist", eventName)
+		// Create the event if it doesn't exist
+		event = e.CreateEvent(eventName)
 	}
 
 	return event.Subscribe(handler)
@@ -177,10 +178,28 @@ func (e *EventModule) Unsubscribe(eventName string, handler core.EventHandler) e
 	e.mu.RUnlock()
 
 	if !exists {
-		return fmt.Errorf("event %s does not exist", eventName)
+		return fmt.Errorf("event %q not found", eventName)
 	}
 
 	return event.Unsubscribe(handler)
+}
+
+// Trigger sends an event to all registered handlers
+func (e *EventModule) Trigger(eventName string, data interface{}) error {
+	if eventName == "" {
+		return fmt.Errorf("event name cannot be empty")
+	}
+
+	e.mu.RLock()
+	event, exists := e.events[eventName]
+	e.mu.RUnlock()
+
+	if !exists {
+		// If event doesn't exist, that's not an error - just no handlers to call
+		return nil
+	}
+
+	return event.Trigger(data)
 }
 
 // GetEvent returns an existing event by name

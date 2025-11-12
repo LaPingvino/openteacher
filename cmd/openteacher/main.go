@@ -10,6 +10,11 @@ import (
 
 	"github.com/LaPingvino/openteacher/internal/core"
 	"github.com/LaPingvino/openteacher/internal/modules"
+	"github.com/LaPingvino/openteacher/internal/modules/data/profiledescriptions"
+	startwidget "github.com/LaPingvino/openteacher/internal/modules/interfaces/qt/startWidget"
+	"github.com/LaPingvino/openteacher/internal/modules/profilerunners/backgroundimage"
+	"github.com/LaPingvino/openteacher/internal/modules/profilerunners/businesscard"
+	"github.com/LaPingvino/openteacher/internal/modules/interfaces/qt/qtApp"
 )
 
 const (
@@ -26,9 +31,9 @@ func main() {
 	// Create module manager
 	manager := core.NewManager()
 
-	// Register core modules
-	if err := registerCoreModules(manager); err != nil {
-		log.Fatalf("Failed to register core modules: %v", err)
+	// Register all modules
+	if err := registerAllModules(manager); err != nil {
+		log.Fatalf("Failed to register modules: %v", err)
 	}
 
 	fmt.Printf("Registered %d modules of %d types\n", manager.ModuleCount(), manager.TypeCount())
@@ -70,7 +75,7 @@ func main() {
 	fmt.Println("OpenTeacher shutdown complete")
 }
 
-func registerCoreModules(manager *core.Manager) error {
+func registerAllModules(manager *core.Manager) error {
 	// Create and register essential modules
 	executeModule := modules.NewExecuteModule()
 	if err := manager.Register(executeModule); err != nil {
@@ -85,6 +90,49 @@ func registerCoreModules(manager *core.Manager) error {
 	settingsModule := modules.NewSettingsModule()
 	if err := manager.Register(settingsModule); err != nil {
 		return fmt.Errorf("failed to register settings module: %w", err)
+	}
+
+	metadataModule := modules.NewMetadataModule()
+	if err := manager.Register(metadataModule); err != nil {
+		return fmt.Errorf("failed to register metadata module: %w", err)
+	}
+
+	buttonRegisterModule := modules.NewButtonRegisterModule()
+	if err := manager.Register(buttonRegisterModule); err != nil {
+		return fmt.Errorf("failed to register button register module: %w", err)
+	}
+
+	startWidgetModule := startwidget.InitStartwidgetModule()
+	if err := manager.Register(startWidgetModule); err != nil {
+		return fmt.Errorf("failed to register start widget module: %w", err)
+	}
+
+	uiModule := modules.NewUIModule()
+	if err := manager.Register(uiModule); err != nil {
+		return fmt.Errorf("failed to register ui module: %w", err)
+	}
+
+	// Register business card related modules
+	businessCardModule := businesscard.Init()
+	if err := manager.Register(businessCardModule); err != nil {
+		return fmt.Errorf("failed to register business card module: %w", err)
+	}
+
+	backgroundImageModule := backgroundimage.Init()
+	if err := manager.Register(backgroundImageModule); err != nil {
+		return fmt.Errorf("failed to register background image module: %w", err)
+	}
+
+	profileDescModule := profiledescriptions.Init()
+	if err := manager.Register(profileDescModule); err != nil {
+		return fmt.Errorf("failed to register profile description module: %w", err)
+	}
+
+
+	// Register qtapp module
+	qtappModule := qtapp.NewQtAppModule()
+	if err := manager.Register(qtappModule); err != nil {
+		return fmt.Errorf("failed to register qtapp module: %w", err)
 	}
 
 	return nil

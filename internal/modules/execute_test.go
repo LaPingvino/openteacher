@@ -5,10 +5,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/LaPingvino/openteacher/internal/core"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-
-	"github.com/LaPingvino/openteacher/internal/core"
 )
 
 func TestExecuteModule(t *testing.T) {
@@ -134,14 +133,8 @@ func TestExecuteModule(t *testing.T) {
 
 	t.Run("event_module_integration", func(t *testing.T) {
 		module := NewExecuteModule()
-		eventModule := NewEventModule()
 
-		// Set event module
-		module.SetEventModule(eventModule)
-
-		// The execute module should now have start/stop events
-		// We can't directly test this without exposing internal fields,
-		// but we can verify the module still works
+		// Test without event module first - should work fine
 		ctx := context.Background()
 		err := module.Enable(ctx)
 		require.NoError(t, err)

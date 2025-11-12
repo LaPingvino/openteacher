@@ -58,6 +58,11 @@ func (m *Manager) Register(module Module) error {
 
 	m.modulesByType[moduleType] = append(m.modulesByType[moduleType], module)
 
+	// Set the manager reference if the module supports it
+	if managerSetter, ok := module.(interface{ SetManager(*Manager) }); ok {
+		managerSetter.SetManager(m)
+	}
+
 	return nil
 }
 
