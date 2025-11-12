@@ -1,10 +1,17 @@
-// Package mnemosyne.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/loaders/mnemosyne/mnemosyne.py
+// Package mnemosyne provides functionality ported from Python module
+//
+// A pretty basic mnemosyne importer. For now it imports everything
+// like it is a words file, which might not always be the best way of
+// dealing with mnemosyne files. Also, it does nothing with the
+// results in the database. But, in the end, it might work fine for
+// people who want to switch. :)
 //
 // This is an automated port - implementation may be incomplete.
 package mnemosyne
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +24,7 @@ type MnemosyneLoaderModule struct {
 
 // NewMnemosyneLoaderModule creates a new MnemosyneLoaderModule instance
 func NewMnemosyneLoaderModule() *MnemosyneLoaderModule {
-	base := core.NewBaseModule("load", "load")
+	base := core.NewBaseModule("logic", "mnemosyne-module")
 
 	return &MnemosyneLoaderModule{
 		BaseModule: base,
@@ -25,69 +32,58 @@ func NewMnemosyneLoaderModule() *MnemosyneLoaderModule {
 }
 
 // parse is the Go port of the Python _parse method
-func (mne *MnemosyneLoaderModule) parse() {
-	// TODO: Port Python private method logic
+func (mod *MnemosyneLoaderModule) parse() {
+	// TODO: Port Python method logic
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (mne *MnemosyneLoaderModule) retranslate() {
-	// TODO: Port Python private method logic
+func (mod *MnemosyneLoaderModule) retranslate() {
+	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (mne *MnemosyneLoaderModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (mne *MnemosyneLoaderModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf method
-func (mne *MnemosyneLoaderModule) GetFileTypeOf() {
+// Getfiletypeof is the Go port of the Python getFileTypeOf method
+func (mod *MnemosyneLoaderModule) Getfiletypeof() {
 	// TODO: Port Python method logic
 }
 
 // Load is the Go port of the Python load method
-func (mne *MnemosyneLoaderModule) Load() {
+func (mod *MnemosyneLoaderModule) Load() {
 	// TODO: Port Python method logic
 }
 
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *MnemosyneLoaderModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("MnemosyneLoaderModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *MnemosyneLoaderModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("MnemosyneLoaderModule disabled")
+	return nil
+}
+
 // SetManager sets the module manager
-func (mne *MnemosyneLoaderModule) SetManager(manager *core.Manager) {
-	mne.manager = manager
+func (mod *MnemosyneLoaderModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _parse is the Go port of the Python _parse function
-func _parse() {
-	// TODO: Port Python function logic
-}
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf function
-
-// Load is the Go port of the Python load function
-
-// Init creates and returns a new module instance
+// InitMnemosyneLoaderModule creates and returns a new MnemosyneLoaderModule instance
 // This is the Go equivalent of the Python init function
+func InitMnemosyneLoaderModule() core.Module {
+	return NewMnemosyneLoaderModule()
+}

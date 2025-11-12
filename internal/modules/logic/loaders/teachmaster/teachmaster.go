@@ -1,10 +1,11 @@
-// Package teachmaster.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/loaders/teachmaster/teachmaster.py
+// Package teachmaster provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package teachmaster
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +18,7 @@ type TeachmasterLoaderModule struct {
 
 // NewTeachmasterLoaderModule creates a new TeachmasterLoaderModule instance
 func NewTeachmasterLoaderModule() *TeachmasterLoaderModule {
-	base := core.NewBaseModule("load", "load")
+	base := core.NewBaseModule("logic", "teachmaster-module")
 
 	return &TeachmasterLoaderModule{
 		BaseModule: base,
@@ -25,79 +26,63 @@ func NewTeachmasterLoaderModule() *TeachmasterLoaderModule {
 }
 
 // parse is the Go port of the Python _parse method
-func (tea *TeachmasterLoaderModule) parse() {
-	// TODO: Port Python private method logic
+func (mod *TeachmasterLoaderModule) parse() {
+	// TODO: Port Python method logic
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (tea *TeachmasterLoaderModule) retranslate() {
-	// TODO: Port Python private method logic
+func (mod *TeachmasterLoaderModule) retranslate() {
+	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (tea *TeachmasterLoaderModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (tea *TeachmasterLoaderModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf method
-func (tea *TeachmasterLoaderModule) GetFileTypeOf() {
+// Getfiletypeof is the Go port of the Python getFileTypeOf method
+func (mod *TeachmasterLoaderModule) Getfiletypeof() {
 	// TODO: Port Python method logic
 }
 
 // Load is the Go port of the Python load method
-func (tea *TeachmasterLoaderModule) Load() {
+func (mod *TeachmasterLoaderModule) Load() {
 	// TODO: Port Python method logic
 }
 
-// loadWordFromItemTree is the Go port of the Python _loadWordFromItemTree method
-func (tea *TeachmasterLoaderModule) loadWordFromItemTree() {
-	// TODO: Port Python private method logic
+// loadwordfromitemtree is the Go port of the Python _loadWordFromItemTree method
+func (mod *TeachmasterLoaderModule) loadwordfromitemtree() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *TeachmasterLoaderModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("TeachmasterLoaderModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *TeachmasterLoaderModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("TeachmasterLoaderModule disabled")
+	return nil
 }
 
 // SetManager sets the module manager
-func (tea *TeachmasterLoaderModule) SetManager(manager *core.Manager) {
-	tea.manager = manager
+func (mod *TeachmasterLoaderModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _parse is the Go port of the Python _parse function
-func _parse() {
-	// TODO: Port Python function logic
-}
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf function
-
-// Load is the Go port of the Python load function
-
-// _loadWordFromItemTree is the Go port of the Python _loadWordFromItemTree function
-func _loadWordFromItemTree() {
-	// TODO: Port Python function logic
-}
-
-// Init creates and returns a new module instance
+// InitTeachmasterLoaderModule creates and returns a new TeachmasterLoaderModule instance
 // This is the Go equivalent of the Python init function
+func InitTeachmasterLoaderModule() core.Module {
+	return NewTeachmasterLoaderModule()
+}

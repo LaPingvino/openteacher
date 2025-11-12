@@ -1,11 +1,13 @@
-// Package theme.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/interfaces/qt/theme/theme.py
+// Package theme provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package theme
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
+	_ "github.com/therecipe/qt/widgets"
 )
 
 // ThemeModule is a Go port of the Python ThemeModule class
@@ -17,50 +19,51 @@ type ThemeModule struct {
 
 // NewThemeModule creates a new ThemeModule instance
 func NewThemeModule() *ThemeModule {
-	base := core.NewBaseModule("theme", "theme")
+	base := core.NewBaseModule("ui", "theme-module")
 
 	return &ThemeModule{
 		BaseModule: base,
 	}
 }
 
-// Enable is the Go port of the Python enable method
-func (the *ThemeModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// InstallTheme is the Go port of the Python installTheme method
-func (the *ThemeModule) InstallTheme() {
+// Installtheme is the Go port of the Python installTheme method
+func (mod *ThemeModule) Installtheme() {
 	// TODO: Port Python method logic
 }
 
-// Disable is the Go port of the Python disable method
-func (the *ThemeModule) Disable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *ThemeModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("ThemeModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *ThemeModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("ThemeModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (the *ThemeModule) SetManager(manager *core.Manager) {
-	the.manager = manager
+func (mod *ThemeModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// InstallTheme is the Go port of the Python installTheme function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitThemeModule creates and returns a new ThemeModule instance
 // This is the Go equivalent of the Python init function
+func InitThemeModule() core.Module {
+	return NewThemeModule()
+}

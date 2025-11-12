@@ -1,10 +1,17 @@
-// Package apkg.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/loaders/apkg/apkg.py
+// Package apkg provides functionality ported from Python module
+//
+// A pretty basic .apkg importer. For now it imports everything like
+// it is a words file, which might not always be the best way of
+// dealing with anki files. Also, it does nothing with the results
+// in the database. But, in the end, it might work fine for people
+// who want to switch. :)
 //
 // This is an automated port - implementation may be incomplete.
 package apkg
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,87 +24,71 @@ type AnkiApkgLoaderModule struct {
 
 // NewAnkiApkgLoaderModule creates a new AnkiApkgLoaderModule instance
 func NewAnkiApkgLoaderModule() *AnkiApkgLoaderModule {
-	base := core.NewBaseModule("load", "load")
+	base := core.NewBaseModule("logic", "apkg-module")
 
 	return &AnkiApkgLoaderModule{
 		BaseModule: base,
 	}
 }
 
-// loadAnki2 is the Go port of the Python _loadAnki2 method
-func (ank *AnkiApkgLoaderModule) loadAnki2() {
-	// TODO: Port Python private method logic
+// loadanki2 is the Go port of the Python _loadAnki2 method
+func (mod *AnkiApkgLoaderModule) loadanki2() {
+	// TODO: Port Python method logic
 }
 
-// stripTags is the Go port of the Python _stripTags method
-func (ank *AnkiApkgLoaderModule) stripTags() {
-	// TODO: Port Python private method logic
+// striptags is the Go port of the Python _stripTags method
+func (mod *AnkiApkgLoaderModule) striptags() {
+	// TODO: Port Python method logic
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (ank *AnkiApkgLoaderModule) retranslate() {
-	// TODO: Port Python private method logic
+func (mod *AnkiApkgLoaderModule) retranslate() {
+	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (ank *AnkiApkgLoaderModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (ank *AnkiApkgLoaderModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf method
-func (ank *AnkiApkgLoaderModule) GetFileTypeOf() {
+// Getfiletypeof is the Go port of the Python getFileTypeOf method
+func (mod *AnkiApkgLoaderModule) Getfiletypeof() {
 	// TODO: Port Python method logic
 }
 
 // Load is the Go port of the Python load method
-func (ank *AnkiApkgLoaderModule) Load() {
+func (mod *AnkiApkgLoaderModule) Load() {
 	// TODO: Port Python method logic
 }
 
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *AnkiApkgLoaderModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("AnkiApkgLoaderModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *AnkiApkgLoaderModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("AnkiApkgLoaderModule disabled")
+	return nil
+}
+
 // SetManager sets the module manager
-func (ank *AnkiApkgLoaderModule) SetManager(manager *core.Manager) {
-	ank.manager = manager
+func (mod *AnkiApkgLoaderModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _loadAnki2 is the Go port of the Python _loadAnki2 function
-func _loadAnki2() {
-	// TODO: Port Python function logic
-}
-
-// _stripTags is the Go port of the Python _stripTags function
-func _stripTags() {
-	// TODO: Port Python function logic
-}
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf function
-
-// Load is the Go port of the Python load function
-
-// Init creates and returns a new module instance
+// InitAnkiApkgLoaderModule creates and returns a new AnkiApkgLoaderModule instance
 // This is the Go equivalent of the Python init function
+func InitAnkiApkgLoaderModule() core.Module {
+	return NewAnkiApkgLoaderModule()
+}

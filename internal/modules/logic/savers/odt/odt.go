@@ -1,10 +1,11 @@
-// Package odt.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/savers/odt/odt.py
+// Package odt provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package odt
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,60 +18,56 @@ type OdtSaverModule struct {
 
 // NewOdtSaverModule creates a new OdtSaverModule instance
 func NewOdtSaverModule() *OdtSaverModule {
-	base := core.NewBaseModule("save", "save")
+	base := core.NewBaseModule("logic", "odt-module")
 
 	return &OdtSaverModule{
 		BaseModule: base,
 	}
 }
 
-// Enable is the Go port of the Python enable method
-func (odt *OdtSaverModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
 // retranslate is the Go port of the Python _retranslate method
-func (odt *OdtSaverModule) retranslate() {
-	// TODO: Port Python private method logic
-}
-
-// Disable is the Go port of the Python disable method
-func (odt *OdtSaverModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// Save is the Go port of the Python save method
-func (odt *OdtSaverModule) Save() {
+func (mod *OdtSaverModule) retranslate() {
 	// TODO: Port Python method logic
 }
 
+// Save is the Go port of the Python save method
+func (mod *OdtSaverModule) Save() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *OdtSaverModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("OdtSaverModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *OdtSaverModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("OdtSaverModule disabled")
+	return nil
+}
+
 // SetManager sets the module manager
-func (odt *OdtSaverModule) SetManager(manager *core.Manager) {
-	odt.manager = manager
+func (mod *OdtSaverModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// Save is the Go port of the Python save function
-
-// Init creates and returns a new module instance
+// InitOdtSaverModule creates and returns a new OdtSaverModule instance
 // This is the Go equivalent of the Python init function
+func InitOdtSaverModule() core.Module {
+	return NewOdtSaverModule()
+}

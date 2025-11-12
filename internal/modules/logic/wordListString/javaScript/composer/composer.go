@@ -1,10 +1,11 @@
-// Package composer.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/wordListString/javaScript/composer/composer.py
+// Package composer provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package composer
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,50 +18,51 @@ type JSWordListStringComposerModule struct {
 
 // NewJSWordListStringComposerModule creates a new JSWordListStringComposerModule instance
 func NewJSWordListStringComposerModule() *JSWordListStringComposerModule {
-	base := core.NewBaseModule("wordListStringComposer", "wordListStringComposer")
+	base := core.NewBaseModule("logic", "composer-module")
 
 	return &JSWordListStringComposerModule{
 		BaseModule: base,
 	}
 }
 
-// ComposeList is the Go port of the Python composeList method
-func (jsw *JSWordListStringComposerModule) ComposeList() {
+// Composelist is the Go port of the Python composeList method
+func (mod *JSWordListStringComposerModule) Composelist() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (jsw *JSWordListStringComposerModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *JSWordListStringComposerModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("JSWordListStringComposerModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (jsw *JSWordListStringComposerModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *JSWordListStringComposerModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("JSWordListStringComposerModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (jsw *JSWordListStringComposerModule) SetManager(manager *core.Manager) {
-	jsw.manager = manager
+func (mod *JSWordListStringComposerModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// ComposeList is the Go port of the Python composeList function
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitJSWordListStringComposerModule creates and returns a new JSWordListStringComposerModule instance
 // This is the Go equivalent of the Python init function
+func InitJSWordListStringComposerModule() core.Module {
+	return NewJSWordListStringComposerModule()
+}

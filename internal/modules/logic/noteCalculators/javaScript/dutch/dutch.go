@@ -1,10 +1,11 @@
-// Package dutch.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/noteCalculators/javaScript/dutch/dutch.py
+// Package dutch provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package dutch
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,53 +18,51 @@ type DutchNoteCalculatorModule struct {
 
 // NewDutchNoteCalculatorModule creates a new DutchNoteCalculatorModule instance
 func NewDutchNoteCalculatorModule() *DutchNoteCalculatorModule {
-	base := core.NewBaseModule("noteCalculator", "noteCalculator")
+	base := core.NewBaseModule("logic", "dutch-module")
 
 	return &DutchNoteCalculatorModule{
 		BaseModule: base,
 	}
 }
 
-// Enable is the Go port of the Python enable method
-func (dut *DutchNoteCalculatorModule) Enable(ctx context.Context) error {
+// retranslate is the Go port of the Python _retranslate method
+func (mod *DutchNoteCalculatorModule) retranslate() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *DutchNoteCalculatorModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("DutchNoteCalculatorModule enabled")
 	return nil
 }
 
-// retranslate is the Go port of the Python _retranslate method
-func (dut *DutchNoteCalculatorModule) retranslate() {
-	// TODO: Port Python private method logic
-}
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *DutchNoteCalculatorModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
 
-// Disable is the Go port of the Python disable method
-func (dut *DutchNoteCalculatorModule) Disable(ctx context.Context) error {
 	// TODO: Port Python disable logic
+
+	fmt.Println("DutchNoteCalculatorModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (dut *DutchNoteCalculatorModule) SetManager(manager *core.Manager) {
-	dut.manager = manager
+func (mod *DutchNoteCalculatorModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitDutchNoteCalculatorModule creates and returns a new DutchNoteCalculatorModule instance
 // This is the Go equivalent of the Python init function
+func InitDutchNoteCalculatorModule() core.Module {
+	return NewDutchNoteCalculatorModule()
+}

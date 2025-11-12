@@ -1,11 +1,13 @@
-// Package teacher.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/interfaces/qt/testMode/teacher/teacher.py
+// Package teacher provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package teacher
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/therecipe/qt/widgets"
 )
 
 // TestModeTeacherModule is a Go port of the Python TestModeTeacherModule class
@@ -17,107 +19,56 @@ type TestModeTeacherModule struct {
 
 // NewTestModeTeacherModule creates a new TestModeTeacherModule instance
 func NewTestModeTeacherModule() *TestModeTeacherModule {
-	base := core.NewBaseModule("wordsTestTeacher", "wordsTestTeacher")
+	base := core.NewBaseModule("ui", "teacher-module")
 
 	return &TestModeTeacherModule{
 		BaseModule: base,
 	}
 }
 
-// CreateWordsTeacher is the Go port of the Python createWordsTeacher method
-func (tes *TestModeTeacherModule) CreateWordsTeacher() {
+// Createwordsteacher is the Go port of the Python createWordsTeacher method
+func (mod *TestModeTeacherModule) Createwordsteacher() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (tes *TestModeTeacherModule) Enable(ctx context.Context) error {
+// retranslate is the Go port of the Python _retranslate method
+func (mod *TestModeTeacherModule) retranslate() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *TestModeTeacherModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("TestModeTeacherModule enabled")
 	return nil
 }
 
-// retranslate is the Go port of the Python _retranslate method
-func (tes *TestModeTeacherModule) retranslate() {
-	// TODO: Port Python private method logic
-}
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *TestModeTeacherModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
 
-// Disable is the Go port of the Python disable method
-func (tes *TestModeTeacherModule) Disable(ctx context.Context) error {
 	// TODO: Port Python disable logic
+
+	fmt.Println("TestModeTeacherModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (tes *TestModeTeacherModule) SetManager(manager *core.Manager) {
-	tes.manager = manager
+func (mod *TestModeTeacherModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// TeachWidget is a Go port of the Python TeachWidget class
-type TeachWidget struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewTeachWidget creates a new TeachWidget instance
-func NewTeachWidget() *TeachWidget {
-	return &TeachWidget{
-		// TODO: Initialize fields
-	}
-}
-
-// Retranslate is the Go port of the Python retranslate method
-func (tea *TeachWidget) Retranslate() {
-	// TODO: Port Python method logic
-}
-
-// UpdateList is the Go port of the Python updateList method
-func (tea *TeachWidget) UpdateList() {
-	// TODO: Port Python method logic
-}
-
-// ShowEvent is the Go port of the Python showEvent method
-func (tea *TeachWidget) ShowEvent() {
-	// TODO: Port Python method logic
-}
-
-// GetAnsweredList is the Go port of the Python getAnsweredList method
-func (tea *TeachWidget) GetAnsweredList() {
-	// TODO: Port Python method logic
-}
-
-// InstallQtClasses is the Go port of the Python installQtClasses function
-func InstallQtClasses() {
-	// TODO: Port Python function logic
-}
-
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// CreateWordsTeacher is the Go port of the Python createWordsTeacher function
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// __init__ is the Go port of the Python __init__ function
-
-// Retranslate is the Go port of the Python retranslate function
-
-// UpdateList is the Go port of the Python updateList function
-
-// ShowEvent is the Go port of the Python showEvent function
-
-// GetAnsweredList is the Go port of the Python getAnsweredList function
-
-// Init creates and returns a new module instance
+// InitTestModeTeacherModule creates and returns a new TestModeTeacherModule instance
 // This is the Go equivalent of the Python init function
+func InitTestModeTeacherModule() core.Module {
+	return NewTestModeTeacherModule()
+}

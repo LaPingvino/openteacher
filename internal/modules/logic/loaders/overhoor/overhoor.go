@@ -1,10 +1,11 @@
-// Package overhoor.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/loaders/overhoor/overhoor.py
+// Package overhoor provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package overhoor
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,87 +18,71 @@ type OverhoorLoaderModule struct {
 
 // NewOverhoorLoaderModule creates a new OverhoorLoaderModule instance
 func NewOverhoorLoaderModule() *OverhoorLoaderModule {
-	base := core.NewBaseModule("load", "load")
+	base := core.NewBaseModule("logic", "overhoor-module")
 
 	return &OverhoorLoaderModule{
 		BaseModule: base,
 	}
 }
 
-// parseList is the Go port of the Python _parseList method
-func (ove *OverhoorLoaderModule) parseList() {
-	// TODO: Port Python private method logic
+// parselist is the Go port of the Python _parseList method
+func (mod *OverhoorLoaderModule) parselist() {
+	// TODO: Port Python method logic
 }
 
-// convertMimicryTypeface is the Go port of the Python _convertMimicryTypeface method
-func (ove *OverhoorLoaderModule) convertMimicryTypeface() {
-	// TODO: Port Python private method logic
+// convertmimicrytypeface is the Go port of the Python _convertMimicryTypeface method
+func (mod *OverhoorLoaderModule) convertmimicrytypeface() {
+	// TODO: Port Python method logic
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (ove *OverhoorLoaderModule) retranslate() {
-	// TODO: Port Python private method logic
+func (mod *OverhoorLoaderModule) retranslate() {
+	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (ove *OverhoorLoaderModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (ove *OverhoorLoaderModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf method
-func (ove *OverhoorLoaderModule) GetFileTypeOf() {
+// Getfiletypeof is the Go port of the Python getFileTypeOf method
+func (mod *OverhoorLoaderModule) Getfiletypeof() {
 	// TODO: Port Python method logic
 }
 
 // Load is the Go port of the Python load method
-func (ove *OverhoorLoaderModule) Load() {
+func (mod *OverhoorLoaderModule) Load() {
 	// TODO: Port Python method logic
 }
 
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *OverhoorLoaderModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("OverhoorLoaderModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *OverhoorLoaderModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("OverhoorLoaderModule disabled")
+	return nil
+}
+
 // SetManager sets the module manager
-func (ove *OverhoorLoaderModule) SetManager(manager *core.Manager) {
-	ove.manager = manager
+func (mod *OverhoorLoaderModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _parseList is the Go port of the Python _parseList function
-func _parseList() {
-	// TODO: Port Python function logic
-}
-
-// _convertMimicryTypeface is the Go port of the Python _convertMimicryTypeface function
-func _convertMimicryTypeface() {
-	// TODO: Port Python function logic
-}
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf function
-
-// Load is the Go port of the Python load function
-
-// Init creates and returns a new module instance
+// InitOverhoorLoaderModule creates and returns a new OverhoorLoaderModule instance
 // This is the Go equivalent of the Python init function
+func InitOverhoorLoaderModule() core.Module {
+	return NewOverhoorLoaderModule()
+}

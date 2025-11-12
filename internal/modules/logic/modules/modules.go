@@ -1,9 +1,19 @@
-// Package modules.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/modules/modules.py
+// Package modules provides functionality ported from Python module
+//
+// This module has two purposes:
+// 1) selecting modules via its default() and sort() methods.
+// 2) updating OT to self.profile (which should be set by a module
+//    other than this one, normally the execute module, before this
+//    module should be used by any module.)
+//
+// Lowest (positive) priority: 1000
 //
 // This is an automated port - implementation may be incomplete.
 package modules
+
 import (
+	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -16,21 +26,21 @@ type ModulesModule struct {
 
 // NewModulesModule creates a new ModulesModule instance
 func NewModulesModule() *ModulesModule {
-	base := core.NewBaseModule("modules", "modules")
+	base := core.NewBaseModule("logic", "modules-module")
 
 	return &ModulesModule{
 		BaseModule: base,
 	}
 }
 
-// getPriority is the Go port of the Python _getPriority method
-func (mod *ModulesModule) getPriority() {
-	// TODO: Port Python private method logic
+// getpriority is the Go port of the Python _getPriority method
+func (mod *ModulesModule) getpriority() {
+	// TODO: Port Python method logic
 }
 
-// getFallbackPriority is the Go port of the Python _getFallbackPriority method
-func (mod *ModulesModule) getFallbackPriority() {
-	// TODO: Port Python private method logic
+// getfallbackpriority is the Go port of the Python _getFallbackPriority method
+func (mod *ModulesModule) getfallbackpriority() {
+	// TODO: Port Python method logic
 }
 
 // Sort is the Go port of the Python sort method
@@ -43,39 +53,65 @@ func (mod *ModulesModule) Default() {
 	// TODO: Port Python method logic
 }
 
-// hasPositivePriority is the Go port of the Python _hasPositivePriority method
-func (mod *ModulesModule) hasPositivePriority() {
-	// TODO: Port Python private method logic
+// haspositivepriority is the Go port of the Python _hasPositivePriority method
+func (mod *ModulesModule) haspositivepriority() {
+	// TODO: Port Python method logic
 }
 
-// UpdateToProfile is the Go port of the Python updateToProfile method
-func (mod *ModulesModule) UpdateToProfile() {
+// Updatetoprofile is the Go port of the Python updateToProfile method
+func (mod *ModulesModule) Updatetoprofile() {
 	// TODO: Port Python method logic
 }
 
 // visit is the Go port of the Python _visit method
 func (mod *ModulesModule) visit() {
-	// TODO: Port Python private method logic
+	// TODO: Port Python method logic
 }
 
-// depFor is the Go port of the Python _depFor method
-func (mod *ModulesModule) depFor() {
-	// TODO: Port Python private method logic
+// depfor is the Go port of the Python _depFor method
+func (mod *ModulesModule) depfor() {
+	// TODO: Port Python method logic
 }
 
-// enableModules is the Go port of the Python _enableModules method
-func (mod *ModulesModule) enableModules() {
-	// TODO: Port Python private method logic
+// enablemodules is the Go port of the Python _enableModules method
+func (mod *ModulesModule) enablemodules() {
+	// TODO: Port Python method logic
 }
 
-// dependenciesActive is the Go port of the Python _dependenciesActive method
-func (mod *ModulesModule) dependenciesActive() {
-	// TODO: Port Python private method logic
+// dependenciesactive is the Go port of the Python _dependenciesActive method
+func (mod *ModulesModule) dependenciesactive() {
+	// TODO: Port Python method logic
 }
 
-// disableModules is the Go port of the Python _disableModules method
-func (mod *ModulesModule) disableModules() {
-	// TODO: Port Python private method logic
+// disablemodules is the Go port of the Python _disableModules method
+func (mod *ModulesModule) disablemodules() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *ModulesModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("ModulesModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *ModulesModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("ModulesModule disabled")
+	return nil
 }
 
 // SetManager sets the module manager
@@ -83,61 +119,8 @@ func (mod *ModulesModule) SetManager(manager *core.Manager) {
 	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _getPriority is the Go port of the Python _getPriority function
-func _getPriority() {
-	// TODO: Port Python function logic
-}
-
-// _getFallbackPriority is the Go port of the Python _getFallbackPriority function
-func _getFallbackPriority() {
-	// TODO: Port Python function logic
-}
-
-// Sort is the Go port of the Python sort function
-
-// Default is the Go port of the Python default function
-
-// _hasPositivePriority is the Go port of the Python _hasPositivePriority function
-func _hasPositivePriority() {
-	// TODO: Port Python function logic
-}
-
-// UpdateToProfile is the Go port of the Python updateToProfile function
-
-// _visit is the Go port of the Python _visit function
-func _visit() {
-	// TODO: Port Python function logic
-}
-
-// _depFor is the Go port of the Python _depFor function
-func _depFor() {
-	// TODO: Port Python function logic
-}
-
-// _enableModules is the Go port of the Python _enableModules function
-func _enableModules() {
-	// TODO: Port Python function logic
-}
-
-// _dependenciesActive is the Go port of the Python _dependenciesActive function
-func _dependenciesActive() {
-	// TODO: Port Python function logic
-}
-
-// _disableModules is the Go port of the Python _disableModules function
-func _disableModules() {
-	// TODO: Port Python function logic
-}
-
-// Init creates and returns a new module instance
+// InitModulesModule creates and returns a new ModulesModule instance
 // This is the Go equivalent of the Python init function
+func InitModulesModule() core.Module {
+	return NewModulesModule()
+}

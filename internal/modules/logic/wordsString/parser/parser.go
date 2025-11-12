@@ -1,10 +1,11 @@
-// Package parser.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/wordsString/parser/parser.py
+// Package parser provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package parser
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +18,7 @@ type WordsStringParserModule struct {
 
 // NewWordsStringParserModule creates a new WordsStringParserModule instance
 func NewWordsStringParserModule() *WordsStringParserModule {
-	base := core.NewBaseModule("wordsStringParser", "wordsStringParser")
+	base := core.NewBaseModule("logic", "parser-module")
 
 	return &WordsStringParserModule{
 		BaseModule: base,
@@ -25,42 +26,43 @@ func NewWordsStringParserModule() *WordsStringParserModule {
 }
 
 // Parse is the Go port of the Python parse method
-func (wor *WordsStringParserModule) Parse() {
+func (mod *WordsStringParserModule) Parse() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (wor *WordsStringParserModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *WordsStringParserModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("WordsStringParserModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (wor *WordsStringParserModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *WordsStringParserModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("WordsStringParserModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (wor *WordsStringParserModule) SetManager(manager *core.Manager) {
-	wor.manager = manager
+func (mod *WordsStringParserModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Parse is the Go port of the Python parse function
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitWordsStringParserModule creates and returns a new WordsStringParserModule instance
 // This is the Go equivalent of the Python init function
+func InitWordsStringParserModule() core.Module {
+	return NewWordsStringParserModule()
+}

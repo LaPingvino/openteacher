@@ -1,10 +1,11 @@
-// Package wrts.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/savers/wrts/wrts.py
+// Package wrts provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package wrts
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +18,7 @@ type WrtsSaverModule struct {
 
 // NewWrtsSaverModule creates a new WrtsSaverModule instance
 func NewWrtsSaverModule() *WrtsSaverModule {
-	base := core.NewBaseModule("save", "save")
+	base := core.NewBaseModule("logic", "wrts-module")
 
 	return &WrtsSaverModule{
 		BaseModule: base,
@@ -25,76 +26,53 @@ func NewWrtsSaverModule() *WrtsSaverModule {
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (wrt *WrtsSaverModule) retranslate() {
-	// TODO: Port Python private method logic
-}
-
-// Enable is the Go port of the Python enable method
-func (wrt *WrtsSaverModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (wrt *WrtsSaverModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// compose is the Go port of the Python _compose method
-func (wrt *WrtsSaverModule) compose() {
-	// TODO: Port Python private method logic
-}
-
-// Save is the Go port of the Python save method
-func (wrt *WrtsSaverModule) Save() {
+func (mod *WrtsSaverModule) retranslate() {
 	// TODO: Port Python method logic
 }
 
-// SetManager sets the module manager
-func (wrt *WrtsSaverModule) SetManager(manager *core.Manager) {
-	wrt.manager = manager
+// compose is the Go port of the Python _compose method
+func (mod *WrtsSaverModule) compose() {
+	// TODO: Port Python method logic
 }
 
-// EvalPseudoSandbox is a Go port of the Python EvalPseudoSandbox class
-type EvalPseudoSandbox struct {
-	// TODO: Add struct fields based on Python class
+// Save is the Go port of the Python save method
+func (mod *WrtsSaverModule) Save() {
+	// TODO: Port Python method logic
 }
 
-// NewEvalPseudoSandbox creates a new EvalPseudoSandbox instance
-func NewEvalPseudoSandbox() *EvalPseudoSandbox {
-	return &EvalPseudoSandbox{
-		// TODO: Initialize fields
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *WrtsSaverModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
 	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("WrtsSaverModule enabled")
+	return nil
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *WrtsSaverModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("WrtsSaverModule disabled")
+	return nil
 }
 
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
+// SetManager sets the module manager
+func (mod *WrtsSaverModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// _compose is the Go port of the Python _compose function
-func _compose() {
-	// TODO: Port Python function logic
-}
-
-// Save is the Go port of the Python save function
-
-// __init__ is the Go port of the Python __init__ function
-
-// Init creates and returns a new module instance
+// InitWrtsSaverModule creates and returns a new WrtsSaverModule instance
 // This is the Go equivalent of the Python init function
+func InitWrtsSaverModule() core.Module {
+	return NewWrtsSaverModule()
+}

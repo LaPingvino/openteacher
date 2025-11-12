@@ -1,10 +1,11 @@
-// Package otxxsaver.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/otxxsaver/otxxsaver.py
+// Package otxxsaver provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package otxxsaver
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +18,7 @@ type OtxxSaverModule struct {
 
 // NewOtxxSaverModule creates a new OtxxSaverModule instance
 func NewOtxxSaverModule() *OtxxSaverModule {
-	base := core.NewBaseModule("otxxSaver", "otxxSaver")
+	base := core.NewBaseModule("logic", "otxxsaver-module")
 
 	return &OtxxSaverModule{
 		BaseModule: base,
@@ -25,62 +26,53 @@ func NewOtxxSaverModule() *OtxxSaverModule {
 }
 
 // Save is the Go port of the Python save method
-func (otx *OtxxSaverModule) Save() {
+func (mod *OtxxSaverModule) Save() {
 	// TODO: Port Python method logic
 }
 
 // version is the Go port of the Python _version method
-func (otx *OtxxSaverModule) version() {
-	// TODO: Port Python private method logic
+func (mod *OtxxSaverModule) version() {
+	// TODO: Port Python method logic
 }
 
 // serialize is the Go port of the Python _serialize method
-func (otx *OtxxSaverModule) serialize() {
-	// TODO: Port Python private method logic
+func (mod *OtxxSaverModule) serialize() {
+	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (otx *OtxxSaverModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *OtxxSaverModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("OtxxSaverModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (otx *OtxxSaverModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *OtxxSaverModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("OtxxSaverModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (otx *OtxxSaverModule) SetManager(manager *core.Manager) {
-	otx.manager = manager
+func (mod *OtxxSaverModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Save is the Go port of the Python save function
-
-// _version is the Go port of the Python _version function
-func _version() {
-	// TODO: Port Python function logic
-}
-
-// _serialize is the Go port of the Python _serialize function
-func _serialize() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitOtxxSaverModule creates and returns a new OtxxSaverModule instance
 // This is the Go equivalent of the Python init function
+func InitOtxxSaverModule() core.Module {
+	return NewOtxxSaverModule()
+}

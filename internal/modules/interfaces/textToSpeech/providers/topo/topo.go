@@ -1,63 +1,73 @@
-// Package topo.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/interfaces/textToSpeech/providers/topo/topo.py
+// Package topo provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package topo
+
 import (
 	"context"
+	"fmt"
+	"github.com/LaPingvino/openteacher/internal/core"
 )
 
 // TextToSpeechProviderTopo is a Go port of the Python TextToSpeechProviderTopo class
 type TextToSpeechProviderTopo struct {
-	// TODO: Add struct fields based on Python class
+	*core.BaseModule
+	manager *core.Manager
+	// TODO: Add module-specific fields
 }
 
 // NewTextToSpeechProviderTopo creates a new TextToSpeechProviderTopo instance
 func NewTextToSpeechProviderTopo() *TextToSpeechProviderTopo {
+	base := core.NewBaseModule("interface", "topo-module")
+
 	return &TextToSpeechProviderTopo{
-		// TODO: Initialize fields
+		BaseModule: base,
 	}
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (tex *TextToSpeechProviderTopo) retranslate() {
-	// TODO: Port Python private method logic
-}
-
-// Enable is the Go port of the Python enable method
-func (tex *TextToSpeechProviderTopo) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (tex *TextToSpeechProviderTopo) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// ItemSent is the Go port of the Python itemSent method
-func (tex *TextToSpeechProviderTopo) ItemSent() {
+func (mod *TextToSpeechProviderTopo) retranslate() {
 	// TODO: Port Python method logic
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
+// Itemsent is the Go port of the Python itemSent method
+func (mod *TextToSpeechProviderTopo) Itemsent() {
+	// TODO: Port Python method logic
 }
 
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *TextToSpeechProviderTopo) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("TextToSpeechProviderTopo enabled")
+	return nil
 }
 
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *TextToSpeechProviderTopo) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("TextToSpeechProviderTopo disabled")
+	return nil
 }
 
-// Enable is the Go port of the Python enable function
+// SetManager sets the module manager
+func (mod *TextToSpeechProviderTopo) SetManager(manager *core.Manager) {
+	mod.manager = manager
+}
 
-// Disable is the Go port of the Python disable function
-
-// ItemSent is the Go port of the Python itemSent function
+// InitTextToSpeechProviderTopo creates and returns a new TextToSpeechProviderTopo instance
+// This is the Go equivalent of the Python init function
+func InitTextToSpeechProviderTopo() core.Module {
+	return NewTextToSpeechProviderTopo()
+}

@@ -1,10 +1,11 @@
-// Package event.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/javaScript/event/event.py
+// Package event provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package event
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,50 +18,51 @@ type JavascriptEventModule struct {
 
 // NewJavascriptEventModule creates a new JavascriptEventModule instance
 func NewJavascriptEventModule() *JavascriptEventModule {
-	base := core.NewBaseModule("javaScriptEvent", "javaScriptEvent")
+	base := core.NewBaseModule("logic", "event-module")
 
 	return &JavascriptEventModule{
 		BaseModule: base,
 	}
 }
 
-// CreateEvent is the Go port of the Python createEvent method
-func (jav *JavascriptEventModule) CreateEvent() {
+// Createevent is the Go port of the Python createEvent method
+func (mod *JavascriptEventModule) Createevent() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (jav *JavascriptEventModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *JavascriptEventModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("JavascriptEventModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (jav *JavascriptEventModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *JavascriptEventModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("JavascriptEventModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (jav *JavascriptEventModule) SetManager(manager *core.Manager) {
-	jav.manager = manager
+func (mod *JavascriptEventModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// CreateEvent is the Go port of the Python createEvent function
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitJavascriptEventModule creates and returns a new JavascriptEventModule instance
 // This is the Go equivalent of the Python init function
+func InitJavascriptEventModule() core.Module {
+	return NewJavascriptEventModule()
+}

@@ -1,10 +1,11 @@
-// Package french.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/noteCalculators/javaScript/french/french.py
+// Package french provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package french
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,53 +18,51 @@ type FrenchNoteCalculatorModule struct {
 
 // NewFrenchNoteCalculatorModule creates a new FrenchNoteCalculatorModule instance
 func NewFrenchNoteCalculatorModule() *FrenchNoteCalculatorModule {
-	base := core.NewBaseModule("noteCalculator", "noteCalculator")
+	base := core.NewBaseModule("logic", "french-module")
 
 	return &FrenchNoteCalculatorModule{
 		BaseModule: base,
 	}
 }
 
-// Enable is the Go port of the Python enable method
-func (fre *FrenchNoteCalculatorModule) Enable(ctx context.Context) error {
+// retranslate is the Go port of the Python _retranslate method
+func (mod *FrenchNoteCalculatorModule) retranslate() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *FrenchNoteCalculatorModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("FrenchNoteCalculatorModule enabled")
 	return nil
 }
 
-// retranslate is the Go port of the Python _retranslate method
-func (fre *FrenchNoteCalculatorModule) retranslate() {
-	// TODO: Port Python private method logic
-}
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *FrenchNoteCalculatorModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
 
-// Disable is the Go port of the Python disable method
-func (fre *FrenchNoteCalculatorModule) Disable(ctx context.Context) error {
 	// TODO: Port Python disable logic
+
+	fmt.Println("FrenchNoteCalculatorModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (fre *FrenchNoteCalculatorModule) SetManager(manager *core.Manager) {
-	fre.manager = manager
+func (mod *FrenchNoteCalculatorModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitFrenchNoteCalculatorModule creates and returns a new FrenchNoteCalculatorModule instance
 // This is the Go equivalent of the Python init function
+func InitFrenchNoteCalculatorModule() core.Module {
+	return NewFrenchNoteCalculatorModule()
+}

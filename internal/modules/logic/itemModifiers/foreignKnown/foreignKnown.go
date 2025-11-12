@@ -1,10 +1,11 @@
-// Package foreignknown.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/itemModifiers/foreignKnown/foreignKnown.py
+// Package foreignknown provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
-package foreignKnown
+package foreignknown
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,50 +18,51 @@ type ForeignKnownModule struct {
 
 // NewForeignKnownModule creates a new ForeignKnownModule instance
 func NewForeignKnownModule() *ForeignKnownModule {
-	base := core.NewBaseModule("itemModifier", "itemModifier")
+	base := core.NewBaseModule("logic", "foreignknown-module")
 
 	return &ForeignKnownModule{
 		BaseModule: base,
 	}
 }
 
-// ModifyItem is the Go port of the Python modifyItem method
-func (for *ForeignKnownModule) ModifyItem() {
+// Modifyitem is the Go port of the Python modifyItem method
+func (mod *ForeignKnownModule) Modifyitem() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (for *ForeignKnownModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *ForeignKnownModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("ForeignKnownModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (for *ForeignKnownModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *ForeignKnownModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("ForeignKnownModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (for *ForeignKnownModule) SetManager(manager *core.Manager) {
-	for.manager = manager
+func (mod *ForeignKnownModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// ModifyItem is the Go port of the Python modifyItem function
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitForeignKnownModule creates and returns a new ForeignKnownModule instance
 // This is the Go equivalent of the Python init function
+func InitForeignKnownModule() core.Module {
+	return NewForeignKnownModule()
+}

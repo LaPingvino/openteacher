@@ -1,273 +1,145 @@
-// Package about.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/interfaces/qt/dialogs/about/about.py
+// Package about provides functionality ported from Python module
+//
+// Provides the about dialog.
 //
 // This is an automated port - implementation may be incomplete.
 package about
+
 import (
 	"context"
+	"fmt"
+
 	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/therecipe/qt/core"
+	"github.com/therecipe/qt/widgets"
 )
 
 // AboutDialogModule is a Go port of the Python AboutDialogModule class
 type AboutDialogModule struct {
 	*core.BaseModule
 	manager *core.Manager
-	// TODO: Add module-specific fields
+	dialog  *widgets.QDialog
 }
 
 // NewAboutDialogModule creates a new AboutDialogModule instance
 func NewAboutDialogModule() *AboutDialogModule {
-	base := core.NewBaseModule("about", "about")
+	base := core.NewBaseModule("ui", "about-module")
+	base.SetRequires("qtApp")
 
 	return &AboutDialogModule{
 		BaseModule: base,
 	}
 }
 
-// Show is the Go port of the Python show method
-func (abo *AboutDialogModule) Show() {
-	// TODO: Port Python method logic
+// Show displays the about dialog
+func (mod *AboutDialogModule) Show() {
+	if mod.dialog == nil {
+		mod.createDialog()
+	}
+
+	if mod.dialog != nil {
+		mod.dialog.Show()
+		mod.dialog.Raise()
+		mod.dialog.ActivateWindow()
+	}
 }
 
-// retranslate is the Go port of the Python _retranslate method
-func (abo *AboutDialogModule) retranslate() {
-	// TODO: Port Python private method logic
+// createDialog creates and configures the about dialog
+func (mod *AboutDialogModule) createDialog() {
+	mod.dialog = widgets.NewQDialog(nil, 0)
+	mod.dialog.SetWindowTitle("About OpenTeacher")
+	mod.dialog.SetFixedSize2(400, 300)
+	mod.dialog.SetWindowModality(core.Qt__ApplicationModal)
+
+	// Create main layout
+	layout := widgets.NewQVBoxLayout()
+	mod.dialog.SetLayout(layout)
+
+	// Add OpenTeacher logo/title
+	titleLabel := widgets.NewQLabel2("OpenTeacher", nil, 0)
+	titleFont := titleLabel.Font()
+	titleFont.SetPointSize(18)
+	titleFont.SetBold(true)
+	titleLabel.SetFont(titleFont)
+	titleLabel.SetAlignment(core.Qt__AlignHCenter)
+	layout.AddWidget(titleLabel, 0, 0)
+
+	// Add version info
+	versionLabel := widgets.NewQLabel2("Version 4.0.0-alpha", nil, 0)
+	versionLabel.SetAlignment(core.Qt__AlignHCenter)
+	layout.AddWidget(versionLabel, 0, 0)
+
+	// Add description
+	descLabel := widgets.NewQLabel2("OpenTeacher helps you learn whatever you want to learn!\nIt's designed to help you learn a foreign language,\nbut can also be used for other subjects.", nil, 0)
+	descLabel.SetAlignment(core.Qt__AlignHCenter)
+	descLabel.SetWordWrap(true)
+	layout.AddWidget(descLabel, 0, 0)
+
+	// Add copyright
+	copyrightLabel := widgets.NewQLabel2("Copyright © 2010-2023 OpenTeacher Team", nil, 0)
+	copyrightLabel.SetAlignment(core.Qt__AlignHCenter)
+	layout.AddWidget(copyrightLabel, 0, 0)
+
+	// Add website link
+	websiteLabel := widgets.NewQLabel2(`<a href="http://openteacher.org">http://openteacher.org</a>`, nil, 0)
+	websiteLabel.SetAlignment(core.Qt__AlignHCenter)
+	websiteLabel.SetOpenExternalLinks(true)
+	layout.AddWidget(websiteLabel, 0, 0)
+
+	// Add spacer
+	layout.AddStretch(1)
+
+	// Add close button
+	buttonBox := widgets.NewQDialogButtonBox3(widgets.QDialogButtonBox__Close, nil)
+	layout.AddWidget(buttonBox, 0, 0)
+
+	// Connect close button
+	buttonBox.ConnectRejected(func() {
+		mod.dialog.Close()
+	})
+
+	mod.retranslate()
 }
 
-// Enable is the Go port of the Python enable method
-func (abo *AboutDialogModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
+// retranslate updates dialog text for localization
+func (mod *AboutDialogModule) retranslate() {
+	if mod.dialog != nil {
+		mod.dialog.SetWindowTitle("About OpenTeacher")
+	}
+}
+
+// Enable activates the module
+func (mod *AboutDialogModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	fmt.Println("AboutDialogModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (abo *AboutDialogModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
+// Disable deactivates the module
+func (mod *AboutDialogModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// Clean up dialog
+	if mod.dialog != nil {
+		mod.dialog.Close()
+		mod.dialog = nil
+	}
+
+	fmt.Println("AboutDialogModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (abo *AboutDialogModule) SetManager(manager *core.Manager) {
-	abo.manager = manager
+func (mod *AboutDialogModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// AboutTextLabel is a Go port of the Python AboutTextLabel class
-type AboutTextLabel struct {
-	// TODO: Add struct fields based on Python class
+// InitAboutDialogModule creates and returns a new AboutDialogModule instance
+func InitAboutDialogModule() core.Module {
+	return NewAboutDialogModule()
 }
-
-// NewAboutTextLabel creates a new AboutTextLabel instance
-func NewAboutTextLabel() *AboutTextLabel {
-	return &AboutTextLabel{
-		// TODO: Initialize fields
-	}
-}
-
-// Retranslate is the Go port of the Python retranslate method
-func (abo *AboutTextLabel) Retranslate() {
-	// TODO: Port Python method logic
-}
-
-// AboutImageLabel is a Go port of the Python AboutImageLabel class
-type AboutImageLabel struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewAboutImageLabel creates a new AboutImageLabel instance
-func NewAboutImageLabel() *AboutImageLabel {
-	return &AboutImageLabel{
-		// TODO: Initialize fields
-	}
-}
-
-// AboutWidget is a Go port of the Python AboutWidget class
-type AboutWidget struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewAboutWidget creates a new AboutWidget instance
-func NewAboutWidget() *AboutWidget {
-	return &AboutWidget{
-		// TODO: Initialize fields
-	}
-}
-
-// Retranslate is the Go port of the Python retranslate method
-
-// ShortLicenseWidget is a Go port of the Python ShortLicenseWidget class
-type ShortLicenseWidget struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewShortLicenseWidget creates a new ShortLicenseWidget instance
-func NewShortLicenseWidget() *ShortLicenseWidget {
-	return &ShortLicenseWidget{
-		// TODO: Initialize fields
-	}
-}
-
-// Retranslate is the Go port of the Python retranslate method
-
-// LongLicenseWidget is a Go port of the Python LongLicenseWidget class
-type LongLicenseWidget struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewLongLicenseWidget creates a new LongLicenseWidget instance
-func NewLongLicenseWidget() *LongLicenseWidget {
-	return &LongLicenseWidget{
-		// TODO: Initialize fields
-	}
-}
-
-// LicenseWidget is a Go port of the Python LicenseWidget class
-type LicenseWidget struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewLicenseWidget creates a new LicenseWidget instance
-func NewLicenseWidget() *LicenseWidget {
-	return &LicenseWidget{
-		// TODO: Initialize fields
-	}
-}
-
-// Retranslate is the Go port of the Python retranslate method
-
-// ShowFullLicense is the Go port of the Python showFullLicense method
-func (lic *LicenseWidget) ShowFullLicense() {
-	// TODO: Port Python method logic
-}
-
-// PersonWidget is a Go port of the Python PersonWidget class
-type PersonWidget struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewPersonWidget creates a new PersonWidget instance
-func NewPersonWidget() *PersonWidget {
-	return &PersonWidget{
-		// TODO: Initialize fields
-	}
-}
-
-// Update is the Go port of the Python update method
-func (per *PersonWidget) Update() {
-	// TODO: Port Python method logic
-}
-
-// Fade is the Go port of the Python fade method
-func (per *PersonWidget) Fade() {
-	// TODO: Port Python method logic
-}
-
-// AuthorsWidget is a Go port of the Python AuthorsWidget class
-type AuthorsWidget struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewAuthorsWidget creates a new AuthorsWidget instance
-func NewAuthorsWidget() *AuthorsWidget {
-	return &AuthorsWidget{
-		// TODO: Initialize fields
-	}
-}
-
-// Retranslate is the Go port of the Python retranslate method
-
-// StartAnimation is the Go port of the Python startAnimation method
-func (aut *AuthorsWidget) StartAnimation() {
-	// TODO: Port Python method logic
-}
-
-// NextAuthor is the Go port of the Python nextAuthor method
-func (aut *AuthorsWidget) NextAuthor() {
-	// TODO: Port Python method logic
-}
-
-// AboutDialog is a Go port of the Python AboutDialog class
-type AboutDialog struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewAboutDialog creates a new AboutDialog instance
-func NewAboutDialog() *AboutDialog {
-	return &AboutDialog{
-		// TODO: Initialize fields
-	}
-}
-
-// Retranslate is the Go port of the Python retranslate method
-
-// StartAnimation is the Go port of the Python startAnimation method
-
-// InstallQtClasses is the Go port of the Python installQtClasses function
-func InstallQtClasses() {
-	// TODO: Port Python function logic
-}
-
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Show is the Go port of the Python show function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// __init__ is the Go port of the Python __init__ function
-
-// Retranslate is the Go port of the Python retranslate function
-
-// __init__ is the Go port of the Python __init__ function
-
-// __init__ is the Go port of the Python __init__ function
-
-// Retranslate is the Go port of the Python retranslate function
-
-// __init__ is the Go port of the Python __init__ function
-
-// Retranslate is the Go port of the Python retranslate function
-
-// __init__ is the Go port of the Python __init__ function
-
-// __init__ is the Go port of the Python __init__ function
-
-// Retranslate is the Go port of the Python retranslate function
-
-// ShowFullLicense is the Go port of the Python showFullLicense function
-
-// __init__ is the Go port of the Python __init__ function
-
-// Update is the Go port of the Python update function
-
-// Fade is the Go port of the Python fade function
-
-// __init__ is the Go port of the Python __init__ function
-
-// Retranslate is the Go port of the Python retranslate function
-
-// StartAnimation is the Go port of the Python startAnimation function
-
-// NextAuthor is the Go port of the Python nextAuthor function
-
-// __init__ is the Go port of the Python __init__ function
-
-// Retranslate is the Go port of the Python retranslate function
-
-// StartAnimation is the Go port of the Python startAnimation function
-
-// Init creates and returns a new module instance
-// This is the Go equivalent of the Python init function

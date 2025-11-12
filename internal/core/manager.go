@@ -9,7 +9,7 @@ import (
 
 // Manager handles module registration, dependency resolution, and lifecycle management
 type Manager struct {
-	modules       map[string]Module
+	modules       map[string][]Module
 	modulesByType map[string][]Module
 	loadOrder     []string
 	resourcePaths map[string]string
@@ -20,7 +20,7 @@ type Manager struct {
 // NewManager creates a new module manager
 func NewManager() *Manager {
 	return &Manager{
-		modules:       make(map[string]Module),
+		modules:       make(map[string][]Module),
 		modulesByType: make(map[string][]Module),
 		loadOrder:     make([]string, 0),
 		resourcePaths: make(map[string]string),
@@ -42,13 +42,8 @@ func (m *Manager) Register(module Module) error {
 		return fmt.Errorf("module name cannot be empty")
 	}
 
-	// Check for duplicate names
-	if _, exists := m.modules[name]; exists {
-		return fmt.Errorf("module with name %q already registered", name)
-	}
-
-	// Register the module
-	m.modules[name] = module
+	// Register the module (append to slice for this name)
+	m.modules[name] = append(m.modules[name], module)
 
 	// Add to type mapping
 	moduleType := module.Type()
@@ -66,36 +61,38 @@ func (m *Manager) Register(module Module) error {
 	return nil
 }
 
-// Unregister removes a module from the manager
+// Unregister removes all modules with the given name from the manager
 func (m *Manager) Unregister(name string) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
-	module, exists := m.modules[name]
-	if !exists {
+	modules, exists := m.modules[name]
+	if !exists || len(modules) == 0 {
 		return fmt.Errorf("module %q not found", name)
 	}
 
-	// Disable if active
-	if module.IsActive() {
-		if err := module.Disable(context.Background()); err != nil {
-			return fmt.Errorf("failed to disable module %q: %w", name, err)
+	// Disable all modules with this name if active
+	for _, module := range modules {
+		if module.IsActive() {
+			if err := module.Disable(context.Background()); err != nil {
+				return fmt.Errorf("failed to disable module %q: %w", name, err)
+			}
 		}
-	}
 
-	// Remove from type mapping
-	moduleType := module.Type()
-	typeModules := m.modulesByType[moduleType]
-	for i, mod := range typeModules {
-		if mod.Name() == name {
-			m.modulesByType[moduleType] = append(typeModules[:i], typeModules[i+1:]...)
-			break
+		// Remove from type mapping
+		moduleType := module.Type()
+		typeModules := m.modulesByType[moduleType]
+		for i, mod := range typeModules {
+			if mod.Name() == name && mod == module {
+				m.modulesByType[moduleType] = append(typeModules[:i], typeModules[i+1:]...)
+				break
+			}
 		}
-	}
 
-	// Clean up empty type entries
-	if len(m.modulesByType[moduleType]) == 0 {
-		delete(m.modulesByType, moduleType)
+		// Clean up empty type entries
+		if len(m.modulesByType[moduleType]) == 0 {
+			delete(m.modulesByType, moduleType)
+		}
 	}
 
 	// Remove from main registry
@@ -112,13 +109,27 @@ func (m *Manager) Unregister(name string) error {
 	return nil
 }
 
-// GetModule returns a module by name
+// GetModule returns the first module by name
 func (m *Manager) GetModule(name string) (Module, bool) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
-	module, exists := m.modules[name]
-	return module, exists
+	modules, exists := m.modules[name]
+	if !exists || len(modules) == 0 {
+		return nil, false
+	}
+	return modules[0], true
+}
+
+// GetModulesByName returns all modules with the given name
+func (m *Manager) GetModulesByName(name string) []Module {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+
+	modules := m.modules[name]
+	result := make([]Module, len(modules))
+	copy(result, modules)
+	return result
 }
 
 // GetModulesByType returns all modules of a specific type
@@ -156,7 +167,6 @@ func (m *Manager) ListModules() []string {
 	for name := range m.modules {
 		names = append(names, name)
 	}
-	sort.Strings(names)
 	return names
 }
 
@@ -189,24 +199,27 @@ func (m *Manager) ResolveLoadOrder() ([]string, error) {
 	}
 
 	// Build edges based on module requirements
-	for name, module := range m.modules {
-		requires := module.Requires()
+	for name, modules := range m.modules {
+		// Process requirements for all modules with this name
+		for _, module := range modules {
+			requires := module.Requires()
 
-		for _, requiredType := range requires {
-			// Find modules of required type
-			requiredModules := m.modulesByType[requiredType]
-			if len(requiredModules) == 0 {
-				return nil, fmt.Errorf("module %q requires type %q but no modules of that type are registered", name, requiredType)
+			for _, requiredType := range requires {
+				// Find modules of required type
+				requiredModules := m.modulesByType[requiredType]
+				if len(requiredModules) == 0 {
+					return nil, fmt.Errorf("module %q requires type %q but no modules of that type are registered", name, requiredType)
+				}
+
+				// For simplicity, depend on the default (highest priority) module of that type
+				sort.Slice(requiredModules, func(i, j int) bool {
+					return requiredModules[i].Priority() > requiredModules[j].Priority()
+				})
+
+				requiredName := requiredModules[0].Name()
+				graph[requiredName] = append(graph[requiredName], name)
+				inDegree[name]++
 			}
-
-			// For simplicity, depend on the default (highest priority) module of that type
-			sort.Slice(requiredModules, func(i, j int) bool {
-				return requiredModules[i].Priority() > requiredModules[j].Priority()
-			})
-
-			requiredName := requiredModules[0].Name()
-			graph[requiredName] = append(graph[requiredName], name)
-			inDegree[name]++
 		}
 	}
 
@@ -224,8 +237,14 @@ func (m *Manager) ResolveLoadOrder() ([]string, error) {
 	// Sort by priority within each level
 	for len(queue) > 0 {
 		// Sort current level by priority
-		sort.Slice(queue, func(i, j int) bool {
-			return m.modules[queue[i]].Priority() > m.modules[queue[j]].Priority()
+		sort.SliceStable(queue, func(i, j int) bool {
+			// For modules with same name, use first module's priority
+			iModules := m.modules[queue[i]]
+			jModules := m.modules[queue[j]]
+			if len(iModules) == 0 || len(jModules) == 0 {
+				return false
+			}
+			return iModules[0].Priority() > jModules[0].Priority()
 		})
 
 		current := queue[0]
@@ -337,11 +356,16 @@ func (m *Manager) GetResourcePath(moduleName string) (string, bool) {
 	return path, exists
 }
 
-// ModuleCount returns the number of registered modules
+// ModuleCount returns the total number of registered modules
 func (m *Manager) ModuleCount() int {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
-	return len(m.modules)
+
+	count := 0
+	for _, modules := range m.modules {
+		count += len(modules)
+	}
+	return count
 }
 
 // TypeCount returns the number of registered module types

@@ -1,10 +1,11 @@
-// Package media.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/reversers/media/media.py
+// Package media provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package media
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +18,7 @@ type MediaReverserModule struct {
 
 // NewMediaReverserModule creates a new MediaReverserModule instance
 func NewMediaReverserModule() *MediaReverserModule {
-	base := core.NewBaseModule("reverser", "reverser")
+	base := core.NewBaseModule("logic", "media-module")
 
 	return &MediaReverserModule{
 		BaseModule: base,
@@ -25,42 +26,43 @@ func NewMediaReverserModule() *MediaReverserModule {
 }
 
 // Reverse is the Go port of the Python reverse method
-func (med *MediaReverserModule) Reverse() {
+func (mod *MediaReverserModule) Reverse() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (med *MediaReverserModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *MediaReverserModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("MediaReverserModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (med *MediaReverserModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *MediaReverserModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("MediaReverserModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (med *MediaReverserModule) SetManager(manager *core.Manager) {
-	med.manager = manager
+func (mod *MediaReverserModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Reverse is the Go port of the Python reverse function
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitMediaReverserModule creates and returns a new MediaReverserModule instance
 // This is the Go equivalent of the Python init function
+func InitMediaReverserModule() core.Module {
+	return NewMediaReverserModule()
+}

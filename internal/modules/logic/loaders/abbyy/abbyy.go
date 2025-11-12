@@ -1,10 +1,13 @@
-// Package abbyy.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/loaders/abbyy/abbyy.py
+// Package abbyy provides functionality ported from Python module
+//
+// Loads ABBYY Lingvo Tutor files (.xml)
 //
 // This is an automated port - implementation may be incomplete.
 package abbyy
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +20,7 @@ type AbbyyLoaderModule struct {
 
 // NewAbbyyLoaderModule creates a new AbbyyLoaderModule instance
 func NewAbbyyLoaderModule() *AbbyyLoaderModule {
-	base := core.NewBaseModule("load", "load")
+	base := core.NewBaseModule("logic", "abbyy-module")
 
 	return &AbbyyLoaderModule{
 		BaseModule: base,
@@ -25,59 +28,53 @@ func NewAbbyyLoaderModule() *AbbyyLoaderModule {
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (abb *AbbyyLoaderModule) retranslate() {
-	// TODO: Port Python private method logic
+func (mod *AbbyyLoaderModule) retranslate() {
+	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (abb *AbbyyLoaderModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (abb *AbbyyLoaderModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf method
-func (abb *AbbyyLoaderModule) GetFileTypeOf() {
+// Getfiletypeof is the Go port of the Python getFileTypeOf method
+func (mod *AbbyyLoaderModule) Getfiletypeof() {
 	// TODO: Port Python method logic
 }
 
 // Load is the Go port of the Python load method
-func (abb *AbbyyLoaderModule) Load() {
+func (mod *AbbyyLoaderModule) Load() {
 	// TODO: Port Python method logic
 }
 
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *AbbyyLoaderModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("AbbyyLoaderModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *AbbyyLoaderModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("AbbyyLoaderModule disabled")
+	return nil
+}
+
 // SetManager sets the module manager
-func (abb *AbbyyLoaderModule) SetManager(manager *core.Manager) {
-	abb.manager = manager
+func (mod *AbbyyLoaderModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf function
-
-// Load is the Go port of the Python load function
-
-// Init creates and returns a new module instance
+// InitAbbyyLoaderModule creates and returns a new AbbyyLoaderModule instance
 // This is the Go equivalent of the Python init function
+func InitAbbyyLoaderModule() core.Module {
+	return NewAbbyyLoaderModule()
+}

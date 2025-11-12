@@ -1,10 +1,11 @@
-// Package granule.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/loaders/granule/granule.py
+// Package granule provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package granule
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +18,7 @@ type GranuleLoaderModule struct {
 
 // NewGranuleLoaderModule creates a new GranuleLoaderModule instance
 func NewGranuleLoaderModule() *GranuleLoaderModule {
-	base := core.NewBaseModule("load", "load")
+	base := core.NewBaseModule("logic", "granule-module")
 
 	return &GranuleLoaderModule{
 		BaseModule: base,
@@ -25,69 +26,58 @@ func NewGranuleLoaderModule() *GranuleLoaderModule {
 }
 
 // parse is the Go port of the Python _parse method
-func (gra *GranuleLoaderModule) parse() {
-	// TODO: Port Python private method logic
+func (mod *GranuleLoaderModule) parse() {
+	// TODO: Port Python method logic
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (gra *GranuleLoaderModule) retranslate() {
-	// TODO: Port Python private method logic
+func (mod *GranuleLoaderModule) retranslate() {
+	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (gra *GranuleLoaderModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (gra *GranuleLoaderModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf method
-func (gra *GranuleLoaderModule) GetFileTypeOf() {
+// Getfiletypeof is the Go port of the Python getFileTypeOf method
+func (mod *GranuleLoaderModule) Getfiletypeof() {
 	// TODO: Port Python method logic
 }
 
 // Load is the Go port of the Python load method
-func (gra *GranuleLoaderModule) Load() {
+func (mod *GranuleLoaderModule) Load() {
 	// TODO: Port Python method logic
 }
 
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *GranuleLoaderModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("GranuleLoaderModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *GranuleLoaderModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("GranuleLoaderModule disabled")
+	return nil
+}
+
 // SetManager sets the module manager
-func (gra *GranuleLoaderModule) SetManager(manager *core.Manager) {
-	gra.manager = manager
+func (mod *GranuleLoaderModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _parse is the Go port of the Python _parse function
-func _parse() {
-	// TODO: Port Python function logic
-}
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf function
-
-// Load is the Go port of the Python load function
-
-// Init creates and returns a new module instance
+// InitGranuleLoaderModule creates and returns a new GranuleLoaderModule instance
 // This is the Go equivalent of the Python init function
+func InitGranuleLoaderModule() core.Module {
+	return NewGranuleLoaderModule()
+}

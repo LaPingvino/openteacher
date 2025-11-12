@@ -1,11 +1,15 @@
-// Package documentation.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/interfaces/qt/dialogs/documentation/documentation.py
+// Package documentation provides functionality ported from Python module
+//
+// This module provides the documentation dialog.
 //
 // This is an automated port - implementation may be incomplete.
 package documentation
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/therecipe/qt/widgets"
 )
 
 // DocumentationModule is a Go port of the Python DocumentationModule class
@@ -17,135 +21,61 @@ type DocumentationModule struct {
 
 // NewDocumentationModule creates a new DocumentationModule instance
 func NewDocumentationModule() *DocumentationModule {
-	base := core.NewBaseModule("documentation", "documentation")
+	base := core.NewBaseModule("ui", "documentation-module")
 
 	return &DocumentationModule{
 		BaseModule: base,
 	}
 }
 
-// getFallbackHtml is the Go port of the Python _getFallbackHtml method
-func (doc *DocumentationModule) getFallbackHtml() {
-	// TODO: Port Python private method logic
-}
-
-// Show is the Go port of the Python show method
-func (doc *DocumentationModule) Show() {
+// getfallbackhtml is the Go port of the Python _getFallbackHtml method
+func (mod *DocumentationModule) getfallbackhtml() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (doc *DocumentationModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
+// Show is the Go port of the Python show method
+func (mod *DocumentationModule) Show() {
+	// TODO: Port Python method logic
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (doc *DocumentationModule) retranslate() {
-	// TODO: Port Python private method logic
+func (mod *DocumentationModule) retranslate() {
+	// TODO: Port Python method logic
 }
 
-// Disable is the Go port of the Python disable method
-func (doc *DocumentationModule) Disable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *DocumentationModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("DocumentationModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *DocumentationModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("DocumentationModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (doc *DocumentationModule) SetManager(manager *core.Manager) {
-	doc.manager = manager
+func (mod *DocumentationModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// OpenTeacherWebPage is a Go port of the Python OpenTeacherWebPage class
-type OpenTeacherWebPage struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewOpenTeacherWebPage creates a new OpenTeacherWebPage instance
-func NewOpenTeacherWebPage() *OpenTeacherWebPage {
-	return &OpenTeacherWebPage{
-		// TODO: Initialize fields
-	}
-}
-
-// UserAgentForUrl is the Go port of the Python userAgentForUrl method
-func (ope *OpenTeacherWebPage) UserAgentForUrl() {
-	// TODO: Port Python method logic
-}
-
-// UpdateStatus is the Go port of the Python updateStatus method
-func (ope *OpenTeacherWebPage) UpdateStatus() {
-	// TODO: Port Python method logic
-}
-
-// UpdateLanguage is the Go port of the Python updateLanguage method
-func (ope *OpenTeacherWebPage) UpdateLanguage() {
-	// TODO: Port Python method logic
-}
-
-// DocumentationDialog is a Go port of the Python DocumentationDialog class
-type DocumentationDialog struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewDocumentationDialog creates a new DocumentationDialog instance
-func NewDocumentationDialog() *DocumentationDialog {
-	return &DocumentationDialog{
-		// TODO: Initialize fields
-	}
-}
-
-// Retranslate is the Go port of the Python retranslate method
-func (doc *DocumentationDialog) Retranslate() {
-	// TODO: Port Python method logic
-}
-
-// UpdateLanguage is the Go port of the Python updateLanguage method
-
-// InstallQtClasses is the Go port of the Python installQtClasses function
-func InstallQtClasses() {
-	// TODO: Port Python function logic
-}
-
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _getFallbackHtml is the Go port of the Python _getFallbackHtml function
-func _getFallbackHtml() {
-	// TODO: Port Python function logic
-}
-
-// Show is the Go port of the Python show function
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// __init__ is the Go port of the Python __init__ function
-
-// UserAgentForUrl is the Go port of the Python userAgentForUrl function
-
-// UpdateStatus is the Go port of the Python updateStatus function
-
-// UpdateLanguage is the Go port of the Python updateLanguage function
-
-// __init__ is the Go port of the Python __init__ function
-
-// Retranslate is the Go port of the Python retranslate function
-
-// UpdateLanguage is the Go port of the Python updateLanguage function
-
-// Init creates and returns a new module instance
+// InitDocumentationModule creates and returns a new DocumentationModule instance
 // This is the Go equivalent of the Python init function
+func InitDocumentationModule() core.Module {
+	return NewDocumentationModule()
+}

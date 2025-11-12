@@ -1,10 +1,11 @@
-// Package american.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/noteCalculators/american/american.py
+// Package american provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package american
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +18,7 @@ type AmericanNoteCalculatorModule struct {
 
 // NewAmericanNoteCalculatorModule creates a new AmericanNoteCalculatorModule instance
 func NewAmericanNoteCalculatorModule() *AmericanNoteCalculatorModule {
-	base := core.NewBaseModule("noteCalculator", "noteCalculator")
+	base := core.NewBaseModule("logic", "american-module")
 
 	return &AmericanNoteCalculatorModule{
 		BaseModule: base,
@@ -25,69 +26,58 @@ func NewAmericanNoteCalculatorModule() *AmericanNoteCalculatorModule {
 }
 
 // convert is the Go port of the Python _convert method
-func (ame *AmericanNoteCalculatorModule) convert() {
-	// TODO: Port Python private method logic
-}
-
-// CalculateNote is the Go port of the Python calculateNote method
-func (ame *AmericanNoteCalculatorModule) CalculateNote() {
+func (mod *AmericanNoteCalculatorModule) convert() {
 	// TODO: Port Python method logic
 }
 
-// CalculateAverageNote is the Go port of the Python calculateAverageNote method
-func (ame *AmericanNoteCalculatorModule) CalculateAverageNote() {
+// Calculatenote is the Go port of the Python calculateNote method
+func (mod *AmericanNoteCalculatorModule) Calculatenote() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (ame *AmericanNoteCalculatorModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
+// Calculateaveragenote is the Go port of the Python calculateAverageNote method
+func (mod *AmericanNoteCalculatorModule) Calculateaveragenote() {
+	// TODO: Port Python method logic
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (ame *AmericanNoteCalculatorModule) retranslate() {
-	// TODO: Port Python private method logic
+func (mod *AmericanNoteCalculatorModule) retranslate() {
+	// TODO: Port Python method logic
 }
 
-// Disable is the Go port of the Python disable method
-func (ame *AmericanNoteCalculatorModule) Disable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *AmericanNoteCalculatorModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("AmericanNoteCalculatorModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *AmericanNoteCalculatorModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("AmericanNoteCalculatorModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (ame *AmericanNoteCalculatorModule) SetManager(manager *core.Manager) {
-	ame.manager = manager
+func (mod *AmericanNoteCalculatorModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _convert is the Go port of the Python _convert function
-func _convert() {
-	// TODO: Port Python function logic
-}
-
-// CalculateNote is the Go port of the Python calculateNote function
-
-// CalculateAverageNote is the Go port of the Python calculateAverageNote function
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitAmericanNoteCalculatorModule creates and returns a new AmericanNoteCalculatorModule instance
 // This is the Go equivalent of the Python init function
+func InitAmericanNoteCalculatorModule() core.Module {
+	return NewAmericanNoteCalculatorModule()
+}

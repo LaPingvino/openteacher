@@ -1,10 +1,14 @@
-// Package tesseractrecognizer.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/ocr/tesseractRecognizer/tesseractRecognizer.py
+// Package tesseractrecognizer provides functionality ported from Python module
+//
+// Recognizes text in an image with the Tesseract OCR program.
+// Outputs to HOCR.
 //
 // This is an automated port - implementation may be incomplete.
-package tesseractRecognizer
+package tesseractrecognizer
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,60 +21,56 @@ type TesseractOCRModule struct {
 
 // NewTesseractOCRModule creates a new TesseractOCRModule instance
 func NewTesseractOCRModule() *TesseractOCRModule {
-	base := core.NewBaseModule("ocrRecognizer", "ocrRecognizer")
+	base := core.NewBaseModule("logic", "tesseractrecognizer-module")
 
 	return &TesseractOCRModule{
 		BaseModule: base,
 	}
 }
 
-// ToHocr is the Go port of the Python toHocr method
-func (tes *TesseractOCRModule) ToHocr() {
+// Tohocr is the Go port of the Python toHocr method
+func (mod *TesseractOCRModule) Tohocr() {
 	// TODO: Port Python method logic
 }
 
-// callTesseract is the Go port of the Python _callTesseract method
-func (tes *TesseractOCRModule) callTesseract() {
-	// TODO: Port Python private method logic
+// calltesseract is the Go port of the Python _callTesseract method
+func (mod *TesseractOCRModule) calltesseract() {
+	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (tes *TesseractOCRModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *TesseractOCRModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("TesseractOCRModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (tes *TesseractOCRModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *TesseractOCRModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("TesseractOCRModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (tes *TesseractOCRModule) SetManager(manager *core.Manager) {
-	tes.manager = manager
+func (mod *TesseractOCRModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// ToHocr is the Go port of the Python toHocr function
-
-// _callTesseract is the Go port of the Python _callTesseract function
-func _callTesseract() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitTesseractOCRModule creates and returns a new TesseractOCRModule instance
 // This is the Go equivalent of the Python init function
+func InitTesseractOCRModule() core.Module {
+	return NewTesseractOCRModule()
+}

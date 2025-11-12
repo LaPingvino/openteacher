@@ -1,10 +1,14 @@
-// Package cuneiformrecognizer.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/ocr/cuneiformRecognizer/cuneiformRecognizer.py
+// Package cuneiformrecognizer provides functionality ported from Python module
+//
+// Recognizes text in an image with the Cuneiform OCR program.
+// Outputs to HOCR.
 //
 // This is an automated port - implementation may be incomplete.
-package cuneiformRecognizer
+package cuneiformrecognizer
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,60 +21,56 @@ type CuneiformOCRModule struct {
 
 // NewCuneiformOCRModule creates a new CuneiformOCRModule instance
 func NewCuneiformOCRModule() *CuneiformOCRModule {
-	base := core.NewBaseModule("ocrRecognizer", "ocrRecognizer")
+	base := core.NewBaseModule("logic", "cuneiformrecognizer-module")
 
 	return &CuneiformOCRModule{
 		BaseModule: base,
 	}
 }
 
-// callCuneiform is the Go port of the Python _callCuneiform method
-func (cun *CuneiformOCRModule) callCuneiform() {
-	// TODO: Port Python private method logic
-}
-
-// ToHocr is the Go port of the Python toHocr method
-func (cun *CuneiformOCRModule) ToHocr() {
+// callcuneiform is the Go port of the Python _callCuneiform method
+func (mod *CuneiformOCRModule) callcuneiform() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (cun *CuneiformOCRModule) Enable(ctx context.Context) error {
+// Tohocr is the Go port of the Python toHocr method
+func (mod *CuneiformOCRModule) Tohocr() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *CuneiformOCRModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("CuneiformOCRModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (cun *CuneiformOCRModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *CuneiformOCRModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("CuneiformOCRModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (cun *CuneiformOCRModule) SetManager(manager *core.Manager) {
-	cun.manager = manager
+func (mod *CuneiformOCRModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _callCuneiform is the Go port of the Python _callCuneiform function
-func _callCuneiform() {
-	// TODO: Port Python function logic
-}
-
-// ToHocr is the Go port of the Python toHocr function
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitCuneiformOCRModule creates and returns a new CuneiformOCRModule instance
 // This is the Go equivalent of the Python init function
+func InitCuneiformOCRModule() core.Module {
+	return NewCuneiformOCRModule()
+}

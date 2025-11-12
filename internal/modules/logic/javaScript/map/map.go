@@ -1,10 +1,12 @@
-// Package map.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/javaScript/map/map.py
+// Package jsmap provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
-package map
+package jsmap
+
 import (
 	"context"
+	"fmt"
+
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,43 +19,46 @@ type JSMapModule struct {
 
 // NewJSMapModule creates a new JSMapModule instance
 func NewJSMapModule() *JSMapModule {
-	base := core.NewBaseModule("mapfunc", "mapfunc")
+	base := core.NewBaseModule("logic", "map-module")
 
 	return &JSMapModule{
 		BaseModule: base,
 	}
 }
 
-// Enable is the Go port of the Python enable method
-func (jsm *JSMapModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *JSMapModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("JSMapModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (jsm *JSMapModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *JSMapModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("JSMapModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (jsm *JSMapModule) SetManager(manager *core.Manager) {
-	jsm.manager = manager
+func (mod *JSMapModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitJSMapModule creates and returns a new JSMapModule instance
 // This is the Go equivalent of the Python init function
+func InitJSMapModule() core.Module {
+	return NewJSMapModule()
+}

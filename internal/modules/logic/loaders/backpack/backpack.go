@@ -1,10 +1,11 @@
-// Package backpack.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/loaders/backpack/backpack.py
+// Package backpack provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package backpack
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,77 +18,66 @@ type BackpackLoaderModule struct {
 
 // NewBackpackLoaderModule creates a new BackpackLoaderModule instance
 func NewBackpackLoaderModule() *BackpackLoaderModule {
-	base := core.NewBaseModule("load", "load")
+	base := core.NewBaseModule("logic", "backpack-module")
 
 	return &BackpackLoaderModule{
 		BaseModule: base,
 	}
 }
 
-// parseList is the Go port of the Python _parseList method
-func (bac *BackpackLoaderModule) parseList() {
-	// TODO: Port Python private method logic
+// parselist is the Go port of the Python _parseList method
+func (mod *BackpackLoaderModule) parselist() {
+	// TODO: Port Python method logic
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (bac *BackpackLoaderModule) retranslate() {
-	// TODO: Port Python private method logic
+func (mod *BackpackLoaderModule) retranslate() {
+	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (bac *BackpackLoaderModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (bac *BackpackLoaderModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf method
-func (bac *BackpackLoaderModule) GetFileTypeOf() {
+// Getfiletypeof is the Go port of the Python getFileTypeOf method
+func (mod *BackpackLoaderModule) Getfiletypeof() {
 	// TODO: Port Python method logic
 }
 
 // Load is the Go port of the Python load method
-func (bac *BackpackLoaderModule) Load() {
+func (mod *BackpackLoaderModule) Load() {
 	// TODO: Port Python method logic
 }
 
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *BackpackLoaderModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("BackpackLoaderModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *BackpackLoaderModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("BackpackLoaderModule disabled")
+	return nil
+}
+
 // SetManager sets the module manager
-func (bac *BackpackLoaderModule) SetManager(manager *core.Manager) {
-	bac.manager = manager
+func (mod *BackpackLoaderModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _parseList is the Go port of the Python _parseList function
-func _parseList() {
-	// TODO: Port Python function logic
-}
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf function
-
-// Load is the Go port of the Python load function
-
-// Init creates and returns a new module instance
+// InitBackpackLoaderModule creates and returns a new BackpackLoaderModule instance
 // This is the Go equivalent of the Python init function
+func InitBackpackLoaderModule() core.Module {
+	return NewBackpackLoaderModule()
+}

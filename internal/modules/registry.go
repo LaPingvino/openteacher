@@ -4,7 +4,6 @@ import (
 	"github.com/LaPingvino/openteacher/internal/core"
 	"github.com/LaPingvino/openteacher/internal/modules/data/profiledescriptions"
 	"github.com/LaPingvino/openteacher/internal/modules/profilerunners/backgroundimage"
-	"github.com/LaPingvino/openteacher/internal/modules/profilerunners/businesscard"
 )
 
 // ModuleRegistry holds all available module initializers
@@ -24,7 +23,8 @@ func NewModuleRegistry() *ModuleRegistry {
 	})
 
 	// Register business card related modules
-	registry.RegisterModule("businessCardGenerator", businesscard.Init)
+	// Temporarily disable business card generator to avoid UI dependency issues
+	// registry.RegisterModule("businessCardGenerator", businesscard.Init)
 	registry.RegisterModule("backgroundImageGenerator", backgroundimage.Init)
 	registry.RegisterModule("profileDescription-generateBusinessCard", profiledescriptions.Init)
 

@@ -1,10 +1,11 @@
-// Package ovr.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/loaders/ovr/ovr.py
+// Package ovr provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package ovr
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +18,7 @@ type OverhoringsprogrammaTalenLoaderModule struct {
 
 // NewOverhoringsprogrammaTalenLoaderModule creates a new OverhoringsprogrammaTalenLoaderModule instance
 func NewOverhoringsprogrammaTalenLoaderModule() *OverhoringsprogrammaTalenLoaderModule {
-	base := core.NewBaseModule("load", "load")
+	base := core.NewBaseModule("logic", "ovr-module")
 
 	return &OverhoringsprogrammaTalenLoaderModule{
 		BaseModule: base,
@@ -25,99 +26,73 @@ func NewOverhoringsprogrammaTalenLoaderModule() *OverhoringsprogrammaTalenLoader
 }
 
 // parse is the Go port of the Python _parse method
-func (ove *OverhoringsprogrammaTalenLoaderModule) parse() {
-	// TODO: Port Python private method logic
+func (mod *OverhoringsprogrammaTalenLoaderModule) parse() {
+	// TODO: Port Python method logic
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (ove *OverhoringsprogrammaTalenLoaderModule) retranslate() {
-	// TODO: Port Python private method logic
-}
-
-// Enable is the Go port of the Python enable method
-func (ove *OverhoringsprogrammaTalenLoaderModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (ove *OverhoringsprogrammaTalenLoaderModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf method
-func (ove *OverhoringsprogrammaTalenLoaderModule) GetFileTypeOf() {
+func (mod *OverhoringsprogrammaTalenLoaderModule) retranslate() {
 	// TODO: Port Python method logic
 }
 
-// readLine is the Go port of the Python _readLine method
-func (ove *OverhoringsprogrammaTalenLoaderModule) readLine() {
-	// TODO: Port Python private method logic
+// Getfiletypeof is the Go port of the Python getFileTypeOf method
+func (mod *OverhoringsprogrammaTalenLoaderModule) Getfiletypeof() {
+	// TODO: Port Python method logic
 }
 
-// skipLine is the Go port of the Python _skipLine method
-func (ove *OverhoringsprogrammaTalenLoaderModule) skipLine() {
-	// TODO: Port Python private method logic
+// readline is the Go port of the Python _readLine method
+func (mod *OverhoringsprogrammaTalenLoaderModule) readline() {
+	// TODO: Port Python method logic
+}
+
+// skipline is the Go port of the Python _skipLine method
+func (mod *OverhoringsprogrammaTalenLoaderModule) skipline() {
+	// TODO: Port Python method logic
 }
 
 // Load is the Go port of the Python load method
-func (ove *OverhoringsprogrammaTalenLoaderModule) Load() {
+func (mod *OverhoringsprogrammaTalenLoaderModule) Load() {
 	// TODO: Port Python method logic
 }
 
-// loadItems is the Go port of the Python _loadItems method
-func (ove *OverhoringsprogrammaTalenLoaderModule) loadItems() {
-	// TODO: Port Python private method logic
+// loaditems is the Go port of the Python _loadItems method
+func (mod *OverhoringsprogrammaTalenLoaderModule) loaditems() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *OverhoringsprogrammaTalenLoaderModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("OverhoringsprogrammaTalenLoaderModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *OverhoringsprogrammaTalenLoaderModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("OverhoringsprogrammaTalenLoaderModule disabled")
+	return nil
 }
 
 // SetManager sets the module manager
-func (ove *OverhoringsprogrammaTalenLoaderModule) SetManager(manager *core.Manager) {
-	ove.manager = manager
+func (mod *OverhoringsprogrammaTalenLoaderModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _parse is the Go port of the Python _parse function
-func _parse() {
-	// TODO: Port Python function logic
-}
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf function
-
-// _readLine is the Go port of the Python _readLine function
-func _readLine() {
-	// TODO: Port Python function logic
-}
-
-// _skipLine is the Go port of the Python _skipLine function
-func _skipLine() {
-	// TODO: Port Python function logic
-}
-
-// Load is the Go port of the Python load function
-
-// _loadItems is the Go port of the Python _loadItems function
-func _loadItems() {
-	// TODO: Port Python function logic
-}
-
-// Init creates and returns a new module instance
+// InitOverhoringsprogrammaTalenLoaderModule creates and returns a new OverhoringsprogrammaTalenLoaderModule instance
 // This is the Go equivalent of the Python init function
+func InitOverhoringsprogrammaTalenLoaderModule() core.Module {
+	return NewOverhoringsprogrammaTalenLoaderModule()
+}

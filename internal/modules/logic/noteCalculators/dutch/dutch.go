@@ -1,10 +1,11 @@
-// Package dutch.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/noteCalculators/dutch/dutch.py
+// Package dutch provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package dutch
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,87 +18,71 @@ type DutchNoteCalculatorModule struct {
 
 // NewDutchNoteCalculatorModule creates a new DutchNoteCalculatorModule instance
 func NewDutchNoteCalculatorModule() *DutchNoteCalculatorModule {
-	base := core.NewBaseModule("noteCalculator", "noteCalculator")
+	base := core.NewBaseModule("logic", "dutch-module")
 
 	return &DutchNoteCalculatorModule{
 		BaseModule: base,
 	}
 }
 
-// formatNote is the Go port of the Python _formatNote method
-func (dut *DutchNoteCalculatorModule) formatNote() {
-	// TODO: Port Python private method logic
-}
-
-// calculateFloat is the Go port of the Python _calculateFloat method
-func (dut *DutchNoteCalculatorModule) calculateFloat() {
-	// TODO: Port Python private method logic
-}
-
-// CalculateNote is the Go port of the Python calculateNote method
-func (dut *DutchNoteCalculatorModule) CalculateNote() {
+// formatnote is the Go port of the Python _formatNote method
+func (mod *DutchNoteCalculatorModule) formatnote() {
 	// TODO: Port Python method logic
 }
 
-// CalculateAverageNote is the Go port of the Python calculateAverageNote method
-func (dut *DutchNoteCalculatorModule) CalculateAverageNote() {
+// calculatefloat is the Go port of the Python _calculateFloat method
+func (mod *DutchNoteCalculatorModule) calculatefloat() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (dut *DutchNoteCalculatorModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
+// Calculatenote is the Go port of the Python calculateNote method
+func (mod *DutchNoteCalculatorModule) Calculatenote() {
+	// TODO: Port Python method logic
+}
+
+// Calculateaveragenote is the Go port of the Python calculateAverageNote method
+func (mod *DutchNoteCalculatorModule) Calculateaveragenote() {
+	// TODO: Port Python method logic
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (dut *DutchNoteCalculatorModule) retranslate() {
-	// TODO: Port Python private method logic
+func (mod *DutchNoteCalculatorModule) retranslate() {
+	// TODO: Port Python method logic
 }
 
-// Disable is the Go port of the Python disable method
-func (dut *DutchNoteCalculatorModule) Disable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *DutchNoteCalculatorModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("DutchNoteCalculatorModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *DutchNoteCalculatorModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("DutchNoteCalculatorModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (dut *DutchNoteCalculatorModule) SetManager(manager *core.Manager) {
-	dut.manager = manager
+func (mod *DutchNoteCalculatorModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _formatNote is the Go port of the Python _formatNote function
-func _formatNote() {
-	// TODO: Port Python function logic
-}
-
-// _calculateFloat is the Go port of the Python _calculateFloat function
-func _calculateFloat() {
-	// TODO: Port Python function logic
-}
-
-// CalculateNote is the Go port of the Python calculateNote function
-
-// CalculateAverageNote is the Go port of the Python calculateAverageNote function
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitDutchNoteCalculatorModule creates and returns a new DutchNoteCalculatorModule instance
 // This is the Go equivalent of the Python init function
+func InitDutchNoteCalculatorModule() core.Module {
+	return NewDutchNoteCalculatorModule()
+}

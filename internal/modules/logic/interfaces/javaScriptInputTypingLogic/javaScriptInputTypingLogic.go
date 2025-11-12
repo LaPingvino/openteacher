@@ -1,10 +1,14 @@
-// Package javascriptinputtypinglogic.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/interfaces/javaScriptInputTypingLogic/javaScriptInputTypingLogic.py
+// Package javascriptinputtypinglogic provides functionality ported from Python module
+//
+// This module offers an object that can be used to control the part
+// of a GUI where the user types his/her answer in in a test.
 //
 // This is an automated port - implementation may be incomplete.
-package javaScriptInputTypingLogic
+package javascriptinputtypinglogic
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,60 +21,56 @@ type JSInputTypingLogicModule struct {
 
 // NewJSInputTypingLogicModule creates a new JSInputTypingLogicModule instance
 func NewJSInputTypingLogicModule() *JSInputTypingLogicModule {
-	base := core.NewBaseModule("jsInputTypingLogic", "jsInputTypingLogic")
+	base := core.NewBaseModule("interface", "javascriptinputtypinglogic-module")
 
 	return &JSInputTypingLogicModule{
 		BaseModule: base,
 	}
 }
 
-// CreateController is the Go port of the Python createController method
-func (jsi *JSInputTypingLogicModule) CreateController() {
+// Createcontroller is the Go port of the Python createController method
+func (mod *JSInputTypingLogicModule) Createcontroller() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (jsi *JSInputTypingLogicModule) Enable(ctx context.Context) error {
+// retranslate is the Go port of the Python _retranslate method
+func (mod *JSInputTypingLogicModule) retranslate() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *JSInputTypingLogicModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("JSInputTypingLogicModule enabled")
 	return nil
 }
 
-// retranslate is the Go port of the Python _retranslate method
-func (jsi *JSInputTypingLogicModule) retranslate() {
-	// TODO: Port Python private method logic
-}
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *JSInputTypingLogicModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
 
-// Disable is the Go port of the Python disable method
-func (jsi *JSInputTypingLogicModule) Disable(ctx context.Context) error {
 	// TODO: Port Python disable logic
+
+	fmt.Println("JSInputTypingLogicModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (jsi *JSInputTypingLogicModule) SetManager(manager *core.Manager) {
-	jsi.manager = manager
+func (mod *JSInputTypingLogicModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// CreateController is the Go port of the Python createController function
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitJSInputTypingLogicModule creates and returns a new JSInputTypingLogicModule instance
 // This is the Go equivalent of the Python init function
+func InitJSInputTypingLogicModule() core.Module {
+	return NewJSInputTypingLogicModule()
+}

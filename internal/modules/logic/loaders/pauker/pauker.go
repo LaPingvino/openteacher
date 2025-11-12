@@ -1,10 +1,13 @@
-// Package pauker.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/loaders/pauker/pauker.py
+// Package pauker provides functionality ported from Python module
+//
+// Loads .pau.gz and .xml.gz files (the format of Pauker)
 //
 // This is an automated port - implementation may be incomplete.
 package pauker
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +20,7 @@ type PaukerLoaderModule struct {
 
 // NewPaukerLoaderModule creates a new PaukerLoaderModule instance
 func NewPaukerLoaderModule() *PaukerLoaderModule {
-	base := core.NewBaseModule("load", "load")
+	base := core.NewBaseModule("logic", "pauker-module")
 
 	return &PaukerLoaderModule{
 		BaseModule: base,
@@ -25,69 +28,58 @@ func NewPaukerLoaderModule() *PaukerLoaderModule {
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (pau *PaukerLoaderModule) retranslate() {
-	// TODO: Port Python private method logic
+func (mod *PaukerLoaderModule) retranslate() {
+	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (pau *PaukerLoaderModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (pau *PaukerLoaderModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf method
-func (pau *PaukerLoaderModule) GetFileTypeOf() {
+// Getfiletypeof is the Go port of the Python getFileTypeOf method
+func (mod *PaukerLoaderModule) Getfiletypeof() {
 	// TODO: Port Python method logic
 }
 
 // parse is the Go port of the Python _parse method
-func (pau *PaukerLoaderModule) parse() {
-	// TODO: Port Python private method logic
-}
-
-// Load is the Go port of the Python load method
-func (pau *PaukerLoaderModule) Load() {
+func (mod *PaukerLoaderModule) parse() {
 	// TODO: Port Python method logic
 }
 
+// Load is the Go port of the Python load method
+func (mod *PaukerLoaderModule) Load() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *PaukerLoaderModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("PaukerLoaderModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *PaukerLoaderModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("PaukerLoaderModule disabled")
+	return nil
+}
+
 // SetManager sets the module manager
-func (pau *PaukerLoaderModule) SetManager(manager *core.Manager) {
-	pau.manager = manager
+func (mod *PaukerLoaderModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf function
-
-// _parse is the Go port of the Python _parse function
-func _parse() {
-	// TODO: Port Python function logic
-}
-
-// Load is the Go port of the Python load function
-
-// Init creates and returns a new module instance
+// InitPaukerLoaderModule creates and returns a new PaukerLoaderModule instance
 // This is the Go equivalent of the Python init function
+func InitPaukerLoaderModule() core.Module {
+	return NewPaukerLoaderModule()
+}

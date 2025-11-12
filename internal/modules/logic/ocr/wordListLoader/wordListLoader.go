@@ -1,39 +1,15 @@
-// Package wordlistloader.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/ocr/wordListLoader/wordListLoader.py
+// Package wordlistloader provides functionality ported from Python module
+//
+// Loads a word list from an image (e.g. a scan or picture).
 //
 // This is an automated port - implementation may be incomplete.
-package wordListLoader
+package wordlistloader
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
-
-// HocrParser is a Go port of the Python HocrParser class
-type HocrParser struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewHocrParser creates a new HocrParser instance
-func NewHocrParser() *HocrParser {
-	return &HocrParser{
-		// TODO: Initialize fields
-	}
-}
-
-// Handle_starttag is the Go port of the Python handle_starttag method
-func (hoc *HocrParser) Handle_starttag() {
-	// TODO: Port Python method logic
-}
-
-// Handle_endtag is the Go port of the Python handle_endtag method
-func (hoc *HocrParser) Handle_endtag() {
-	// TODO: Port Python method logic
-}
-
-// Handle_data is the Go port of the Python handle_data method
-func (hoc *HocrParser) Handle_data() {
-	// TODO: Port Python method logic
-}
 
 // OcrWordListLoaderModule is a Go port of the Python OcrWordListLoaderModule class
 type OcrWordListLoaderModule struct {
@@ -44,108 +20,76 @@ type OcrWordListLoaderModule struct {
 
 // NewOcrWordListLoaderModule creates a new OcrWordListLoaderModule instance
 func NewOcrWordListLoaderModule() *OcrWordListLoaderModule {
-	base := core.NewBaseModule("ocrWordListLoader", "ocrWordListLoader")
+	base := core.NewBaseModule("logic", "wordlistloader-module")
 
 	return &OcrWordListLoaderModule{
 		BaseModule: base,
 	}
 }
 
-// sortAndDetectRows is the Go port of the Python _sortAndDetectRows method
-func (ocr *OcrWordListLoaderModule) sortAndDetectRows() {
-	// TODO: Port Python private method logic
-}
-
-// sortAndDetectColumns is the Go port of the Python _sortAndDetectColumns method
-func (ocr *OcrWordListLoaderModule) sortAndDetectColumns() {
-	// TODO: Port Python private method logic
-}
-
-// hocrToRects is the Go port of the Python _hocrToRects method
-func (ocr *OcrWordListLoaderModule) hocrToRects() {
-	// TODO: Port Python private method logic
-}
-
-// makeFilteredRowsFromColumnsTable is the Go port of the Python _makeFilteredRowsFromColumnsTable method
-func (ocr *OcrWordListLoaderModule) makeFilteredRowsFromColumnsTable() {
-	// TODO: Port Python private method logic
-}
-
-// columnsTableToLesson is the Go port of the Python _columnsTableToLesson method
-func (ocr *OcrWordListLoaderModule) columnsTableToLesson() {
-	// TODO: Port Python private method logic
-}
-
-// LoadWordList is the Go port of the Python loadWordList method
-func (ocr *OcrWordListLoaderModule) LoadWordList() {
+// sortanddetectrows is the Go port of the Python _sortAndDetectRows method
+func (mod *OcrWordListLoaderModule) sortanddetectrows() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (ocr *OcrWordListLoaderModule) Enable(ctx context.Context) error {
+// sortanddetectcolumns is the Go port of the Python _sortAndDetectColumns method
+func (mod *OcrWordListLoaderModule) sortanddetectcolumns() {
+	// TODO: Port Python method logic
+}
+
+// hocrtorects is the Go port of the Python _hocrToRects method
+func (mod *OcrWordListLoaderModule) hocrtorects() {
+	// TODO: Port Python method logic
+}
+
+// makefilteredrowsfromcolumnstable is the Go port of the Python _makeFilteredRowsFromColumnsTable method
+func (mod *OcrWordListLoaderModule) makefilteredrowsfromcolumnstable() {
+	// TODO: Port Python method logic
+}
+
+// columnstabletolesson is the Go port of the Python _columnsTableToLesson method
+func (mod *OcrWordListLoaderModule) columnstabletolesson() {
+	// TODO: Port Python method logic
+}
+
+// Loadwordlist is the Go port of the Python loadWordList method
+func (mod *OcrWordListLoaderModule) Loadwordlist() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *OcrWordListLoaderModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("OcrWordListLoaderModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (ocr *OcrWordListLoaderModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *OcrWordListLoaderModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("OcrWordListLoaderModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (ocr *OcrWordListLoaderModule) SetManager(manager *core.Manager) {
-	ocr.manager = manager
+func (mod *OcrWordListLoaderModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Handle_starttag is the Go port of the Python handle_starttag function
-
-// Handle_endtag is the Go port of the Python handle_endtag function
-
-// Handle_data is the Go port of the Python handle_data function
-
-// __init__ is the Go port of the Python __init__ function
-
-// _sortAndDetectRows is the Go port of the Python _sortAndDetectRows function
-func _sortAndDetectRows() {
-	// TODO: Port Python function logic
-}
-
-// _sortAndDetectColumns is the Go port of the Python _sortAndDetectColumns function
-func _sortAndDetectColumns() {
-	// TODO: Port Python function logic
-}
-
-// _hocrToRects is the Go port of the Python _hocrToRects function
-func _hocrToRects() {
-	// TODO: Port Python function logic
-}
-
-// _makeFilteredRowsFromColumnsTable is the Go port of the Python _makeFilteredRowsFromColumnsTable function
-func _makeFilteredRowsFromColumnsTable() {
-	// TODO: Port Python function logic
-}
-
-// _columnsTableToLesson is the Go port of the Python _columnsTableToLesson function
-func _columnsTableToLesson() {
-	// TODO: Port Python function logic
-}
-
-// LoadWordList is the Go port of the Python loadWordList function
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitOcrWordListLoaderModule creates and returns a new OcrWordListLoaderModule instance
 // This is the Go equivalent of the Python init function
+func InitOcrWordListLoaderModule() core.Module {
+	return NewOcrWordListLoaderModule()
+}

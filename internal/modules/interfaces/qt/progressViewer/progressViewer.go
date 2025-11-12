@@ -1,11 +1,13 @@
-// Package progressviewer.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/interfaces/qt/progressViewer/progressViewer.py
+// Package progressviewer provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
-package progressViewer
+package progressviewer
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
+	_ "github.com/therecipe/qt/widgets"
 )
 
 // ProgressViewerModule is a Go port of the Python ProgressViewerModule class
@@ -17,134 +19,56 @@ type ProgressViewerModule struct {
 
 // NewProgressViewerModule creates a new ProgressViewerModule instance
 func NewProgressViewerModule() *ProgressViewerModule {
-	base := core.NewBaseModule("progressViewer", "progressViewer")
+	base := core.NewBaseModule("ui", "progressviewer-module")
 
 	return &ProgressViewerModule{
 		BaseModule: base,
 	}
 }
 
-// CreateProgressViewer is the Go port of the Python createProgressViewer method
-func (pro *ProgressViewerModule) CreateProgressViewer() {
+// Createprogressviewer is the Go port of the Python createProgressViewer method
+func (mod *ProgressViewerModule) Createprogressviewer() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (pro *ProgressViewerModule) Enable(ctx context.Context) error {
+// retranslate is the Go port of the Python _retranslate method
+func (mod *ProgressViewerModule) retranslate() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *ProgressViewerModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("ProgressViewerModule enabled")
 	return nil
 }
 
-// retranslate is the Go port of the Python _retranslate method
-func (pro *ProgressViewerModule) retranslate() {
-	// TODO: Port Python private method logic
-}
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *ProgressViewerModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
 
-// Disable is the Go port of the Python disable method
-func (pro *ProgressViewerModule) Disable(ctx context.Context) error {
 	// TODO: Port Python disable logic
+
+	fmt.Println("ProgressViewerModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (pro *ProgressViewerModule) SetManager(manager *core.Manager) {
-	pro.manager = manager
+func (mod *ProgressViewerModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Graph is a Go port of the Python Graph class
-type Graph struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewGraph creates a new Graph instance
-func NewGraph() *Graph {
-	return &Graph{
-		// TODO: Initialize fields
-	}
-}
-
-// amountOfUniqueItems is the Go port of the Python _amountOfUniqueItems method
-func (gra *Graph) amountOfUniqueItems() {
-	// TODO: Port Python private method logic
-}
-
-// Event is the Go port of the Python event method
-func (gra *Graph) Event() {
-	// TODO: Port Python method logic
-}
-
-// paintItem is the Go port of the Python _paintItem method
-func (gra *Graph) paintItem() {
-	// TODO: Port Python private method logic
-}
-
-// PaintEvent is the Go port of the Python paintEvent method
-func (gra *Graph) PaintEvent() {
-	// TODO: Port Python method logic
-}
-
-// SizeHint is the Go port of the Python sizeHint method
-func (gra *Graph) SizeHint() {
-	// TODO: Port Python method logic
-}
-
-// ProgressViewer is a Go port of the Python ProgressViewer class
-type ProgressViewer struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewProgressViewer creates a new ProgressViewer instance
-func NewProgressViewer() *ProgressViewer {
-	return &ProgressViewer{
-		// TODO: Initialize fields
-	}
-}
-
-// InstallQtClasses is the Go port of the Python installQtClasses function
-func InstallQtClasses() {
-	// TODO: Port Python function logic
-}
-
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// CreateProgressViewer is the Go port of the Python createProgressViewer function
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// __init__ is the Go port of the Python __init__ function
-
-// _amountOfUniqueItems is the Go port of the Python _amountOfUniqueItems function
-func _amountOfUniqueItems() {
-	// TODO: Port Python function logic
-}
-
-// Event is the Go port of the Python event function
-
-// _paintItem is the Go port of the Python _paintItem function
-func _paintItem() {
-	// TODO: Port Python function logic
-}
-
-// PaintEvent is the Go port of the Python paintEvent function
-
-// SizeHint is the Go port of the Python sizeHint function
-
-// __init__ is the Go port of the Python __init__ function
-
-// Init creates and returns a new module instance
+// InitProgressViewerModule creates and returns a new ProgressViewerModule instance
 // This is the Go equivalent of the Python init function
+func InitProgressViewerModule() core.Module {
+	return NewProgressViewerModule()
+}

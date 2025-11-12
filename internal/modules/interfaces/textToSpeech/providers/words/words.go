@@ -1,63 +1,73 @@
-// Package words.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/interfaces/textToSpeech/providers/words/words.py
+// Package words provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package words
+
 import (
 	"context"
+	"fmt"
+	"github.com/LaPingvino/openteacher/internal/core"
 )
 
 // TextToSpeechProviderWords is a Go port of the Python TextToSpeechProviderWords class
 type TextToSpeechProviderWords struct {
-	// TODO: Add struct fields based on Python class
+	*core.BaseModule
+	manager *core.Manager
+	// TODO: Add module-specific fields
 }
 
 // NewTextToSpeechProviderWords creates a new TextToSpeechProviderWords instance
 func NewTextToSpeechProviderWords() *TextToSpeechProviderWords {
+	base := core.NewBaseModule("interface", "words-module")
+
 	return &TextToSpeechProviderWords{
-		// TODO: Initialize fields
+		BaseModule: base,
 	}
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (tex *TextToSpeechProviderWords) retranslate() {
-	// TODO: Port Python private method logic
-}
-
-// Enable is the Go port of the Python enable method
-func (tex *TextToSpeechProviderWords) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (tex *TextToSpeechProviderWords) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// ItemSent is the Go port of the Python itemSent method
-func (tex *TextToSpeechProviderWords) ItemSent() {
+func (mod *TextToSpeechProviderWords) retranslate() {
 	// TODO: Port Python method logic
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
+// Itemsent is the Go port of the Python itemSent method
+func (mod *TextToSpeechProviderWords) Itemsent() {
+	// TODO: Port Python method logic
 }
 
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *TextToSpeechProviderWords) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("TextToSpeechProviderWords enabled")
+	return nil
 }
 
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *TextToSpeechProviderWords) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("TextToSpeechProviderWords disabled")
+	return nil
 }
 
-// Enable is the Go port of the Python enable function
+// SetManager sets the module manager
+func (mod *TextToSpeechProviderWords) SetManager(manager *core.Manager) {
+	mod.manager = manager
+}
 
-// Disable is the Go port of the Python disable function
-
-// ItemSent is the Go port of the Python itemSent function
+// InitTextToSpeechProviderWords creates and returns a new TextToSpeechProviderWords instance
+// This is the Go equivalent of the Python init function
+func InitTextToSpeechProviderWords() core.Module {
+	return NewTextToSpeechProviderWords()
+}

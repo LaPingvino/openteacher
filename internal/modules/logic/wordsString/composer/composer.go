@@ -1,9 +1,11 @@
-// Package composer.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/wordsString/composer/composer.py
+// Package composer provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package composer
+
 import (
+	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -16,7 +18,7 @@ type WordsStringComposerModule struct {
 
 // NewWordsStringComposerModule creates a new WordsStringComposerModule instance
 func NewWordsStringComposerModule() *WordsStringComposerModule {
-	base := core.NewBaseModule("wordsStringComposer", "wordsStringComposer")
+	base := core.NewBaseModule("logic", "composer-module")
 
 	return &WordsStringComposerModule{
 		BaseModule: base,
@@ -24,26 +26,43 @@ func NewWordsStringComposerModule() *WordsStringComposerModule {
 }
 
 // Compose is the Go port of the Python compose method
-func (wor *WordsStringComposerModule) Compose() {
+func (mod *WordsStringComposerModule) Compose() {
 	// TODO: Port Python method logic
 }
 
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *WordsStringComposerModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("WordsStringComposerModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *WordsStringComposerModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("WordsStringComposerModule disabled")
+	return nil
+}
+
 // SetManager sets the module manager
-func (wor *WordsStringComposerModule) SetManager(manager *core.Manager) {
-	wor.manager = manager
+func (mod *WordsStringComposerModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Compose is the Go port of the Python compose function
-
-// Init creates and returns a new module instance
+// InitWordsStringComposerModule creates and returns a new WordsStringComposerModule instance
 // This is the Go equivalent of the Python init function
+func InitWordsStringComposerModule() core.Module {
+	return NewWordsStringComposerModule()
+}

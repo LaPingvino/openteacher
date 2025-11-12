@@ -1,10 +1,11 @@
-// Package merger.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/translationIndex/merger/merger.py
+// Package merger provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package merger
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,50 +18,51 @@ type TranslationIndexesMergerModule struct {
 
 // NewTranslationIndexesMergerModule creates a new TranslationIndexesMergerModule instance
 func NewTranslationIndexesMergerModule() *TranslationIndexesMergerModule {
-	base := core.NewBaseModule("translationIndexesMerger", "translationIndexesMerger")
+	base := core.NewBaseModule("logic", "merger-module")
 
 	return &TranslationIndexesMergerModule{
 		BaseModule: base,
 	}
 }
 
-// Enable is the Go port of the Python enable method
-func (tra *TranslationIndexesMergerModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// MergeIndexes is the Go port of the Python mergeIndexes method
-func (tra *TranslationIndexesMergerModule) MergeIndexes() {
+// Mergeindexes is the Go port of the Python mergeIndexes method
+func (mod *TranslationIndexesMergerModule) Mergeindexes() {
 	// TODO: Port Python method logic
 }
 
-// Disable is the Go port of the Python disable method
-func (tra *TranslationIndexesMergerModule) Disable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *TranslationIndexesMergerModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("TranslationIndexesMergerModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *TranslationIndexesMergerModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("TranslationIndexesMergerModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (tra *TranslationIndexesMergerModule) SetManager(manager *core.Manager) {
-	tra.manager = manager
+func (mod *TranslationIndexesMergerModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// MergeIndexes is the Go port of the Python mergeIndexes function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitTranslationIndexesMergerModule creates and returns a new TranslationIndexesMergerModule instance
 // This is the Go equivalent of the Python init function
+func InitTranslationIndexesMergerModule() core.Module {
+	return NewTranslationIndexesMergerModule()
+}

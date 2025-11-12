@@ -1,10 +1,11 @@
-// Package checker.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/wordsString/checker/checker.py
+// Package checker provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package checker
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,70 +18,61 @@ type WordsStringCheckerModule struct {
 
 // NewWordsStringCheckerModule creates a new WordsStringCheckerModule instance
 func NewWordsStringCheckerModule() *WordsStringCheckerModule {
-	base := core.NewBaseModule("wordsStringChecker", "wordsStringChecker")
+	base := core.NewBaseModule("logic", "checker-module")
 
 	return &WordsStringCheckerModule{
 		BaseModule: base,
 	}
 }
 
-// checkSingleCompulsoryAnswerGiven is the Go port of the Python _checkSingleCompulsoryAnswerGiven method
-func (wor *WordsStringCheckerModule) checkSingleCompulsoryAnswerGiven() {
-	// TODO: Port Python private method logic
-}
-
-// checkMultipleCompulsoryAnswersGiven is the Go port of the Python _checkMultipleCompulsoryAnswersGiven method
-func (wor *WordsStringCheckerModule) checkMultipleCompulsoryAnswersGiven() {
-	// TODO: Port Python private method logic
-}
-
-// Check is the Go port of the Python check method
-func (wor *WordsStringCheckerModule) Check() {
+// checksinglecompulsoryanswergiven is the Go port of the Python _checkSingleCompulsoryAnswerGiven method
+func (mod *WordsStringCheckerModule) checksinglecompulsoryanswergiven() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (wor *WordsStringCheckerModule) Enable(ctx context.Context) error {
+// checkmultiplecompulsoryanswersgiven is the Go port of the Python _checkMultipleCompulsoryAnswersGiven method
+func (mod *WordsStringCheckerModule) checkmultiplecompulsoryanswersgiven() {
+	// TODO: Port Python method logic
+}
+
+// Check is the Go port of the Python check method
+func (mod *WordsStringCheckerModule) Check() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *WordsStringCheckerModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("WordsStringCheckerModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (wor *WordsStringCheckerModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *WordsStringCheckerModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("WordsStringCheckerModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (wor *WordsStringCheckerModule) SetManager(manager *core.Manager) {
-	wor.manager = manager
+func (mod *WordsStringCheckerModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _checkSingleCompulsoryAnswerGiven is the Go port of the Python _checkSingleCompulsoryAnswerGiven function
-func _checkSingleCompulsoryAnswerGiven() {
-	// TODO: Port Python function logic
-}
-
-// _checkMultipleCompulsoryAnswersGiven is the Go port of the Python _checkMultipleCompulsoryAnswersGiven function
-func _checkMultipleCompulsoryAnswersGiven() {
-	// TODO: Port Python function logic
-}
-
-// Check is the Go port of the Python check function
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitWordsStringCheckerModule creates and returns a new WordsStringCheckerModule instance
 // This is the Go equivalent of the Python init function
+func InitWordsStringCheckerModule() core.Module {
+	return NewWordsStringCheckerModule()
+}

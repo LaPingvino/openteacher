@@ -10,7 +10,10 @@ package qtapp
 import (
 	"context"
 	"fmt"
+	"os"
+
 	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/widgets"
 )
 
@@ -18,12 +21,13 @@ import (
 type QtAppModule struct {
 	*core.BaseModule
 	manager *core.Manager
-	// TODO: Add module-specific fields
+	app     *widgets.QApplication
 }
 
 // NewQtAppModule creates a new QtAppModule instance
 func NewQtAppModule() *QtAppModule {
-	base := core.NewBaseModule("ui", "qtapp-module")
+	base := core.NewBaseModule("qtApp", "qtapp-module")
+	base.SetPriority(2000) // High priority - needs to run early
 
 	return &QtAppModule{
 		BaseModule: base,
@@ -37,7 +41,18 @@ func (mod *QtAppModule) Enable(ctx context.Context) error {
 		return err
 	}
 
-	// TODO: Port Python enable logic
+	// Initialize Qt Application if not already done
+	if mod.app == nil {
+		mod.app = widgets.NewQApplication(len(os.Args), os.Args)
+
+		// Set application properties
+		mod.app.SetApplicationName("OpenTeacher")
+		mod.app.SetApplicationVersion("4.0.0")
+		mod.app.SetOrganizationName("OpenTeacher")
+		mod.app.SetOrganizationDomain("openteacher.org")
+
+		fmt.Println("Qt Application initialized")
+	}
 
 	fmt.Println("QtAppModule enabled")
 	return nil
@@ -50,7 +65,11 @@ func (mod *QtAppModule) Disable(ctx context.Context) error {
 		return err
 	}
 
-	// TODO: Port Python disable logic
+	// Clean up Qt Application
+	if mod.app != nil {
+		mod.app.Quit()
+		mod.app = nil
+	}
 
 	fmt.Println("QtAppModule disabled")
 	return nil
@@ -59,6 +78,26 @@ func (mod *QtAppModule) Disable(ctx context.Context) error {
 // SetManager sets the module manager
 func (mod *QtAppModule) SetManager(manager *core.Manager) {
 	mod.manager = manager
+}
+
+// GetApplication returns the Qt application instance
+func (mod *QtAppModule) GetApplication() *widgets.QApplication {
+	return mod.app
+}
+
+// ProcessEvents processes pending Qt events
+func (mod *QtAppModule) ProcessEvents() {
+	if mod.app != nil {
+		mod.app.ProcessEvents2(core.QEventLoop__AllEvents, 0)
+	}
+}
+
+// Exec runs the Qt event loop (blocking)
+func (mod *QtAppModule) Exec() int {
+	if mod.app != nil {
+		return mod.app.Exec()
+	}
+	return 0
 }
 
 // InitQtAppModule creates and returns a new QtAppModule instance

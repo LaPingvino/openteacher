@@ -1,10 +1,11 @@
-// Package userdocumentationwrapper.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/userDocumentationWrapper/userDocumentationWrapper.py
+// Package userdocumentationwrapper provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
-package userDocumentationWrapper
+package userdocumentationwrapper
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +18,7 @@ type UserDocumentationWrapperModule struct {
 
 // NewUserDocumentationWrapperModule creates a new UserDocumentationWrapperModule instance
 func NewUserDocumentationWrapperModule() *UserDocumentationWrapperModule {
-	base := core.NewBaseModule("userDocumentationWrapper", "userDocumentationWrapper")
+	base := core.NewBaseModule("logic", "userdocumentationwrapper-module")
 
 	return &UserDocumentationWrapperModule{
 		BaseModule: base,
@@ -25,42 +26,43 @@ func NewUserDocumentationWrapperModule() *UserDocumentationWrapperModule {
 }
 
 // Wrap is the Go port of the Python wrap method
-func (use *UserDocumentationWrapperModule) Wrap() {
+func (mod *UserDocumentationWrapperModule) Wrap() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (use *UserDocumentationWrapperModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *UserDocumentationWrapperModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("UserDocumentationWrapperModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (use *UserDocumentationWrapperModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *UserDocumentationWrapperModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("UserDocumentationWrapperModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (use *UserDocumentationWrapperModule) SetManager(manager *core.Manager) {
-	use.manager = manager
+func (mod *UserDocumentationWrapperModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Wrap is the Go port of the Python wrap function
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitUserDocumentationWrapperModule creates and returns a new UserDocumentationWrapperModule instance
 // This is the Go equivalent of the Python init function
+func InitUserDocumentationWrapperModule() core.Module {
+	return NewUserDocumentationWrapperModule()
+}

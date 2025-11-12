@@ -1,10 +1,11 @@
-// Package composer.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/wordListString/composer/composer.py
+// Package composer provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package composer
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,60 +18,56 @@ type WordListStringComposerModule struct {
 
 // NewWordListStringComposerModule creates a new WordListStringComposerModule instance
 func NewWordListStringComposerModule() *WordListStringComposerModule {
-	base := core.NewBaseModule("wordListStringComposer", "wordListStringComposer")
+	base := core.NewBaseModule("logic", "composer-module")
 
 	return &WordListStringComposerModule{
 		BaseModule: base,
 	}
 }
 
-// ComposeList is the Go port of the Python composeList method
-func (wor *WordListStringComposerModule) ComposeList() {
+// Composelist is the Go port of the Python composeList method
+func (mod *WordListStringComposerModule) Composelist() {
 	// TODO: Port Python method logic
 }
 
 // escape is the Go port of the Python _escape method
-func (wor *WordListStringComposerModule) escape() {
-	// TODO: Port Python private method logic
+func (mod *WordListStringComposerModule) escape() {
+	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (wor *WordListStringComposerModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *WordListStringComposerModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("WordListStringComposerModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (wor *WordListStringComposerModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *WordListStringComposerModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("WordListStringComposerModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (wor *WordListStringComposerModule) SetManager(manager *core.Manager) {
-	wor.manager = manager
+func (mod *WordListStringComposerModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// ComposeList is the Go port of the Python composeList function
-
-// _escape is the Go port of the Python _escape function
-func _escape() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitWordListStringComposerModule creates and returns a new WordListStringComposerModule instance
 // This is the Go equivalent of the Python init function
+func InitWordListStringComposerModule() core.Module {
+	return NewWordListStringComposerModule()
+}

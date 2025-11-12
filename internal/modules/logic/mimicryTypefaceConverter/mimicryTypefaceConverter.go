@@ -1,10 +1,15 @@
-// Package mimicrytypefaceconverter.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/mimicryTypefaceConverter/mimicryTypefaceConverter.py
+// Package mimicrytypefaceconverter provides functionality ported from Python module
+//
+// Supported mimicry fonts:
+// - Greek
+// - TekniaGreek
 //
 // This is an automated port - implementation may be incomplete.
-package mimicryTypefaceConverter
+package mimicrytypefaceconverter
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +22,7 @@ type MimicryTypefaceConverterModule struct {
 
 // NewMimicryTypefaceConverterModule creates a new MimicryTypefaceConverterModule instance
 func NewMimicryTypefaceConverterModule() *MimicryTypefaceConverterModule {
-	base := core.NewBaseModule("mimicryTypefaceConverter", "mimicryTypefaceConverter")
+	base := core.NewBaseModule("logic", "mimicrytypefaceconverter-module")
 
 	return &MimicryTypefaceConverterModule{
 		BaseModule: base,
@@ -25,42 +30,43 @@ func NewMimicryTypefaceConverterModule() *MimicryTypefaceConverterModule {
 }
 
 // Convert is the Go port of the Python convert method
-func (mim *MimicryTypefaceConverterModule) Convert() {
+func (mod *MimicryTypefaceConverterModule) Convert() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (mim *MimicryTypefaceConverterModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *MimicryTypefaceConverterModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("MimicryTypefaceConverterModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (mim *MimicryTypefaceConverterModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *MimicryTypefaceConverterModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("MimicryTypefaceConverterModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (mim *MimicryTypefaceConverterModule) SetManager(manager *core.Manager) {
-	mim.manager = manager
+func (mod *MimicryTypefaceConverterModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Convert is the Go port of the Python convert function
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitMimicryTypefaceConverterModule creates and returns a new MimicryTypefaceConverterModule instance
 // This is the Go equivalent of the Python init function
+func InitMimicryTypefaceConverterModule() core.Module {
+	return NewMimicryTypefaceConverterModule()
+}

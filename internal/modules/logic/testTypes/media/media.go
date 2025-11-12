@@ -1,10 +1,11 @@
-// Package media.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/testTypes/media/media.py
+// Package media provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package media
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,74 +18,66 @@ type MediaTestTypeModule struct {
 
 // NewMediaTestTypeModule creates a new MediaTestTypeModule instance
 func NewMediaTestTypeModule() *MediaTestTypeModule {
-	base := core.NewBaseModule("testType", "testType")
+	base := core.NewBaseModule("logic", "media-module")
 
 	return &MediaTestTypeModule{
 		BaseModule: base,
 	}
 }
 
-// Enable is the Go port of the Python enable method
-func (med *MediaTestTypeModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (med *MediaTestTypeModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// UpdateList is the Go port of the Python updateList method
-func (med *MediaTestTypeModule) UpdateList() {
+// Updatelist is the Go port of the Python updateList method
+func (mod *MediaTestTypeModule) Updatelist() {
 	// TODO: Port Python method logic
 }
 
 // Header is the Go port of the Python header method
-func (med *MediaTestTypeModule) Header() {
+func (mod *MediaTestTypeModule) Header() {
 	// TODO: Port Python method logic
 }
 
-// itemForResult is the Go port of the Python _itemForResult method
-func (med *MediaTestTypeModule) itemForResult() {
-	// TODO: Port Python private method logic
+// itemforresult is the Go port of the Python _itemForResult method
+func (mod *MediaTestTypeModule) itemforresult() {
+	// TODO: Port Python method logic
 }
 
 // Data is the Go port of the Python data method
-func (med *MediaTestTypeModule) Data() {
+func (mod *MediaTestTypeModule) Data() {
 	// TODO: Port Python method logic
 }
 
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *MediaTestTypeModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("MediaTestTypeModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *MediaTestTypeModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("MediaTestTypeModule disabled")
+	return nil
+}
+
 // SetManager sets the module manager
-func (med *MediaTestTypeModule) SetManager(manager *core.Manager) {
-	med.manager = manager
+func (mod *MediaTestTypeModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// UpdateList is the Go port of the Python updateList function
-
-// Header is the Go port of the Python header function
-
-// _itemForResult is the Go port of the Python _itemForResult function
-func _itemForResult() {
-	// TODO: Port Python function logic
-}
-
-// Data is the Go port of the Python data function
-
-// Init creates and returns a new module instance
+// InitMediaTestTypeModule creates and returns a new MediaTestTypeModule instance
 // This is the Go equivalent of the Python init function
+func InitMediaTestTypeModule() core.Module {
+	return NewMediaTestTypeModule()
+}

@@ -1,10 +1,11 @@
-// Package settingsfilterer.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/settingsFilterer/settingsFilterer.py
+// Package settingsfilterer provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
-package settingsFilterer
+package settingsfilterer
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,60 +18,56 @@ type SettingsFiltererModule struct {
 
 // NewSettingsFiltererModule creates a new SettingsFiltererModule instance
 func NewSettingsFiltererModule() *SettingsFiltererModule {
-	base := core.NewBaseModule("settingsFilterer", "settingsFilterer")
+	base := core.NewBaseModule("logic", "settingsfilterer-module")
 
 	return &SettingsFiltererModule{
 		BaseModule: base,
 	}
 }
 
-// ByKey is the Go port of the Python byKey method
-func (set *SettingsFiltererModule) ByKey() {
+// Bykey is the Go port of the Python byKey method
+func (mod *SettingsFiltererModule) Bykey() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (set *SettingsFiltererModule) Enable(ctx context.Context) error {
+// retranslate is the Go port of the Python _retranslate method
+func (mod *SettingsFiltererModule) retranslate() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *SettingsFiltererModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("SettingsFiltererModule enabled")
 	return nil
 }
 
-// retranslate is the Go port of the Python _retranslate method
-func (set *SettingsFiltererModule) retranslate() {
-	// TODO: Port Python private method logic
-}
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *SettingsFiltererModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
 
-// Disable is the Go port of the Python disable method
-func (set *SettingsFiltererModule) Disable(ctx context.Context) error {
 	// TODO: Port Python disable logic
+
+	fmt.Println("SettingsFiltererModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (set *SettingsFiltererModule) SetManager(manager *core.Manager) {
-	set.manager = manager
+func (mod *SettingsFiltererModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// ByKey is the Go port of the Python byKey function
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitSettingsFiltererModule creates and returns a new SettingsFiltererModule instance
 // This is the Go equivalent of the Python init function
+func InitSettingsFiltererModule() core.Module {
+	return NewSettingsFiltererModule()
+}

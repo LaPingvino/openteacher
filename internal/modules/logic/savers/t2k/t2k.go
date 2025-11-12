@@ -1,10 +1,11 @@
-// Package t2k.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/savers/t2k/t2k.py
+// Package t2k provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package t2k
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +18,7 @@ type Teach2000SaverModule struct {
 
 // NewTeach2000SaverModule creates a new Teach2000SaverModule instance
 func NewTeach2000SaverModule() *Teach2000SaverModule {
-	base := core.NewBaseModule("save", "save")
+	base := core.NewBaseModule("logic", "t2k-module")
 
 	return &Teach2000SaverModule{
 		BaseModule: base,
@@ -25,152 +26,98 @@ func NewTeach2000SaverModule() *Teach2000SaverModule {
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (tea *Teach2000SaverModule) retranslate() {
-	// TODO: Port Python private method logic
-}
-
-// Enable is the Go port of the Python enable method
-func (tea *Teach2000SaverModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (tea *Teach2000SaverModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// Save is the Go port of the Python save method
-func (tea *Teach2000SaverModule) Save() {
+func (mod *Teach2000SaverModule) retranslate() {
 	// TODO: Port Python method logic
 }
 
-// storeRightWrongCountInWords is the Go port of the Python _storeRightWrongCountInWords method
-func (tea *Teach2000SaverModule) storeRightWrongCountInWords() {
-	// TODO: Port Python private method logic
+// Save is the Go port of the Python save method
+func (mod *Teach2000SaverModule) Save() {
+	// TODO: Port Python method logic
 }
 
-// calculateNote is the Go port of the Python _calculateNote method
-func (tea *Teach2000SaverModule) calculateNote() {
-	// TODO: Port Python private method logic
+// storerightwrongcountinwords is the Go port of the Python _storeRightWrongCountInWords method
+func (mod *Teach2000SaverModule) storerightwrongcountinwords() {
+	// TODO: Port Python method logic
 }
 
-// startTime is the Go port of the Python _startTime method
-func (tea *Teach2000SaverModule) startTime() {
-	// TODO: Port Python private method logic
+// calculatenote is the Go port of the Python _calculateNote method
+func (mod *Teach2000SaverModule) calculatenote() {
+	// TODO: Port Python method logic
 }
 
-// composeDateTime is the Go port of the Python _composeDateTime method
-func (tea *Teach2000SaverModule) composeDateTime() {
-	// TODO: Port Python private method logic
+// starttime is the Go port of the Python _startTime method
+func (mod *Teach2000SaverModule) starttime() {
+	// TODO: Port Python method logic
+}
+
+// composedatetime is the Go port of the Python _composeDateTime method
+func (mod *Teach2000SaverModule) composedatetime() {
+	// TODO: Port Python method logic
 }
 
 // duration is the Go port of the Python _duration method
-func (tea *Teach2000SaverModule) duration() {
-	// TODO: Port Python private method logic
+func (mod *Teach2000SaverModule) duration() {
+	// TODO: Port Python method logic
 }
 
-// answersCorrect is the Go port of the Python _answersCorrect method
-func (tea *Teach2000SaverModule) answersCorrect() {
-	// TODO: Port Python private method logic
+// answerscorrect is the Go port of the Python _answersCorrect method
+func (mod *Teach2000SaverModule) answerscorrect() {
+	// TODO: Port Python method logic
 }
 
 // stats is the Go port of the Python _stats method
-func (tea *Teach2000SaverModule) stats() {
-	// TODO: Port Python private method logic
+func (mod *Teach2000SaverModule) stats() {
+	// TODO: Port Python method logic
 }
 
-// wrongOnce is the Go port of the Python _wrongOnce method
-func (tea *Teach2000SaverModule) wrongOnce() {
-	// TODO: Port Python private method logic
+// wrongonce is the Go port of the Python _wrongOnce method
+func (mod *Teach2000SaverModule) wrongonce() {
+	// TODO: Port Python method logic
 }
 
-// wrongTwice is the Go port of the Python _wrongTwice method
-func (tea *Teach2000SaverModule) wrongTwice() {
-	// TODO: Port Python private method logic
+// wrongtwice is the Go port of the Python _wrongTwice method
+func (mod *Teach2000SaverModule) wrongtwice() {
+	// TODO: Port Python method logic
 }
 
-// wrongMoreThanTwice is the Go port of the Python _wrongMoreThanTwice method
-func (tea *Teach2000SaverModule) wrongMoreThanTwice() {
-	// TODO: Port Python private method logic
+// wrongmorethantwice is the Go port of the Python _wrongMoreThanTwice method
+func (mod *Teach2000SaverModule) wrongmorethantwice() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *Teach2000SaverModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("Teach2000SaverModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *Teach2000SaverModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("Teach2000SaverModule disabled")
+	return nil
 }
 
 // SetManager sets the module manager
-func (tea *Teach2000SaverModule) SetManager(manager *core.Manager) {
-	tea.manager = manager
+func (mod *Teach2000SaverModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Save is the Go port of the Python save function
-
-// _storeRightWrongCountInWords is the Go port of the Python _storeRightWrongCountInWords function
-func _storeRightWrongCountInWords() {
-	// TODO: Port Python function logic
-}
-
-// _calculateNote is the Go port of the Python _calculateNote function
-func _calculateNote() {
-	// TODO: Port Python function logic
-}
-
-// _startTime is the Go port of the Python _startTime function
-func _startTime() {
-	// TODO: Port Python function logic
-}
-
-// _composeDateTime is the Go port of the Python _composeDateTime function
-func _composeDateTime() {
-	// TODO: Port Python function logic
-}
-
-// _duration is the Go port of the Python _duration function
-func _duration() {
-	// TODO: Port Python function logic
-}
-
-// _answersCorrect is the Go port of the Python _answersCorrect function
-func _answersCorrect() {
-	// TODO: Port Python function logic
-}
-
-// _stats is the Go port of the Python _stats function
-func _stats() {
-	// TODO: Port Python function logic
-}
-
-// _wrongOnce is the Go port of the Python _wrongOnce function
-func _wrongOnce() {
-	// TODO: Port Python function logic
-}
-
-// _wrongTwice is the Go port of the Python _wrongTwice function
-func _wrongTwice() {
-	// TODO: Port Python function logic
-}
-
-// _wrongMoreThanTwice is the Go port of the Python _wrongMoreThanTwice function
-func _wrongMoreThanTwice() {
-	// TODO: Port Python function logic
-}
-
-// Init creates and returns a new module instance
+// InitTeach2000SaverModule creates and returns a new Teach2000SaverModule instance
 // This is the Go equivalent of the Python init function
+func InitTeach2000SaverModule() core.Module {
+	return NewTeach2000SaverModule()
+}

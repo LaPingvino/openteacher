@@ -1,38 +1,13 @@
-// Package event.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/event/event.py
+// Package event provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package event
+
 import (
+	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
-
-// Event is a Go port of the Python Event class
-type Event struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewEvent creates a new Event instance
-func NewEvent() *Event {
-	return &Event{
-		// TODO: Initialize fields
-	}
-}
-
-// Handle is the Go port of the Python handle method
-func (eve *Event) Handle() {
-	// TODO: Port Python method logic
-}
-
-// Unhandle is the Go port of the Python unhandle method
-func (eve *Event) Unhandle() {
-	// TODO: Port Python method logic
-}
-
-// Send is the Go port of the Python send method
-func (eve *Event) Send() {
-	// TODO: Port Python method logic
-}
 
 // EventModule is a Go port of the Python EventModule class
 type EventModule struct {
@@ -43,42 +18,51 @@ type EventModule struct {
 
 // NewEventModule creates a new EventModule instance
 func NewEventModule() *EventModule {
-	base := core.NewBaseModule("event", "event")
+	base := core.NewBaseModule("logic", "event-module")
 
 	return &EventModule{
 		BaseModule: base,
 	}
 }
 
-// CreateEvent is the Go port of the Python createEvent method
-func (eve *EventModule) CreateEvent() {
+// Createevent is the Go port of the Python createEvent method
+func (mod *EventModule) Createevent() {
 	// TODO: Port Python method logic
 }
 
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *EventModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("EventModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *EventModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("EventModule disabled")
+	return nil
+}
+
 // SetManager sets the module manager
-func (eve *EventModule) SetManager(manager *core.Manager) {
-	eve.manager = manager
+func (mod *EventModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Handle is the Go port of the Python handle function
-
-// Unhandle is the Go port of the Python unhandle function
-
-// Send is the Go port of the Python send function
-
-// __init__ is the Go port of the Python __init__ function
-
-// CreateEvent is the Go port of the Python createEvent function
-
-// Init creates and returns a new module instance
+// InitEventModule creates and returns a new EventModule instance
 // This is the Go equivalent of the Python init function
+func InitEventModule() core.Module {
+	return NewEventModule()
+}

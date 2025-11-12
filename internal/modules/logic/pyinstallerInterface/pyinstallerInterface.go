@@ -1,10 +1,16 @@
-// Package pyinstallerinterface.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/pyinstallerInterface/pyinstallerInterface.py
+// Package pyinstallerinterface provides functionality ported from Python module
+//
+// This module freezes the current installation of OpenTeacher with
+// PyInstaller into an executable. For more on PyInstaller, see:
+//
+// http://www.pyinstaller.org/
 //
 // This is an automated port - implementation may be incomplete.
-package pyinstallerInterface
+package pyinstallerinterface
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,80 +23,66 @@ type PyinstallerInterfaceModule struct {
 
 // NewPyinstallerInterfaceModule creates a new PyinstallerInterfaceModule instance
 func NewPyinstallerInterfaceModule() *PyinstallerInterfaceModule {
-	base := core.NewBaseModule("pyinstallerInterface", "pyinstallerInterface")
+	base := core.NewBaseModule("logic", "pyinstallerinterface-module")
 
 	return &PyinstallerInterfaceModule{
 		BaseModule: base,
 	}
 }
 
-// saveSource is the Go port of the Python _saveSource method
-func (pyi *PyinstallerInterfaceModule) saveSource() {
-	// TODO: Port Python private method logic
-}
-
-// Build is the Go port of the Python build method
-func (pyi *PyinstallerInterfaceModule) Build() {
+// savesource is the Go port of the Python _saveSource method
+func (mod *PyinstallerInterfaceModule) savesource() {
 	// TODO: Port Python method logic
 }
 
-// copyInTesseractPortableExecutables is the Go port of the Python _copyInTesseractPortableExecutables method
-func (pyi *PyinstallerInterfaceModule) copyInTesseractPortableExecutables() {
-	// TODO: Port Python private method logic
+// Build is the Go port of the Python build method
+func (mod *PyinstallerInterfaceModule) Build() {
+	// TODO: Port Python method logic
+}
+
+// copyintesseractportableexecutables is the Go port of the Python _copyInTesseractPortableExecutables method
+func (mod *PyinstallerInterfaceModule) copyintesseractportableexecutables() {
+	// TODO: Port Python method logic
 }
 
 // cleanup is the Go port of the Python _cleanup method
-func (pyi *PyinstallerInterfaceModule) cleanup() {
-	// TODO: Port Python private method logic
+func (mod *PyinstallerInterfaceModule) cleanup() {
+	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (pyi *PyinstallerInterfaceModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *PyinstallerInterfaceModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("PyinstallerInterfaceModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (pyi *PyinstallerInterfaceModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *PyinstallerInterfaceModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("PyinstallerInterfaceModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (pyi *PyinstallerInterfaceModule) SetManager(manager *core.Manager) {
-	pyi.manager = manager
+func (mod *PyinstallerInterfaceModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _saveSource is the Go port of the Python _saveSource function
-func _saveSource() {
-	// TODO: Port Python function logic
-}
-
-// Build is the Go port of the Python build function
-
-// _copyInTesseractPortableExecutables is the Go port of the Python _copyInTesseractPortableExecutables function
-func _copyInTesseractPortableExecutables() {
-	// TODO: Port Python function logic
-}
-
-// _cleanup is the Go port of the Python _cleanup function
-func _cleanup() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitPyinstallerInterfaceModule creates and returns a new PyinstallerInterfaceModule instance
 // This is the Go equivalent of the Python init function
+func InitPyinstallerInterfaceModule() core.Module {
+	return NewPyinstallerInterfaceModule()
+}

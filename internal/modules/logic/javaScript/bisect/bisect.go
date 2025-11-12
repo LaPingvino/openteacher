@@ -1,10 +1,11 @@
-// Package bisect.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/javaScript/bisect/bisect.py
+// Package bisect provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package bisect
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,43 +18,46 @@ type JSBisectModule struct {
 
 // NewJSBisectModule creates a new JSBisectModule instance
 func NewJSBisectModule() *JSBisectModule {
-	base := core.NewBaseModule("bisectfunc", "bisectfunc")
+	base := core.NewBaseModule("logic", "bisect-module")
 
 	return &JSBisectModule{
 		BaseModule: base,
 	}
 }
 
-// Enable is the Go port of the Python enable method
-func (jsb *JSBisectModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *JSBisectModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("JSBisectModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (jsb *JSBisectModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *JSBisectModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("JSBisectModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (jsb *JSBisectModule) SetManager(manager *core.Manager) {
-	jsb.manager = manager
+func (mod *JSBisectModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitJSBisectModule creates and returns a new JSBisectModule instance
 // This is the Go equivalent of the Python init function
+func InitJSBisectModule() core.Module {
+	return NewJSBisectModule()
+}

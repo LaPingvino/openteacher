@@ -1,36 +1,74 @@
-// Package graphics.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/interfaces/qt/teachTypes/hangman/graphics.py
+// Package hangman provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package hangman
 
+import (
+	"context"
+	"fmt"
+
+	"github.com/LaPingvino/openteacher/internal/core"
+)
+
 // HangmanGraphics is a Go port of the Python HangmanGraphics class
 type HangmanGraphics struct {
-	// TODO: Add struct fields based on Python class
+	*core.BaseModule
+	manager *core.Manager
+	// TODO: Add module-specific fields
 }
 
 // NewHangmanGraphics creates a new HangmanGraphics instance
 func NewHangmanGraphics() *HangmanGraphics {
+	base := core.NewBaseModule("ui", "hangmanGraphics-module")
+
 	return &HangmanGraphics{
-		// TODO: Initialize fields
+		BaseModule: base,
 	}
 }
 
-// PaintEvent is the Go port of the Python paintEvent method
-func (han *HangmanGraphics) PaintEvent() {
+// Paintevent is the Go port of the Python paintEvent method
+func (mod *HangmanGraphics) Paintevent() {
 	// TODO: Port Python method logic
 }
 
-// InitDraw is the Go port of the Python initDraw method
-func (han *HangmanGraphics) InitDraw() {
+// Initdraw is the Go port of the Python initDraw method
+func (mod *HangmanGraphics) Initdraw() {
 	// TODO: Port Python method logic
 }
 
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *HangmanGraphics) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("HangmanGraphics enabled")
+	return nil
 }
 
-// PaintEvent is the Go port of the Python paintEvent function
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *HangmanGraphics) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
 
-// InitDraw is the Go port of the Python initDraw function
+	// TODO: Port Python disable logic
+
+	fmt.Println("HangmanGraphics disabled")
+	return nil
+}
+
+// SetManager sets the module manager
+func (mod *HangmanGraphics) SetManager(manager *core.Manager) {
+	mod.manager = manager
+}
+
+// InitHangmanGraphics creates and returns a new HangmanGraphics instance
+// This is the Go equivalent of the Python init function
+func InitHangmanGraphics() core.Module {
+	return NewHangmanGraphics()
+}

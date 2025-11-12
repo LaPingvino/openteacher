@@ -1,10 +1,11 @@
-// Package weblogicgenerator.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/javaScript/webLogicGenerator/webLogicGenerator.py
+// Package weblogicgenerator provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
-package webLogicGenerator
+package weblogicgenerator
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,67 +18,61 @@ type WebLogicGeneratorModule struct {
 
 // NewWebLogicGeneratorModule creates a new WebLogicGeneratorModule instance
 func NewWebLogicGeneratorModule() *WebLogicGeneratorModule {
-	base := core.NewBaseModule("webLogicGenerator", "webLogicGenerator")
+	base := core.NewBaseModule("logic", "weblogicgenerator-module")
 
 	return &WebLogicGeneratorModule{
 		BaseModule: base,
 	}
 }
 
-// logicMods is the Go port of the Python _logicMods method
-func (web *WebLogicGeneratorModule) logicMods() {
-	// TODO: Port Python private method logic
-}
-
-// WriteLogicCode is the Go port of the Python writeLogicCode method
-func (web *WebLogicGeneratorModule) WriteLogicCode() {
+// logicmods is the Go port of the Python _logicMods method
+func (mod *WebLogicGeneratorModule) logicmods() {
 	// TODO: Port Python method logic
 }
 
-// TranslationIndex is the Go port of the Python translationIndex method
-func (web *WebLogicGeneratorModule) TranslationIndex() {
+// Writelogiccode is the Go port of the Python writeLogicCode method
+func (mod *WebLogicGeneratorModule) Writelogiccode() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (web *WebLogicGeneratorModule) Enable(ctx context.Context) error {
+// Translationindex is the Go port of the Python translationIndex method
+func (mod *WebLogicGeneratorModule) Translationindex() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *WebLogicGeneratorModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("WebLogicGeneratorModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (web *WebLogicGeneratorModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *WebLogicGeneratorModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("WebLogicGeneratorModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (web *WebLogicGeneratorModule) SetManager(manager *core.Manager) {
-	web.manager = manager
+func (mod *WebLogicGeneratorModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _logicMods is the Go port of the Python _logicMods function
-func _logicMods() {
-	// TODO: Port Python function logic
-}
-
-// WriteLogicCode is the Go port of the Python writeLogicCode function
-
-// TranslationIndex is the Go port of the Python translationIndex function
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitWebLogicGeneratorModule creates and returns a new WebLogicGeneratorModule instance
 // This is the Go equivalent of the Python init function
+func InitWebLogicGeneratorModule() core.Module {
+	return NewWebLogicGeneratorModule()
+}

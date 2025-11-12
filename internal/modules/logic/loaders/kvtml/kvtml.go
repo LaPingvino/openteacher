@@ -1,10 +1,13 @@
-// Package kvtml.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/loaders/kvtml/kvtml.py
+// Package kvtml provides functionality ported from Python module
+//
+// Loads .kvtml files (the format of various KDE programs)
 //
 // This is an automated port - implementation may be incomplete.
 package kvtml
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +20,7 @@ type KvtmlLoaderModule struct {
 
 // NewKvtmlLoaderModule creates a new KvtmlLoaderModule instance
 func NewKvtmlLoaderModule() *KvtmlLoaderModule {
-	base := core.NewBaseModule("load", "load")
+	base := core.NewBaseModule("logic", "kvtml-module")
 
 	return &KvtmlLoaderModule{
 		BaseModule: base,
@@ -25,89 +28,68 @@ func NewKvtmlLoaderModule() *KvtmlLoaderModule {
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (kvt *KvtmlLoaderModule) retranslate() {
-	// TODO: Port Python private method logic
+func (mod *KvtmlLoaderModule) retranslate() {
+	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (kvt *KvtmlLoaderModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (kvt *KvtmlLoaderModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf method
-func (kvt *KvtmlLoaderModule) GetFileTypeOf() {
+// Getfiletypeof is the Go port of the Python getFileTypeOf method
+func (mod *KvtmlLoaderModule) Getfiletypeof() {
 	// TODO: Port Python method logic
 }
 
 // parse is the Go port of the Python _parse method
-func (kvt *KvtmlLoaderModule) parse() {
-	// TODO: Port Python private method logic
+func (mod *KvtmlLoaderModule) parse() {
+	// TODO: Port Python method logic
 }
 
 // Load is the Go port of the Python load method
-func (kvt *KvtmlLoaderModule) Load() {
+func (mod *KvtmlLoaderModule) Load() {
 	// TODO: Port Python method logic
 }
 
 // load2x is the Go port of the Python _load2x method
-func (kvt *KvtmlLoaderModule) load2x() {
-	// TODO: Port Python private method logic
+func (mod *KvtmlLoaderModule) load2x() {
+	// TODO: Port Python method logic
 }
 
 // load1x is the Go port of the Python _load1x method
-func (kvt *KvtmlLoaderModule) load1x() {
-	// TODO: Port Python private method logic
+func (mod *KvtmlLoaderModule) load1x() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *KvtmlLoaderModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("KvtmlLoaderModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *KvtmlLoaderModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("KvtmlLoaderModule disabled")
+	return nil
 }
 
 // SetManager sets the module manager
-func (kvt *KvtmlLoaderModule) SetManager(manager *core.Manager) {
-	kvt.manager = manager
+func (mod *KvtmlLoaderModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf function
-
-// _parse is the Go port of the Python _parse function
-func _parse() {
-	// TODO: Port Python function logic
-}
-
-// Load is the Go port of the Python load function
-
-// _load2x is the Go port of the Python _load2x function
-func _load2x() {
-	// TODO: Port Python function logic
-}
-
-// _load1x is the Go port of the Python _load1x function
-func _load1x() {
-	// TODO: Port Python function logic
-}
-
-// Init creates and returns a new module instance
+// InitKvtmlLoaderModule creates and returns a new KvtmlLoaderModule instance
 // This is the Go equivalent of the Python init function
+func InitKvtmlLoaderModule() core.Module {
+	return NewKvtmlLoaderModule()
+}

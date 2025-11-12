@@ -2,9 +2,11 @@
 // legacy/modules/org/openteacher/logic/modulesTest/modulesTest.py
 //
 // This is an automated port - implementation may be incomplete.
-package modulesTest
+package modulestest
+
 import (
 	"context"
+
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 

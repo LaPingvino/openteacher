@@ -1,10 +1,11 @@
-// Package mediahtml.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/savers/mediaHtml/mediaHtml.py
+// Package mediahtml provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
-package mediaHtml
+package mediahtml
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,60 +18,56 @@ type HtmlSaverModule struct {
 
 // NewHtmlSaverModule creates a new HtmlSaverModule instance
 func NewHtmlSaverModule() *HtmlSaverModule {
-	base := core.NewBaseModule("save", "save")
+	base := core.NewBaseModule("logic", "mediahtml-module")
 
 	return &HtmlSaverModule{
 		BaseModule: base,
 	}
 }
 
-// Enable is the Go port of the Python enable method
-func (htm *HtmlSaverModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
 // retranslate is the Go port of the Python _retranslate method
-func (htm *HtmlSaverModule) retranslate() {
-	// TODO: Port Python private method logic
-}
-
-// Disable is the Go port of the Python disable method
-func (htm *HtmlSaverModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// Save is the Go port of the Python save method
-func (htm *HtmlSaverModule) Save() {
+func (mod *HtmlSaverModule) retranslate() {
 	// TODO: Port Python method logic
 }
 
+// Save is the Go port of the Python save method
+func (mod *HtmlSaverModule) Save() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *HtmlSaverModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("HtmlSaverModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *HtmlSaverModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("HtmlSaverModule disabled")
+	return nil
+}
+
 // SetManager sets the module manager
-func (htm *HtmlSaverModule) SetManager(manager *core.Manager) {
-	htm.manager = manager
+func (mod *HtmlSaverModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// Save is the Go port of the Python save function
-
-// Init creates and returns a new module instance
+// InitHtmlSaverModule creates and returns a new HtmlSaverModule instance
 // This is the Go equivalent of the Python init function
+func InitHtmlSaverModule() core.Module {
+	return NewHtmlSaverModule()
+}

@@ -1,453 +1,531 @@
-// Package words.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/interfaces/qt/enterers/words/words.py
+// Package words provides functionality ported from Python module
+//
+// Provides a word list enterer widget for creating and editing word pairs.
+// This module allows users to enter question/answer pairs for vocabulary lessons.
 //
 // This is an automated port - implementation may be incomplete.
 package words
+
 import (
 	"context"
+	"fmt"
+	"strings"
+
 	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/therecipe/qt/core"
+	"github.com/therecipe/qt/widgets"
 )
 
-// EmptyLesson is a Go port of the Python EmptyLesson class
-type EmptyLesson struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewEmptyLesson creates a new EmptyLesson instance
-func NewEmptyLesson() *EmptyLesson {
-	return &EmptyLesson{
-		// TODO: Initialize fields
-	}
+// WordPair represents a question/answer pair
+type WordPair struct {
+	Question string
+	Answer   string
+	Comment  string
 }
 
 // WordsEntererModule is a Go port of the Python WordsEntererModule class
 type WordsEntererModule struct {
 	*core.BaseModule
-	manager *core.Manager
-	// TODO: Add module-specific fields
+	manager     *core.Manager
+	widget      *widgets.QWidget
+	tableView   *widgets.QTableWidget
+	addButton   *widgets.QPushButton
+	delButton   *widgets.QPushButton
+	clearButton *widgets.QPushButton
+	wordPairs   []WordPair
 }
 
 // NewWordsEntererModule creates a new WordsEntererModule instance
 func NewWordsEntererModule() *WordsEntererModule {
-	base := core.NewBaseModule("wordsEnterer", "wordsEnterer")
+	base := core.NewBaseModule("ui", "words-enterer-module")
+	base.SetRequires("qtApp")
 
 	return &WordsEntererModule{
 		BaseModule: base,
+		wordPairs:  make([]WordPair, 0),
 	}
 }
 
-// charsKeyboard is the Go port of the Python _charsKeyboard method
-func (wor *WordsEntererModule) charsKeyboard() {
-	// TODO: Port Python private method logic
+// GetWidget returns the main widget for this enterer
+func (mod *WordsEntererModule) GetWidget() *widgets.QWidget {
+	if mod.widget == nil {
+		mod.createWidget()
+	}
+	return mod.widget
 }
 
-// compose is the Go port of the Python _compose method
-func (wor *WordsEntererModule) compose() {
-	// TODO: Port Python private method logic
+// createWidget creates the main word enterer widget
+func (mod *WordsEntererModule) createWidget() {
+	mod.widget = widgets.NewQWidget(nil, 0)
+	layout := widgets.NewQVBoxLayout()
+	mod.widget.SetLayout(layout)
+
+	// Header
+	headerLabel := widgets.NewQLabel2("Word List Editor", nil, 0)
+	headerFont := headerLabel.Font()
+	headerFont.SetBold(true)
+	headerFont.SetPointSize(14)
+	headerLabel.SetFont(headerFont)
+	layout.AddWidget(headerLabel, 0, 0)
+
+	// Instructions
+	instructionsLabel := widgets.NewQLabel2("Enter word pairs below. Click 'Add Row' to add new pairs.", nil, 0)
+	instructionsLabel.SetWordWrap(true)
+	layout.AddWidget(instructionsLabel, 0, 0)
+
+	// Table widget
+	mod.tableView = widgets.NewQTableWidget3(0, 3, nil)
+	mod.tableView.SetHorizontalHeaderLabels([]string{"Question", "Answer", "Comment"})
+
+	// Set column widths
+	header := mod.tableView.HorizontalHeader()
+	header.SetStretchLastSection(false)
+	header.ResizeSection(0, 200) // Question column
+	header.ResizeSection(1, 200) // Answer column
+	header.ResizeSection(2, 150) // Comment column
+
+	// Enable sorting
+	mod.tableView.SetSortingEnabled(true)
+	mod.tableView.SetAlternatingRowColors(true)
+	mod.tableView.SetSelectionBehavior(widgets.QAbstractItemView__SelectRows)
+
+	layout.AddWidget(mod.tableView, 1, 0)
+
+	// Button layout
+	buttonLayout := widgets.NewQHBoxLayout()
+
+	mod.addButton = widgets.NewQPushButton2("Add Row", nil)
+	mod.addButton.ConnectClicked(func(checked bool) {
+		mod.addWordPair()
+	})
+	buttonLayout.AddWidget(mod.addButton, 0, 0)
+
+	mod.delButton = widgets.NewQPushButton2("Delete Selected", nil)
+	mod.delButton.ConnectClicked(func(checked bool) {
+		mod.deleteSelectedRows()
+	})
+	buttonLayout.AddWidget(mod.delButton, 0, 0)
+
+	mod.clearButton = widgets.NewQPushButton2("Clear All", nil)
+	mod.clearButton.ConnectClicked(func(checked bool) {
+		mod.clearAllRows()
+	})
+	buttonLayout.AddWidget(mod.clearButton, 0, 0)
+
+	buttonLayout.AddStretch(1)
+
+	// Import/Export buttons
+	importButton := widgets.NewQPushButton2("Import from Text", nil)
+	importButton.ConnectClicked(func(checked bool) {
+		mod.showImportDialog()
+	})
+	buttonLayout.AddWidget(importButton, 0, 0)
+
+	exportButton := widgets.NewQPushButton2("Export to Text", nil)
+	exportButton.ConnectClicked(func(checked bool) {
+		mod.showExportDialog()
+	})
+	buttonLayout.AddWidget(exportButton, 0, 0)
+
+	layout.AddLayout(buttonLayout, 0)
+
+	// Connect table signals
+	mod.tableView.ConnectCellChanged(func(row, column int) {
+		mod.updateWordPairFromTable(row)
+	})
+
+	// Add some initial rows
+	mod.addWordPair()
+	mod.addWordPair()
+	mod.addWordPair()
 }
 
-// parse is the Go port of the Python _parse method
-func (wor *WordsEntererModule) parse() {
-	// TODO: Port Python private method logic
+// addWordPair adds a new word pair row to the table
+func (mod *WordsEntererModule) addWordPair() {
+	if mod.tableView == nil {
+		return
+	}
+
+	row := mod.tableView.RowCount()
+	mod.tableView.InsertRow(row)
+
+	// Create editable items
+	questionItem := widgets.NewQTableWidgetItem2("", 0)
+	answerItem := widgets.NewQTableWidgetItem2("", 0)
+	commentItem := widgets.NewQTableWidgetItem2("", 0)
+
+	mod.tableView.SetItem(row, 0, questionItem)
+	mod.tableView.SetItem(row, 1, answerItem)
+	mod.tableView.SetItem(row, 2, commentItem)
+
+	// Add to internal storage
+	mod.wordPairs = append(mod.wordPairs, WordPair{})
+
+	// Focus on the new row's first column
+	mod.tableView.SetCurrentCell(row, 0)
 }
 
-// createChecker is the Go port of the Python _createChecker method
-func (wor *WordsEntererModule) createChecker() {
-	// TODO: Port Python private method logic
+// deleteSelectedRows deletes the currently selected rows
+func (mod *WordsEntererModule) deleteSelectedRows() {
+	if mod.tableView == nil {
+		return
+	}
+
+	selectedRanges := mod.tableView.SelectedRanges()
+	if len(selectedRanges) == 0 {
+		return
+	}
+
+	// Get all selected row numbers
+	selectedRows := make([]int, 0)
+	for _, selRange := range selectedRanges {
+		for row := selRange.TopRow(); row <= selRange.BottomRow(); row++ {
+			selectedRows = append(selectedRows, row)
+		}
+	}
+
+	// Remove duplicates and sort in descending order
+	uniqueRows := make(map[int]bool)
+	for _, row := range selectedRows {
+		uniqueRows[row] = true
+	}
+
+	sortedRows := make([]int, 0, len(uniqueRows))
+	for row := range uniqueRows {
+		sortedRows = append(sortedRows, row)
+	}
+
+	// Sort in descending order to remove from bottom up
+	for i := 0; i < len(sortedRows)-1; i++ {
+		for j := i + 1; j < len(sortedRows); j++ {
+			if sortedRows[i] < sortedRows[j] {
+				sortedRows[i], sortedRows[j] = sortedRows[j], sortedRows[i]
+			}
+		}
+	}
+
+	// Remove rows
+	for _, row := range sortedRows {
+		if row >= 0 && row < len(mod.wordPairs) {
+			mod.tableView.RemoveRow(row)
+			// Remove from internal storage
+			mod.wordPairs = append(mod.wordPairs[:row], mod.wordPairs[row+1:]...)
+		}
+	}
 }
 
-// CreateWordsEnterer is the Go port of the Python createWordsEnterer method
-func (wor *WordsEntererModule) CreateWordsEnterer() {
-	// TODO: Port Python method logic
+// clearAllRows removes all word pairs
+func (mod *WordsEntererModule) clearAllRows() {
+	if mod.tableView == nil {
+		return
+	}
+
+	// Ask for confirmation
+	reply := widgets.QMessageBox_Question(mod.widget,
+		"Clear All",
+		"Are you sure you want to clear all word pairs?",
+		widgets.QMessageBox__Yes|widgets.QMessageBox__No,
+		widgets.QMessageBox__No)
+
+	if reply == widgets.QMessageBox__Yes {
+		mod.tableView.SetRowCount(0)
+		mod.wordPairs = make([]WordPair, 0)
+
+		// Add one empty row
+		mod.addWordPair()
+	}
 }
 
-// Enable is the Go port of the Python enable method
-func (wor *WordsEntererModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
+// updateWordPairFromTable updates internal storage when table cell changes
+func (mod *WordsEntererModule) updateWordPairFromTable(row int) {
+	if mod.tableView == nil || row >= len(mod.wordPairs) {
+		return
+	}
+
+	questionItem := mod.tableView.Item(row, 0)
+	answerItem := mod.tableView.Item(row, 1)
+	commentItem := mod.tableView.Item(row, 2)
+
+	if questionItem != nil && answerItem != nil && commentItem != nil {
+		mod.wordPairs[row].Question = strings.TrimSpace(questionItem.Text())
+		mod.wordPairs[row].Answer = strings.TrimSpace(answerItem.Text())
+		mod.wordPairs[row].Comment = strings.TrimSpace(commentItem.Text())
+	}
+}
+
+// showImportDialog shows a dialog for importing word pairs from text
+func (mod *WordsEntererModule) showImportDialog() {
+	dialog := widgets.NewQDialog(mod.widget, 0)
+	dialog.SetWindowTitle("Import Word Pairs")
+	dialog.SetFixedSize2(500, 400)
+	dialog.SetWindowModality(core.Qt__ApplicationModal)
+
+	layout := widgets.NewQVBoxLayout()
+	dialog.SetLayout(layout)
+
+	// Instructions
+	instructLabel := widgets.NewQLabel2("Enter word pairs, one per line, separated by tabs or commas:", nil, 0)
+	layout.AddWidget(instructLabel, 0, 0)
+
+	// Text area
+	textEdit := widgets.NewQTextEdit(nil)
+	textEdit.SetPlaceholderText("hello\tworld\tgreeting\ngoodbye\tauf wiedersehen\tparting")
+	layout.AddWidget(textEdit, 1, 0)
+
+	// Separator options
+	sepLayout := widgets.NewQHBoxLayout()
+	sepLabel := widgets.NewQLabel2("Separator:", nil, 0)
+	sepLayout.AddWidget(sepLabel, 0, 0)
+
+	sepCombo := widgets.NewQComboBox(nil)
+	sepCombo.AddItems([]string{"Tab", "Comma", "Semicolon", "Pipe (|)"})
+	sepLayout.AddWidget(sepCombo, 0, 0)
+
+	sepLayout.AddStretch(1)
+	layout.AddLayout(sepLayout, 0)
+
+	// Buttons
+	buttonBox := widgets.NewQDialogButtonBox3(
+		widgets.QDialogButtonBox__Ok|widgets.QDialogButtonBox__Cancel,
+		nil)
+	layout.AddWidget(buttonBox, 0, 0)
+
+	buttonBox.ConnectAccepted(func() {
+		text := textEdit.ToPlainText()
+		separator := sepCombo.CurrentText()
+		mod.importFromText(text, separator)
+		dialog.Accept()
+	})
+
+	buttonBox.ConnectRejected(func() {
+		dialog.Reject()
+	})
+
+	dialog.Exec()
+}
+
+// showExportDialog shows a dialog for exporting word pairs to text
+func (mod *WordsEntererModule) showExportDialog() {
+	// Gather current word pairs
+	mod.updateAllWordPairsFromTable()
+
+	if len(mod.wordPairs) == 0 {
+		widgets.QMessageBox_Information(mod.widget, "Export", "No word pairs to export.", widgets.QMessageBox__Ok, widgets.QMessageBox__Ok)
+		return
+	}
+
+	dialog := widgets.NewQDialog(mod.widget, 0)
+	dialog.SetWindowTitle("Export Word Pairs")
+	dialog.SetFixedSize2(500, 400)
+	dialog.SetWindowModality(core.Qt__ApplicationModal)
+
+	layout := widgets.NewQVBoxLayout()
+	dialog.SetLayout(layout)
+
+	// Instructions
+	instructLabel := widgets.NewQLabel2("Word pairs exported as text:", nil, 0)
+	layout.AddWidget(instructLabel, 0, 0)
+
+	// Text area
+	textEdit := widgets.NewQTextEdit(nil)
+	textEdit.SetReadOnly(true)
+
+	// Generate export text
+	exportText := ""
+	for _, pair := range mod.wordPairs {
+		if pair.Question != "" || pair.Answer != "" {
+			line := pair.Question + "\t" + pair.Answer
+			if pair.Comment != "" {
+				line += "\t" + pair.Comment
+			}
+			exportText += line + "\n"
+		}
+	}
+	textEdit.SetPlainText(exportText)
+	layout.AddWidget(textEdit, 1, 0)
+
+	// Buttons
+	buttonBox := widgets.NewQDialogButtonBox3(
+		widgets.QDialogButtonBox__Close,
+		nil)
+	layout.AddWidget(buttonBox, 0, 0)
+
+	// Add copy button
+	copyButton := widgets.NewQPushButton2("Copy to Clipboard", nil)
+	copyButton.ConnectClicked(func(checked bool) {
+		clipboard := widgets.QApplication_Clipboard()
+		clipboard.SetText(exportText, widgets.QClipboard__Clipboard)
+		widgets.QMessageBox_Information(dialog, "Copied", "Text copied to clipboard!", widgets.QMessageBox__Ok, widgets.QMessageBox__Ok)
+	})
+	buttonBox.AddButton(copyButton, widgets.QDialogButtonBox__ActionRole)
+
+	buttonBox.ConnectRejected(func() {
+		dialog.Close()
+	})
+
+	dialog.Exec()
+}
+
+// importFromText imports word pairs from text string
+func (mod *WordsEntererModule) importFromText(text string, separatorType string) {
+	if text == "" {
+		return
+	}
+
+	// Determine separator
+	separator := "\t"
+	switch separatorType {
+	case "Comma":
+		separator = ","
+	case "Semicolon":
+		separator = ";"
+	case "Pipe (|)":
+		separator = "|"
+	}
+
+	// Clear existing data
+	mod.tableView.SetRowCount(0)
+	mod.wordPairs = make([]WordPair, 0)
+
+	// Parse lines
+	lines := strings.Split(text, "\n")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			continue
+		}
+
+		parts := strings.Split(line, separator)
+		pair := WordPair{}
+
+		if len(parts) >= 1 {
+			pair.Question = strings.TrimSpace(parts[0])
+		}
+		if len(parts) >= 2 {
+			pair.Answer = strings.TrimSpace(parts[1])
+		}
+		if len(parts) >= 3 {
+			pair.Comment = strings.TrimSpace(parts[2])
+		}
+
+		// Add to table
+		row := mod.tableView.RowCount()
+		mod.tableView.InsertRow(row)
+
+		questionItem := widgets.NewQTableWidgetItem2(pair.Question, 0)
+		answerItem := widgets.NewQTableWidgetItem2(pair.Answer, 0)
+		commentItem := widgets.NewQTableWidgetItem2(pair.Comment, 0)
+
+		mod.tableView.SetItem(row, 0, questionItem)
+		mod.tableView.SetItem(row, 1, answerItem)
+		mod.tableView.SetItem(row, 2, commentItem)
+
+		mod.wordPairs = append(mod.wordPairs, pair)
+	}
+
+	// Add one empty row at the end
+	mod.addWordPair()
+}
+
+// updateAllWordPairsFromTable updates all word pairs from current table state
+func (mod *WordsEntererModule) updateAllWordPairsFromTable() {
+	if mod.tableView == nil {
+		return
+	}
+
+	rowCount := mod.tableView.RowCount()
+	mod.wordPairs = make([]WordPair, rowCount)
+
+	for row := 0; row < rowCount; row++ {
+		mod.updateWordPairFromTable(row)
+	}
+}
+
+// GetWordPairs returns the current list of word pairs
+func (mod *WordsEntererModule) GetWordPairs() []WordPair {
+	mod.updateAllWordPairsFromTable()
+	return mod.wordPairs
+}
+
+// SetWordPairs sets the word pairs and updates the table
+func (mod *WordsEntererModule) SetWordPairs(pairs []WordPair) {
+	if mod.tableView == nil {
+		mod.wordPairs = pairs
+		return
+	}
+
+	// Clear existing table
+	mod.tableView.SetRowCount(0)
+	mod.wordPairs = make([]WordPair, 0)
+
+	// Add pairs
+	for _, pair := range pairs {
+		row := mod.tableView.RowCount()
+		mod.tableView.InsertRow(row)
+
+		questionItem := widgets.NewQTableWidgetItem2(pair.Question, 0)
+		answerItem := widgets.NewQTableWidgetItem2(pair.Answer, 0)
+		commentItem := widgets.NewQTableWidgetItem2(pair.Comment, 0)
+
+		mod.tableView.SetItem(row, 0, questionItem)
+		mod.tableView.SetItem(row, 1, answerItem)
+		mod.tableView.SetItem(row, 2, commentItem)
+
+		mod.wordPairs = append(mod.wordPairs, pair)
+	}
+
+	// Add one empty row
+	mod.addWordPair()
+}
+
+// GetWordCount returns the number of non-empty word pairs
+func (mod *WordsEntererModule) GetWordCount() int {
+	mod.updateAllWordPairsFromTable()
+	count := 0
+	for _, pair := range mod.wordPairs {
+		if pair.Question != "" || pair.Answer != "" {
+			count++
+		}
+	}
+	return count
+}
+
+// Enable activates the module
+func (mod *WordsEntererModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	fmt.Println("WordsEntererModule enabled")
 	return nil
 }
 
-// retranslate is the Go port of the Python _retranslate method
-func (wor *WordsEntererModule) retranslate() {
-	// TODO: Port Python private method logic
-}
+// Disable deactivates the module
+func (mod *WordsEntererModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
 
-// Disable is the Go port of the Python disable method
-func (wor *WordsEntererModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
+	// Clean up widget
+	if mod.widget != nil {
+		mod.widget.Close()
+		mod.widget = nil
+		mod.tableView = nil
+		mod.addButton = nil
+		mod.delButton = nil
+		mod.clearButton = nil
+	}
+
+	fmt.Println("WordsEntererModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (wor *WordsEntererModule) SetManager(manager *core.Manager) {
-	wor.manager = manager
+func (mod *WordsEntererModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// SpellingHighlighter is a Go port of the Python SpellingHighlighter class
-type SpellingHighlighter struct {
-	// TODO: Add struct fields based on Python class
+// InitWordsEntererModule creates and returns a new WordsEntererModule instance
+func InitWordsEntererModule() core.Module {
+	return NewWordsEntererModule()
 }
-
-// NewSpellingHighlighter creates a new SpellingHighlighter instance
-func NewSpellingHighlighter() *SpellingHighlighter {
-	return &SpellingHighlighter{
-		// TODO: Initialize fields
-	}
-}
-
-// HighlightBlock is the Go port of the Python highlightBlock method
-func (spe *SpellingHighlighter) HighlightBlock() {
-	// TODO: Port Python method logic
-}
-
-// WordsTableItemDelegate is a Go port of the Python WordsTableItemDelegate class
-type WordsTableItemDelegate struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewWordsTableItemDelegate creates a new WordsTableItemDelegate instance
-func NewWordsTableItemDelegate() *WordsTableItemDelegate {
-	return &WordsTableItemDelegate{
-		// TODO: Initialize fields
-	}
-}
-
-// EventFilter is the Go port of the Python eventFilter method
-func (wor *WordsTableItemDelegate) EventFilter() {
-	// TODO: Port Python method logic
-}
-
-// Paint is the Go port of the Python paint method
-func (wor *WordsTableItemDelegate) Paint() {
-	// TODO: Port Python method logic
-}
-
-// CreateEditor is the Go port of the Python createEditor method
-func (wor *WordsTableItemDelegate) CreateEditor() {
-	// TODO: Port Python method logic
-}
-
-// WordsTableView is a Go port of the Python WordsTableView class
-type WordsTableView struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewWordsTableView creates a new WordsTableView instance
-func NewWordsTableView() *WordsTableView {
-	return &WordsTableView{
-		// TODO: Initialize fields
-	}
-}
-
-// questionLanguageChanged is the Go port of the Python _questionLanguageChanged method
-func (wor *WordsTableView) questionLanguageChanged() {
-	// TODO: Port Python private method logic
-}
-
-// answerLanguageChanged is the Go port of the Python _answerLanguageChanged method
-func (wor *WordsTableView) answerLanguageChanged() {
-	// TODO: Port Python private method logic
-}
-
-// wholeModelChanged is the Go port of the Python _wholeModelChanged method
-func (wor *WordsTableView) wholeModelChanged() {
-	// TODO: Port Python private method logic
-}
-
-// SetModel is the Go port of the Python setModel method
-func (wor *WordsTableView) SetModel() {
-	// TODO: Port Python method logic
-}
-
-// modelReset is the Go port of the Python _modelReset method
-func (wor *WordsTableView) modelReset() {
-	// TODO: Port Python private method logic
-}
-
-// MoveCursor is the Go port of the Python moveCursor method
-func (wor *WordsTableView) MoveCursor() {
-	// TODO: Port Python method logic
-}
-
-// WordsTableModel is a Go port of the Python WordsTableModel class
-type WordsTableModel struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewWordsTableModel creates a new WordsTableModel instance
-func NewWordsTableModel() *WordsTableModel {
-	return &WordsTableModel{
-		// TODO: Initialize fields
-	}
-}
-
-// Retranslate is the Go port of the Python retranslate method
-func (wor *WordsTableModel) Retranslate() {
-	// TODO: Port Python method logic
-}
-
-// UpdateLesson is the Go port of the Python updateLesson method
-func (wor *WordsTableModel) UpdateLesson() {
-	// TODO: Port Python method logic
-}
-
-// Sort is the Go port of the Python sort method
-func (wor *WordsTableModel) Sort() {
-	// TODO: Port Python method logic
-}
-
-// UpdateTitle is the Go port of the Python updateTitle method
-func (wor *WordsTableModel) UpdateTitle() {
-	// TODO: Port Python method logic
-}
-
-// UpdateQuestionLanguage is the Go port of the Python updateQuestionLanguage method
-func (wor *WordsTableModel) UpdateQuestionLanguage() {
-	// TODO: Port Python method logic
-}
-
-// UpdateAnswerLanguage is the Go port of the Python updateAnswerLanguage method
-func (wor *WordsTableModel) UpdateAnswerLanguage() {
-	// TODO: Port Python method logic
-}
-
-// HeaderData is the Go port of the Python headerData method
-func (wor *WordsTableModel) HeaderData() {
-	// TODO: Port Python method logic
-}
-
-// RowCount is the Go port of the Python rowCount method
-func (wor *WordsTableModel) RowCount() {
-	// TODO: Port Python method logic
-}
-
-// ColumnCount is the Go port of the Python columnCount method
-func (wor *WordsTableModel) ColumnCount() {
-	// TODO: Port Python method logic
-}
-
-// Data is the Go port of the Python data method
-func (wor *WordsTableModel) Data() {
-	// TODO: Port Python method logic
-}
-
-// Flags is the Go port of the Python flags method
-func (wor *WordsTableModel) Flags() {
-	// TODO: Port Python method logic
-}
-
-// SetData is the Go port of the Python setData method
-func (wor *WordsTableModel) SetData() {
-	// TODO: Port Python method logic
-}
-
-// RemoveRow is the Go port of the Python removeRow method
-func (wor *WordsTableModel) RemoveRow() {
-	// TODO: Port Python method logic
-}
-
-// EnterWidget is a Go port of the Python EnterWidget class
-type EnterWidget struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewEnterWidget creates a new EnterWidget instance
-func NewEnterWidget() *EnterWidget {
-	return &EnterWidget{
-		// TODO: Initialize fields
-	}
-}
-
-// Lesson is the Go port of the Python lesson method
-func (ent *EnterWidget) Lesson() {
-	// TODO: Port Python method logic
-}
-
-// UpdateLesson is the Go port of the Python updateLesson method
-
-// RemoveSelectedRows is the Go port of the Python removeSelectedRows method
-func (ent *EnterWidget) RemoveSelectedRows() {
-	// TODO: Port Python method logic
-}
-
-// AddLetter is the Go port of the Python addLetter method
-func (ent *EnterWidget) AddLetter() {
-	// TODO: Port Python method logic
-}
-
-// buildUi is the Go port of the Python _buildUi method
-func (ent *EnterWidget) buildUi() {
-	// TODO: Port Python private method logic
-}
-
-// Retranslate is the Go port of the Python retranslate method
-
-// connectSignals is the Go port of the Python _connectSignals method
-func (ent *EnterWidget) connectSignals() {
-	// TODO: Port Python private method logic
-}
-
-// Fallback is a Go port of the Python Fallback class
-type Fallback struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewFallback creates a new Fallback instance
-func NewFallback() *Fallback {
-	return &Fallback{
-		// TODO: Initialize fields
-	}
-}
-
-// Check is the Go port of the Python check method
-func (fal *Fallback) Check() {
-	// TODO: Port Python method logic
-}
-
-// Split is the Go port of the Python split method
-func (fal *Fallback) Split() {
-	// TODO: Port Python method logic
-}
-
-// InstallQtClasses is the Go port of the Python installQtClasses function
-func InstallQtClasses() {
-	// TODO: Port Python function logic
-}
-
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-
-// _charsKeyboard is the Go port of the Python _charsKeyboard function
-func _charsKeyboard() {
-	// TODO: Port Python function logic
-}
-
-// _compose is the Go port of the Python _compose function
-func _compose() {
-	// TODO: Port Python function logic
-}
-
-// _parse is the Go port of the Python _parse function
-func _parse() {
-	// TODO: Port Python function logic
-}
-
-// _createChecker is the Go port of the Python _createChecker function
-func _createChecker() {
-	// TODO: Port Python function logic
-}
-
-// CreateWordsEnterer is the Go port of the Python createWordsEnterer function
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// __init__ is the Go port of the Python __init__ function
-
-// HighlightBlock is the Go port of the Python highlightBlock function
-
-// EventFilter is the Go port of the Python eventFilter function
-
-// Paint is the Go port of the Python paint function
-
-// CreateEditor is the Go port of the Python createEditor function
-
-// __init__ is the Go port of the Python __init__ function
-
-// _questionLanguageChanged is the Go port of the Python _questionLanguageChanged function
-func _questionLanguageChanged() {
-	// TODO: Port Python function logic
-}
-
-// _answerLanguageChanged is the Go port of the Python _answerLanguageChanged function
-func _answerLanguageChanged() {
-	// TODO: Port Python function logic
-}
-
-// _wholeModelChanged is the Go port of the Python _wholeModelChanged function
-func _wholeModelChanged() {
-	// TODO: Port Python function logic
-}
-
-// SetModel is the Go port of the Python setModel function
-
-// _modelReset is the Go port of the Python _modelReset function
-func _modelReset() {
-	// TODO: Port Python function logic
-}
-
-// MoveCursor is the Go port of the Python moveCursor function
-
-// __init__ is the Go port of the Python __init__ function
-
-// Retranslate is the Go port of the Python retranslate function
-
-// UpdateLesson is the Go port of the Python updateLesson function
-
-// Sort is the Go port of the Python sort function
-
-// UpdateTitle is the Go port of the Python updateTitle function
-
-// UpdateQuestionLanguage is the Go port of the Python updateQuestionLanguage function
-
-// UpdateAnswerLanguage is the Go port of the Python updateAnswerLanguage function
-
-// HeaderData is the Go port of the Python headerData function
-
-// RowCount is the Go port of the Python rowCount function
-
-// ColumnCount is the Go port of the Python columnCount function
-
-// Data is the Go port of the Python data function
-
-// Flags is the Go port of the Python flags function
-
-// SetData is the Go port of the Python setData function
-
-// RemoveRow is the Go port of the Python removeRow function
-
-// __init__ is the Go port of the Python __init__ function
-
-// Lesson is the Go port of the Python lesson function
-
-// UpdateLesson is the Go port of the Python updateLesson function
-
-// RemoveSelectedRows is the Go port of the Python removeSelectedRows function
-
-// AddLetter is the Go port of the Python addLetter function
-
-// _buildUi is the Go port of the Python _buildUi function
-func _buildUi() {
-	// TODO: Port Python function logic
-}
-
-// Retranslate is the Go port of the Python retranslate function
-
-// _connectSignals is the Go port of the Python _connectSignals function
-func _connectSignals() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-
-// Check is the Go port of the Python check function
-
-// Split is the Go port of the Python split function
-
-// Init creates and returns a new module instance
-// This is the Go equivalent of the Python init function

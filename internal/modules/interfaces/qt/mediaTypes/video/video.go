@@ -1,11 +1,13 @@
-// Package video.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/interfaces/qt/mediaTypes/video/video.py
+// Package video provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package video
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
+	_ "github.com/therecipe/qt/widgets"
 )
 
 // MediaTypeModule is a Go port of the Python MediaTypeModule class
@@ -17,81 +19,71 @@ type MediaTypeModule struct {
 
 // NewMediaTypeModule creates a new MediaTypeModule instance
 func NewMediaTypeModule() *MediaTypeModule {
-	base := core.NewBaseModule("mediaType", "mediaType")
+	base := core.NewBaseModule("ui", "video-module")
 
 	return &MediaTypeModule{
 		BaseModule: base,
 	}
 }
 
-// Enable is the Go port of the Python enable method
-func (med *MediaTypeModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (med *MediaTypeModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// PhononControls is the Go port of the Python phononControls method
-func (med *MediaTypeModule) PhononControls() {
+// Phononcontrols is the Go port of the Python phononControls method
+func (mod *MediaTypeModule) Phononcontrols() {
 	// TODO: Port Python method logic
 }
 
 // Supports is the Go port of the Python supports method
-func (med *MediaTypeModule) Supports() {
+func (mod *MediaTypeModule) Supports() {
 	// TODO: Port Python method logic
 }
 
 // Path is the Go port of the Python path method
-func (med *MediaTypeModule) Path() {
+func (mod *MediaTypeModule) Path() {
 	// TODO: Port Python method logic
 }
 
-// mediaContent is the Go port of the Python _mediaContent method
-func (med *MediaTypeModule) mediaContent() {
-	// TODO: Port Python private method logic
+// mediacontent is the Go port of the Python _mediaContent method
+func (mod *MediaTypeModule) mediacontent() {
+	// TODO: Port Python method logic
 }
 
-// ShowMedia is the Go port of the Python showMedia method
-func (med *MediaTypeModule) ShowMedia() {
+// Showmedia is the Go port of the Python showMedia method
+func (mod *MediaTypeModule) Showmedia() {
 	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *MediaTypeModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("MediaTypeModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *MediaTypeModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("MediaTypeModule disabled")
+	return nil
 }
 
 // SetManager sets the module manager
-func (med *MediaTypeModule) SetManager(manager *core.Manager) {
-	med.manager = manager
+func (mod *MediaTypeModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// PhononControls is the Go port of the Python phononControls function
-
-// Supports is the Go port of the Python supports function
-
-// Path is the Go port of the Python path function
-
-// _mediaContent is the Go port of the Python _mediaContent function
-func _mediaContent() {
-	// TODO: Port Python function logic
-}
-
-// ShowMedia is the Go port of the Python showMedia function
-
-// Init creates and returns a new module instance
+// InitMediaTypeModule creates and returns a new MediaTypeModule instance
 // This is the Go equivalent of the Python init function
+func InitMediaTypeModule() core.Module {
+	return NewMediaTypeModule()
+}

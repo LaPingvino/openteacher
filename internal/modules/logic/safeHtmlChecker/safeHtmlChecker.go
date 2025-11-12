@@ -1,10 +1,11 @@
-// Package safehtmlchecker.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/safeHtmlChecker/safeHtmlChecker.py
+// Package safehtmlchecker provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
-package safeHtmlChecker
+package safehtmlchecker
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,50 +18,51 @@ type SafeHtmlCheckerModule struct {
 
 // NewSafeHtmlCheckerModule creates a new SafeHtmlCheckerModule instance
 func NewSafeHtmlCheckerModule() *SafeHtmlCheckerModule {
-	base := core.NewBaseModule("safeHtmlChecker", "safeHtmlChecker")
+	base := core.NewBaseModule("logic", "safehtmlchecker-module")
 
 	return &SafeHtmlCheckerModule{
 		BaseModule: base,
 	}
 }
 
-// IsSafeHtml is the Go port of the Python isSafeHtml method
-func (saf *SafeHtmlCheckerModule) IsSafeHtml() {
+// Issafehtml is the Go port of the Python isSafeHtml method
+func (mod *SafeHtmlCheckerModule) Issafehtml() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (saf *SafeHtmlCheckerModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *SafeHtmlCheckerModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("SafeHtmlCheckerModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (saf *SafeHtmlCheckerModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *SafeHtmlCheckerModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("SafeHtmlCheckerModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (saf *SafeHtmlCheckerModule) SetManager(manager *core.Manager) {
-	saf.manager = manager
+func (mod *SafeHtmlCheckerModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// IsSafeHtml is the Go port of the Python isSafeHtml function
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitSafeHtmlCheckerModule creates and returns a new SafeHtmlCheckerModule instance
 // This is the Go equivalent of the Python init function
+func InitSafeHtmlCheckerModule() core.Module {
+	return NewSafeHtmlCheckerModule()
+}

@@ -1,29 +1,13 @@
-// Package friendlytranslationnames.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/friendlyTranslationNames/friendlyTranslationNames.py
+// Package friendlytranslationnames provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
-package friendlyTranslationNames
+package friendlytranslationnames
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
-
-// KeyAsDefaultDict is a Go port of the Python KeyAsDefaultDict class
-type KeyAsDefaultDict struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewKeyAsDefaultDict creates a new KeyAsDefaultDict instance
-func NewKeyAsDefaultDict() *KeyAsDefaultDict {
-	return &KeyAsDefaultDict{
-		// TODO: Initialize fields
-	}
-}
-
-// __missing__ is the Go port of the Python __missing__ method
-func ((key *KeyAsDefaultDict)) missing__() {
-	// TODO: Port Python method logic
-}
 
 // FriendlyTranslationNamesModule is a Go port of the Python FriendlyTranslationNamesModule class
 type FriendlyTranslationNamesModule struct {
@@ -34,55 +18,51 @@ type FriendlyTranslationNamesModule struct {
 
 // NewFriendlyTranslationNamesModule creates a new FriendlyTranslationNamesModule instance
 func NewFriendlyTranslationNamesModule() *FriendlyTranslationNamesModule {
-	base := core.NewBaseModule("friendlyTranslationNames", "friendlyTranslationNames")
+	base := core.NewBaseModule("logic", "friendlytranslationnames-module")
 
 	return &FriendlyTranslationNamesModule{
 		BaseModule: base,
 	}
 }
 
-// FriendlyNames is the Go port of the Python friendlyNames method
-func (fri *FriendlyTranslationNamesModule) FriendlyNames() {
+// Friendlynames is the Go port of the Python friendlyNames method
+func (mod *FriendlyTranslationNamesModule) Friendlynames() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (fri *FriendlyTranslationNamesModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *FriendlyTranslationNamesModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("FriendlyTranslationNamesModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (fri *FriendlyTranslationNamesModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *FriendlyTranslationNamesModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("FriendlyTranslationNamesModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (fri *FriendlyTranslationNamesModule) SetManager(manager *core.Manager) {
-	fri.manager = manager
+func (mod *FriendlyTranslationNamesModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __missing__ is the Go port of the Python __missing__ function
-func __missing__() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// FriendlyNames is the Go port of the Python friendlyNames function
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitFriendlyTranslationNamesModule creates and returns a new FriendlyTranslationNamesModule instance
 // This is the Go equivalent of the Python init function
+func InitFriendlyTranslationNamesModule() core.Module {
+	return NewFriendlyTranslationNamesModule()
+}

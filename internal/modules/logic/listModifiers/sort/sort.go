@@ -1,10 +1,11 @@
-// Package sort.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/listModifiers/sort/sort.py
+// Package sort provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package sort
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,65 +18,56 @@ type SortModule struct {
 
 // NewSortModule creates a new SortModule instance
 func NewSortModule() *SortModule {
-	base := core.NewBaseModule("listModifier", "listModifier")
+	base := core.NewBaseModule("logic", "sort-module")
 
 	return &SortModule{
 		BaseModule: base,
 	}
 }
 
-// ModifyList is the Go port of the Python modifyList method
-func (sor *SortModule) ModifyList() {
+// Modifylist is the Go port of the Python modifyList method
+func (mod *SortModule) Modifylist() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (sor *SortModule) Enable(ctx context.Context) error {
+// retranslate is the Go port of the Python _retranslate method
+func (mod *SortModule) retranslate() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *SortModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("SortModule enabled")
 	return nil
 }
 
-// retranslate is the Go port of the Python _retranslate method
-func (sor *SortModule) retranslate() {
-	// TODO: Port Python private method logic
-}
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *SortModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
 
-// Disable is the Go port of the Python disable method
-func (sor *SortModule) Disable(ctx context.Context) error {
 	// TODO: Port Python disable logic
+
+	fmt.Println("SortModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (sor *SortModule) SetManager(manager *core.Manager) {
-	sor.manager = manager
+func (mod *SortModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// ModifyList is the Go port of the Python modifyList function
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// GetFirstQuestion is the Go port of the Python getFirstQuestion function
-func GetFirstQuestion() {
-	// TODO: Port Python function logic
-}
-
-// Init creates and returns a new module instance
+// InitSortModule creates and returns a new SortModule instance
 // This is the Go equivalent of the Python init function
+func InitSortModule() core.Module {
+	return NewSortModule()
+}

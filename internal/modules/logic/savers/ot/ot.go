@@ -1,10 +1,11 @@
-// Package ot.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/savers/ot/ot.py
+// Package ot provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package ot
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,70 +18,61 @@ type OpenTeacherSaverModule struct {
 
 // NewOpenTeacherSaverModule creates a new OpenTeacherSaverModule instance
 func NewOpenTeacherSaverModule() *OpenTeacherSaverModule {
-	base := core.NewBaseModule("save", "save")
+	base := core.NewBaseModule("logic", "ot-module")
 
 	return &OpenTeacherSaverModule{
 		BaseModule: base,
 	}
 }
 
-// Enable is the Go port of the Python enable method
-func (ope *OpenTeacherSaverModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
 // retranslate is the Go port of the Python _retranslate method
-func (ope *OpenTeacherSaverModule) retranslate() {
-	// TODO: Port Python private method logic
-}
-
-// Disable is the Go port of the Python disable method
-func (ope *OpenTeacherSaverModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// compose is the Go port of the Python _compose method
-func (ope *OpenTeacherSaverModule) compose() {
-	// TODO: Port Python private method logic
-}
-
-// Save is the Go port of the Python save method
-func (ope *OpenTeacherSaverModule) Save() {
+func (mod *OpenTeacherSaverModule) retranslate() {
 	// TODO: Port Python method logic
 }
 
+// compose is the Go port of the Python _compose method
+func (mod *OpenTeacherSaverModule) compose() {
+	// TODO: Port Python method logic
+}
+
+// Save is the Go port of the Python save method
+func (mod *OpenTeacherSaverModule) Save() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *OpenTeacherSaverModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("OpenTeacherSaverModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *OpenTeacherSaverModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("OpenTeacherSaverModule disabled")
+	return nil
+}
+
 // SetManager sets the module manager
-func (ope *OpenTeacherSaverModule) SetManager(manager *core.Manager) {
-	ope.manager = manager
+func (mod *OpenTeacherSaverModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// _compose is the Go port of the Python _compose function
-func _compose() {
-	// TODO: Port Python function logic
-}
-
-// Save is the Go port of the Python save function
-
-// Init creates and returns a new module instance
+// InitOpenTeacherSaverModule creates and returns a new OpenTeacherSaverModule instance
 // This is the Go equivalent of the Python init function
+func InitOpenTeacherSaverModule() core.Module {
+	return NewOpenTeacherSaverModule()
+}

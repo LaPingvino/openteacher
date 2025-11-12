@@ -1,10 +1,11 @@
-// Package vocabularium.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/loaders/vocabularium/vocabularium.py
+// Package vocabularium provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package vocabularium
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +18,7 @@ type VocabulariumLoaderModule struct {
 
 // NewVocabulariumLoaderModule creates a new VocabulariumLoaderModule instance
 func NewVocabulariumLoaderModule() *VocabulariumLoaderModule {
-	base := core.NewBaseModule("load", "load")
+	base := core.NewBaseModule("logic", "vocabularium-module")
 
 	return &VocabulariumLoaderModule{
 		BaseModule: base,
@@ -25,79 +26,63 @@ func NewVocabulariumLoaderModule() *VocabulariumLoaderModule {
 }
 
 // parse is the Go port of the Python _parse method
-func (voc *VocabulariumLoaderModule) parse() {
-	// TODO: Port Python private method logic
+func (mod *VocabulariumLoaderModule) parse() {
+	// TODO: Port Python method logic
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (voc *VocabulariumLoaderModule) retranslate() {
-	// TODO: Port Python private method logic
-}
-
-// Enable is the Go port of the Python enable method
-func (voc *VocabulariumLoaderModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (voc *VocabulariumLoaderModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
+func (mod *VocabulariumLoaderModule) retranslate() {
+	// TODO: Port Python method logic
 }
 
 // lines is the Go port of the Python _lines method
-func (voc *VocabulariumLoaderModule) lines() {
-	// TODO: Port Python private method logic
+func (mod *VocabulariumLoaderModule) lines() {
+	// TODO: Port Python method logic
 }
 
-// GetFileTypeOf is the Go port of the Python getFileTypeOf method
-func (voc *VocabulariumLoaderModule) GetFileTypeOf() {
+// Getfiletypeof is the Go port of the Python getFileTypeOf method
+func (mod *VocabulariumLoaderModule) Getfiletypeof() {
 	// TODO: Port Python method logic
 }
 
 // Load is the Go port of the Python load method
-func (voc *VocabulariumLoaderModule) Load() {
+func (mod *VocabulariumLoaderModule) Load() {
 	// TODO: Port Python method logic
 }
 
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *VocabulariumLoaderModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("VocabulariumLoaderModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *VocabulariumLoaderModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("VocabulariumLoaderModule disabled")
+	return nil
+}
+
 // SetManager sets the module manager
-func (voc *VocabulariumLoaderModule) SetManager(manager *core.Manager) {
-	voc.manager = manager
+func (mod *VocabulariumLoaderModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _parse is the Go port of the Python _parse function
-func _parse() {
-	// TODO: Port Python function logic
-}
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// _lines is the Go port of the Python _lines function
-func _lines() {
-	// TODO: Port Python function logic
-}
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf function
-
-// Load is the Go port of the Python load function
-
-// Init creates and returns a new module instance
+// InitVocabulariumLoaderModule creates and returns a new VocabulariumLoaderModule instance
 // This is the Go equivalent of the Python init function
+func InitVocabulariumLoaderModule() core.Module {
+	return NewVocabulariumLoaderModule()
+}

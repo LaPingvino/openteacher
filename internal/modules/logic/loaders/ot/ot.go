@@ -1,10 +1,11 @@
-// Package ot.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/loaders/ot/ot.py
+// Package ot provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package ot
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,67 +18,61 @@ type OpenTeacherLoaderModule struct {
 
 // NewOpenTeacherLoaderModule creates a new OpenTeacherLoaderModule instance
 func NewOpenTeacherLoaderModule() *OpenTeacherLoaderModule {
-	base := core.NewBaseModule("load", "load")
+	base := core.NewBaseModule("logic", "ot-module")
 
 	return &OpenTeacherLoaderModule{
 		BaseModule: base,
 	}
 }
 
-// Enable is the Go port of the Python enable method
-func (ope *OpenTeacherLoaderModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
 // retranslate is the Go port of the Python _retranslate method
-func (ope *OpenTeacherLoaderModule) retranslate() {
-	// TODO: Port Python private method logic
+func (mod *OpenTeacherLoaderModule) retranslate() {
+	// TODO: Port Python method logic
 }
 
-// Disable is the Go port of the Python disable method
-func (ope *OpenTeacherLoaderModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf method
-func (ope *OpenTeacherLoaderModule) GetFileTypeOf() {
+// Getfiletypeof is the Go port of the Python getFileTypeOf method
+func (mod *OpenTeacherLoaderModule) Getfiletypeof() {
 	// TODO: Port Python method logic
 }
 
 // Load is the Go port of the Python load method
-func (ope *OpenTeacherLoaderModule) Load() {
+func (mod *OpenTeacherLoaderModule) Load() {
 	// TODO: Port Python method logic
 }
 
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *OpenTeacherLoaderModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("OpenTeacherLoaderModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *OpenTeacherLoaderModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("OpenTeacherLoaderModule disabled")
+	return nil
+}
+
 // SetManager sets the module manager
-func (ope *OpenTeacherLoaderModule) SetManager(manager *core.Manager) {
-	ope.manager = manager
+func (mod *OpenTeacherLoaderModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// GetFileTypeOf is the Go port of the Python getFileTypeOf function
-
-// Load is the Go port of the Python load function
-
-// Init creates and returns a new module instance
+// InitOpenTeacherLoaderModule creates and returns a new OpenTeacherLoaderModule instance
 // This is the Go equivalent of the Python init function
+func InitOpenTeacherLoaderModule() core.Module {
+	return NewOpenTeacherLoaderModule()
+}

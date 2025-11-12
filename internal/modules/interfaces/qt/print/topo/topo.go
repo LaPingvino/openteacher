@@ -1,11 +1,13 @@
-// Package topo.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/interfaces/qt/print/topo/topo.py
+// Package topo provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package topo
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/therecipe/qt/widgets"
 )
 
 // PrintModule is a Go port of the Python PrintModule class
@@ -17,50 +19,51 @@ type PrintModule struct {
 
 // NewPrintModule creates a new PrintModule instance
 func NewPrintModule() *PrintModule {
-	base := core.NewBaseModule("print", "print")
+	base := core.NewBaseModule("ui", "topo-module")
 
 	return &PrintModule{
 		BaseModule: base,
 	}
 }
 
-// Enable is the Go port of the Python enable method
-func (pri *PrintModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// Disable is the Go port of the Python disable method
-func (pri *PrintModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
-	return nil
-}
-
-// Print_ is the Go port of the Python print_ method
-func (pri *PrintModule) Print_() {
+// Print is the Go port of the Python print_ method
+func (mod *PrintModule) Print() {
 	// TODO: Port Python method logic
 }
 
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *PrintModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("PrintModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *PrintModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("PrintModule disabled")
+	return nil
+}
+
 // SetManager sets the module manager
-func (pri *PrintModule) SetManager(manager *core.Manager) {
-	pri.manager = manager
+func (mod *PrintModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Print_ is the Go port of the Python print_ function
-
-// Init creates and returns a new module instance
+// InitPrintModule creates and returns a new PrintModule instance
 // This is the Go equivalent of the Python init function
+func InitPrintModule() core.Module {
+	return NewPrintModule()
+}

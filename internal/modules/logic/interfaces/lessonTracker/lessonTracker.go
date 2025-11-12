@@ -1,10 +1,12 @@
-// Package lessontracker.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/interfaces/lessonTracker/lessonTracker.py
+// Package lessontracker provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
-package lessonTracker
+package lessontracker
+
 import (
 	"context"
+	"fmt"
+
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +19,7 @@ type LessonTrackerModule struct {
 
 // NewLessonTrackerModule creates a new LessonTrackerModule instance
 func NewLessonTrackerModule() *LessonTrackerModule {
-	base := core.NewBaseModule("lessonTracker", "lessonTracker")
+	base := core.NewBaseModule("lessonTracker", "lessontracker-module")
 
 	return &LessonTrackerModule{
 		BaseModule: base,
@@ -25,69 +27,58 @@ func NewLessonTrackerModule() *LessonTrackerModule {
 }
 
 // Lessons is the Go port of the Python lessons method
-func (les *LessonTrackerModule) Lessons() {
+func (mod *LessonTrackerModule) Lessons() {
 	// TODO: Port Python method logic
 }
 
-// CurrentLesson is the Go port of the Python currentLesson method
-func (les *LessonTrackerModule) CurrentLesson() {
+// Currentlesson is the Go port of the Python currentLesson method
+func (mod *LessonTrackerModule) Currentlesson() {
 	// TODO: Port Python method logic
 }
 
-// lessonAdded is the Go port of the Python _lessonAdded method
-func (les *LessonTrackerModule) lessonAdded() {
-	// TODO: Port Python private method logic
+// lessonadded is the Go port of the Python _lessonAdded method
+func (mod *LessonTrackerModule) lessonadded() {
+	// TODO: Port Python method logic
 }
 
-// removeLesson is the Go port of the Python _removeLesson method
-func (les *LessonTrackerModule) removeLesson() {
-	// TODO: Port Python private method logic
+// removelesson is the Go port of the Python _removeLesson method
+func (mod *LessonTrackerModule) removelesson() {
+	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (les *LessonTrackerModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *LessonTrackerModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("LessonTrackerModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (les *LessonTrackerModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *LessonTrackerModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("LessonTrackerModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (les *LessonTrackerModule) SetManager(manager *core.Manager) {
-	les.manager = manager
+func (mod *LessonTrackerModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// Lessons is the Go port of the Python lessons function
-
-// CurrentLesson is the Go port of the Python currentLesson function
-
-// _lessonAdded is the Go port of the Python _lessonAdded function
-func _lessonAdded() {
-	// TODO: Port Python function logic
-}
-
-// _removeLesson is the Go port of the Python _removeLesson function
-func _removeLesson() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitLessonTrackerModule creates and returns a new LessonTrackerModule instance
 // This is the Go equivalent of the Python init function
+func InitLessonTrackerModule() core.Module {
+	return NewLessonTrackerModule()
+}

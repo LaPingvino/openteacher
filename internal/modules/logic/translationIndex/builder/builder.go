@@ -1,49 +1,13 @@
-// Package builder.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/translationIndex/builder/builder.py
+// Package builder provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package builder
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
-
-// LazyDict is a Go port of the Python LazyDict class
-type LazyDict struct {
-	// TODO: Add struct fields based on Python class
-}
-
-// NewLazyDict creates a new LazyDict instance
-func NewLazyDict() *LazyDict {
-	return &LazyDict{
-		// TODO: Initialize fields
-	}
-}
-
-// dict is the Go port of the Python _dict method
-func (laz *LazyDict) dict() {
-	// TODO: Port Python private method logic
-}
-
-// __iter__ is the Go port of the Python __iter__ method
-func ((laz *LazyDict)) iter__() {
-	// TODO: Port Python method logic
-}
-
-// __len__ is the Go port of the Python __len__ method
-func ((laz *LazyDict)) len__() {
-	// TODO: Port Python method logic
-}
-
-// __getitem__ is the Go port of the Python __getitem__ method
-func ((laz *LazyDict)) getitem__() {
-	// TODO: Port Python method logic
-}
-
-// __repr__ is the Go port of the Python __repr__ method
-func ((laz *LazyDict)) repr__() {
-	// TODO: Port Python method logic
-}
 
 // TranslationIndexBuilderModule is a Go port of the Python TranslationIndexBuilderModule class
 type TranslationIndexBuilderModule struct {
@@ -54,97 +18,61 @@ type TranslationIndexBuilderModule struct {
 
 // NewTranslationIndexBuilderModule creates a new TranslationIndexBuilderModule instance
 func NewTranslationIndexBuilderModule() *TranslationIndexBuilderModule {
-	base := core.NewBaseModule("translationIndexBuilder", "translationIndexBuilder")
+	base := core.NewBaseModule("logic", "builder-module")
 
 	return &TranslationIndexBuilderModule{
 		BaseModule: base,
 	}
 }
 
-// Enable is the Go port of the Python enable method
-func (tra *TranslationIndexBuilderModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
-}
-
-// translationsIn is the Go port of the Python _translationsIn method
-func (tra *TranslationIndexBuilderModule) translationsIn() {
-	// TODO: Port Python private method logic
-}
-
-// translationIndex is the Go port of the Python _translationIndex method
-func (tra *TranslationIndexBuilderModule) translationIndex() {
-	// TODO: Port Python private method logic
-}
-
-// BuildTranslationIndex is the Go port of the Python buildTranslationIndex method
-func (tra *TranslationIndexBuilderModule) BuildTranslationIndex() {
+// translationsin is the Go port of the Python _translationsIn method
+func (mod *TranslationIndexBuilderModule) translationsin() {
 	// TODO: Port Python method logic
 }
 
-// Disable is the Go port of the Python disable method
-func (tra *TranslationIndexBuilderModule) Disable(ctx context.Context) error {
+// translationindex is the Go port of the Python _translationIndex method
+func (mod *TranslationIndexBuilderModule) translationindex() {
+	// TODO: Port Python method logic
+}
+
+// Buildtranslationindex is the Go port of the Python buildTranslationIndex method
+func (mod *TranslationIndexBuilderModule) Buildtranslationindex() {
+	// TODO: Port Python method logic
+}
+
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *TranslationIndexBuilderModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("TranslationIndexBuilderModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *TranslationIndexBuilderModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("TranslationIndexBuilderModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (tra *TranslationIndexBuilderModule) SetManager(manager *core.Manager) {
-	tra.manager = manager
+func (mod *TranslationIndexBuilderModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _dict is the Go port of the Python _dict function
-func _dict() {
-	// TODO: Port Python function logic
-}
-
-// __iter__ is the Go port of the Python __iter__ function
-func __iter__() {
-	// TODO: Port Python function logic
-}
-
-// __len__ is the Go port of the Python __len__ function
-func __len__() {
-	// TODO: Port Python function logic
-}
-
-// __getitem__ is the Go port of the Python __getitem__ function
-func __getitem__() {
-	// TODO: Port Python function logic
-}
-
-// __repr__ is the Go port of the Python __repr__ function
-func __repr__() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-
-// Enable is the Go port of the Python enable function
-
-// _translationsIn is the Go port of the Python _translationsIn function
-func _translationsIn() {
-	// TODO: Port Python function logic
-}
-
-// _translationIndex is the Go port of the Python _translationIndex function
-func _translationIndex() {
-	// TODO: Port Python function logic
-}
-
-// BuildTranslationIndex is the Go port of the Python buildTranslationIndex function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitTranslationIndexBuilderModule creates and returns a new TranslationIndexBuilderModule instance
 // This is the Go equivalent of the Python init function
+func InitTranslationIndexBuilderModule() core.Module {
+	return NewTranslationIndexBuilderModule()
+}

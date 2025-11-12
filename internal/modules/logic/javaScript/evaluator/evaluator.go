@@ -1,10 +1,11 @@
-// Package evaluator.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/javaScript/evaluator/evaluator.py
+// Package evaluator provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package evaluator
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,50 +18,51 @@ type JSEvaluatorModule struct {
 
 // NewJSEvaluatorModule creates a new JSEvaluatorModule instance
 func NewJSEvaluatorModule() *JSEvaluatorModule {
-	base := core.NewBaseModule("javaScriptEvaluator", "javaScriptEvaluator")
+	base := core.NewBaseModule("logic", "evaluator-module")
 
 	return &JSEvaluatorModule{
 		BaseModule: base,
 	}
 }
 
-// CreateEvaluator is the Go port of the Python createEvaluator method
-func (jse *JSEvaluatorModule) CreateEvaluator() {
+// Createevaluator is the Go port of the Python createEvaluator method
+func (mod *JSEvaluatorModule) Createevaluator() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (jse *JSEvaluatorModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *JSEvaluatorModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("JSEvaluatorModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (jse *JSEvaluatorModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *JSEvaluatorModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("JSEvaluatorModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (jse *JSEvaluatorModule) SetManager(manager *core.Manager) {
-	jse.manager = manager
+func (mod *JSEvaluatorModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// CreateEvaluator is the Go port of the Python createEvaluator function
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitJSEvaluatorModule creates and returns a new JSEvaluatorModule instance
 // This is the Go equivalent of the Python init function
+func InitJSEvaluatorModule() core.Module {
+	return NewJSEvaluatorModule()
+}

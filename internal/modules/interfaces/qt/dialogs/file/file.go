@@ -1,90 +1,207 @@
-// Package file.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/interfaces/qt/dialogs/file/file.py
+// Package file provides functionality ported from Python module
+//
+// Provides file dialogs for opening and saving files.
 //
 // This is an automated port - implementation may be incomplete.
 package file
+
 import (
 	"context"
+	"fmt"
+	"path/filepath"
+
 	"github.com/LaPingvino/openteacher/internal/core"
+	qtcore "github.com/therecipe/qt/core"
+	"github.com/therecipe/qt/widgets"
 )
 
-// FileDialogsModule is a Go port of the Python FileDialogsModule class
-type FileDialogsModule struct {
+// FileDialogModule is a Go port of the Python FileDialogModule class
+type FileDialogModule struct {
 	*core.BaseModule
-	manager *core.Manager
-	// TODO: Add module-specific fields
+	manager    *core.Manager
+	lastDir    string
+	fileFilter string
 }
 
-// NewFileDialogsModule creates a new FileDialogsModule instance
-func NewFileDialogsModule() *FileDialogsModule {
-	base := core.NewBaseModule("fileDialogs", "fileDialogs")
+// NewFileDialogModule creates a new FileDialogModule instance
+func NewFileDialogModule() *FileDialogModule {
+	base := core.NewBaseModule("ui", "file-dialog-module")
+	base.SetRequires("qtApp")
 
-	return &FileDialogsModule{
+	return &FileDialogModule{
 		BaseModule: base,
+		lastDir:    "",
+		fileFilter: "All Files (*.*)",
 	}
 }
 
-// GetSavePath is the Go port of the Python getSavePath method
-func (fil *FileDialogsModule) GetSavePath() {
-	// TODO: Port Python method logic
+// OpenFile shows an open file dialog and returns the selected file path
+func (mod *FileDialogModule) OpenFile(parent *widgets.QWidget, title string, filter string) string {
+	if filter == "" {
+		filter = mod.fileFilter
+	}
+
+	dialog := widgets.NewQFileDialog2(parent, title, mod.lastDir, filter)
+	dialog.SetFileMode(widgets.QFileDialog__ExistingFile)
+	dialog.SetAcceptMode(widgets.QFileDialog__AcceptOpen)
+
+	if dialog.Exec() == int(widgets.QDialog__Accepted) {
+		selectedFiles := dialog.SelectedFiles()
+		if len(selectedFiles) > 0 {
+			filePath := selectedFiles[0]
+			mod.lastDir = filepath.Dir(filePath)
+			return filePath
+		}
+	}
+
+	return ""
 }
 
-// GetLoadPath is the Go port of the Python getLoadPath method
-func (fil *FileDialogsModule) GetLoadPath() {
-	// TODO: Port Python method logic
+// OpenFiles shows an open files dialog and returns the selected file paths
+func (mod *FileDialogModule) OpenFiles(parent *widgets.QWidget, title string, filter string) []string {
+	if filter == "" {
+		filter = mod.fileFilter
+	}
+
+	dialog := widgets.NewQFileDialog2(parent, title, mod.lastDir, filter)
+	dialog.SetFileMode(widgets.QFileDialog__ExistingFiles)
+	dialog.SetAcceptMode(widgets.QFileDialog__AcceptOpen)
+
+	if dialog.Exec() == int(widgets.QDialog__Accepted) {
+		selectedFiles := dialog.SelectedFiles()
+		if len(selectedFiles) > 0 {
+			mod.lastDir = filepath.Dir(selectedFiles[0])
+			return selectedFiles
+		}
+	}
+
+	return []string{}
 }
 
-// Enable is the Go port of the Python enable method
-func (fil *FileDialogsModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
+// SaveFile shows a save file dialog and returns the selected file path
+func (mod *FileDialogModule) SaveFile(parent *widgets.QWidget, title string, filter string, defaultName string) string {
+	if filter == "" {
+		filter = mod.fileFilter
+	}
+
+	startPath := mod.lastDir
+	if defaultName != "" {
+		startPath = filepath.Join(mod.lastDir, defaultName)
+	}
+
+	dialog := widgets.NewQFileDialog2(parent, title, startPath, filter)
+	dialog.SetFileMode(widgets.QFileDialog__AnyFile)
+	dialog.SetAcceptMode(widgets.QFileDialog__AcceptSave)
+	dialog.SetDefaultSuffix("ot")
+
+	if dialog.Exec() == int(widgets.QDialog__Accepted) {
+		selectedFiles := dialog.SelectedFiles()
+		if len(selectedFiles) > 0 {
+			filePath := selectedFiles[0]
+			mod.lastDir = filepath.Dir(filePath)
+			return filePath
+		}
+	}
+
+	return ""
+}
+
+// SelectDirectory shows a directory selection dialog
+func (mod *FileDialogModule) SelectDirectory(parent *widgets.QWidget, title string) string {
+	dialog := widgets.NewQFileDialog2(parent, title, mod.lastDir, "")
+	dialog.SetFileMode(widgets.QFileDialog__Directory)
+	dialog.SetOption(widgets.QFileDialog__ShowDirsOnly, true)
+
+	if dialog.Exec() == int(widgets.QDialog__Accepted) {
+		selectedFiles := dialog.SelectedFiles()
+		if len(selectedFiles) > 0 {
+			dirPath := selectedFiles[0]
+			mod.lastDir = dirPath
+			return dirPath
+		}
+	}
+
+	return ""
+}
+
+// SetDefaultDirectory sets the default directory for file dialogs
+func (mod *FileDialogModule) SetDefaultDirectory(dir string) {
+	mod.lastDir = dir
+}
+
+// GetDefaultDirectory returns the current default directory
+func (mod *FileDialogModule) GetDefaultDirectory() string {
+	return mod.lastDir
+}
+
+// SetDefaultFilter sets the default file filter
+func (mod *FileDialogModule) SetDefaultFilter(filter string) {
+	mod.fileFilter = filter
+}
+
+// GetSupportedFormats returns supported file formats
+func (mod *FileDialogModule) GetSupportedFormats() map[string]string {
+	return map[string]string{
+		"OpenTeacher Files": "*.ot",
+		"Text Files":        "*.txt",
+		"All Files":         "*.*",
+	}
+}
+
+// BuildFilterString builds a filter string from format map
+func (mod *FileDialogModule) BuildFilterString(formats map[string]string) string {
+	if len(formats) == 0 {
+		return mod.fileFilter
+	}
+
+	var filters []string
+	for name, pattern := range formats {
+		filters = append(filters, fmt.Sprintf("%s (%s)", name, pattern))
+	}
+
+	result := ""
+	for i, filter := range filters {
+		if i > 0 {
+			result += ";;"
+		}
+		result += filter
+	}
+
+	return result
+}
+
+// Enable activates the module
+func (mod *FileDialogModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// Set default directory to user's home directory
+	homeDir := qtcore.QDir_HomePath()
+	if homeDir != "" {
+		mod.lastDir = homeDir
+	}
+
+	fmt.Println("FileDialogModule enabled")
 	return nil
 }
 
-// retranslate is the Go port of the Python _retranslate method
-func (fil *FileDialogsModule) retranslate() {
-	// TODO: Port Python private method logic
-}
+// Disable deactivates the module
+func (mod *FileDialogModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
 
-// Disable is the Go port of the Python disable method
-func (fil *FileDialogsModule) Disable(ctx context.Context) error {
-	// TODO: Port Python disable logic
+	fmt.Println("FileDialogModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (fil *FileDialogsModule) SetManager(manager *core.Manager) {
-	fil.manager = manager
+func (mod *FileDialogModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
+// InitFileDialogModule creates and returns a new FileDialogModule instance
+func InitFileDialogModule() core.Module {
+	return NewFileDialogModule()
 }
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// GetSavePath is the Go port of the Python getSavePath function
-
-// GetLoadPath is the Go port of the Python getLoadPath function
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// OnFileDialogAccepted is the Go port of the Python onFileDialogAccepted function
-func OnFileDialogAccepted() {
-	// TODO: Port Python function logic
-}
-
-// OnFileDialogAccepted is the Go port of the Python onFileDialogAccepted function
-
-// Init creates and returns a new module instance
-// This is the Go equivalent of the Python init function

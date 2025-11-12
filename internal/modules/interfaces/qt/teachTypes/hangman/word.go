@@ -1,46 +1,79 @@
-// Package word.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/interfaces/qt/teachTypes/hangman/word.py
+// Package hangman provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package hangman
 
+import (
+	"context"
+	"fmt"
+
+	"github.com/LaPingvino/openteacher/internal/core"
+)
+
 // Word is a Go port of the Python Word class
 type Word struct {
-	// TODO: Add struct fields based on Python class
+	*core.BaseModule
+	manager *core.Manager
+	// TODO: Add module-specific fields
 }
 
 // NewWord creates a new Word instance
 func NewWord() *Word {
+	base := core.NewBaseModule("ui", "hangmanWord-module")
+
 	return &Word{
-		// TODO: Initialize fields
+		BaseModule: base,
 	}
 }
 
-// __unicode__ is the Go port of the Python __unicode__ method
-func ((wor *Word)) unicode__() {
+// Unicode is the Go port of the Python __unicode__ method
+func (mod *Word) Unicode() {
 	// TODO: Port Python method logic
 }
 
-// GuessCharacter is the Go port of the Python guessCharacter method
-func (wor *Word) GuessCharacter() {
+// Guesscharacter is the Go port of the Python guessCharacter method
+func (mod *Word) Guesscharacter() {
 	// TODO: Port Python method logic
 }
 
-// GuessWord is the Go port of the Python guessWord method
-func (wor *Word) GuessWord() {
+// Guessword is the Go port of the Python guessWord method
+func (mod *Word) Guessword() {
 	// TODO: Port Python method logic
 }
 
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *Word) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("Word enabled")
+	return nil
 }
 
-// __unicode__ is the Go port of the Python __unicode__ function
-func __unicode__() {
-	// TODO: Port Python function logic
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *Word) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python disable logic
+
+	fmt.Println("Word disabled")
+	return nil
 }
 
-// GuessCharacter is the Go port of the Python guessCharacter function
+// SetManager sets the module manager
+func (mod *Word) SetManager(manager *core.Manager) {
+	mod.manager = manager
+}
 
-// GuessWord is the Go port of the Python guessWord function
+// InitWord creates and returns a new Word instance
+// This is the Go equivalent of the Python init function
+func InitWord() core.Module {
+	return NewWord()
+}

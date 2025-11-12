@@ -1,10 +1,11 @@
-// Package otxxloader.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/otxxloader/otxxloader.py
+// Package otxxloader provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package otxxloader
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,77 +18,66 @@ type OtxxLoaderModule struct {
 
 // NewOtxxLoaderModule creates a new OtxxLoaderModule instance
 func NewOtxxLoaderModule() *OtxxLoaderModule {
-	base := core.NewBaseModule("otxxLoader", "otxxLoader")
+	base := core.NewBaseModule("logic", "otxxloader-module")
 
 	return &OtxxLoaderModule{
 		BaseModule: base,
 	}
 }
 
-// stringsToDatetimes is the Go port of the Python _stringsToDatetimes method
-func (otx *OtxxLoaderModule) stringsToDatetimes() {
-	// TODO: Port Python private method logic
+// stringstodatetimes is the Go port of the Python _stringsToDatetimes method
+func (mod *OtxxLoaderModule) stringstodatetimes() {
+	// TODO: Port Python method logic
 }
 
-// StringToDatetime is the Go port of the Python stringToDatetime method
-func (otx *OtxxLoaderModule) StringToDatetime() {
+// Stringtodatetime is the Go port of the Python stringToDatetime method
+func (mod *OtxxLoaderModule) Stringtodatetime() {
 	// TODO: Port Python method logic
 }
 
 // Load is the Go port of the Python load method
-func (otx *OtxxLoaderModule) Load() {
+func (mod *OtxxLoaderModule) Load() {
 	// TODO: Port Python method logic
 }
 
-// cleanupTempPaths is the Go port of the Python _cleanupTempPaths method
-func (otx *OtxxLoaderModule) cleanupTempPaths() {
-	// TODO: Port Python private method logic
+// cleanuptemppaths is the Go port of the Python _cleanupTempPaths method
+func (mod *OtxxLoaderModule) cleanuptemppaths() {
+	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (otx *OtxxLoaderModule) Enable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *OtxxLoaderModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python enable logic
+
+	fmt.Println("OtxxLoaderModule enabled")
 	return nil
 }
 
-// Disable is the Go port of the Python disable method
-func (otx *OtxxLoaderModule) Disable(ctx context.Context) error {
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *OtxxLoaderModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("OtxxLoaderModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (otx *OtxxLoaderModule) SetManager(manager *core.Manager) {
-	otx.manager = manager
+func (mod *OtxxLoaderModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _stringsToDatetimes is the Go port of the Python _stringsToDatetimes function
-func _stringsToDatetimes() {
-	// TODO: Port Python function logic
-}
-
-// StringToDatetime is the Go port of the Python stringToDatetime function
-
-// Load is the Go port of the Python load function
-
-// _cleanupTempPaths is the Go port of the Python _cleanupTempPaths function
-func _cleanupTempPaths() {
-	// TODO: Port Python function logic
-}
-
-// Enable is the Go port of the Python enable function
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitOtxxLoaderModule creates and returns a new OtxxLoaderModule instance
 // This is the Go equivalent of the Python init function
+func InitOtxxLoaderModule() core.Module {
+	return NewOtxxLoaderModule()
+}

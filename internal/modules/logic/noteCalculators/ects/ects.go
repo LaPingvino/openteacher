@@ -1,10 +1,11 @@
-// Package ects.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/noteCalculators/ects/ects.py
+// Package ects provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
 package ects
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,7 +18,7 @@ type ECTSNoteCalculatorModule struct {
 
 // NewECTSNoteCalculatorModule creates a new ECTSNoteCalculatorModule instance
 func NewECTSNoteCalculatorModule() *ECTSNoteCalculatorModule {
-	base := core.NewBaseModule("noteCalculator", "noteCalculator")
+	base := core.NewBaseModule("logic", "ects-module")
 
 	return &ECTSNoteCalculatorModule{
 		BaseModule: base,
@@ -25,69 +26,58 @@ func NewECTSNoteCalculatorModule() *ECTSNoteCalculatorModule {
 }
 
 // convert is the Go port of the Python _convert method
-func (ect *ECTSNoteCalculatorModule) convert() {
-	// TODO: Port Python private method logic
-}
-
-// CalculateNote is the Go port of the Python calculateNote method
-func (ect *ECTSNoteCalculatorModule) CalculateNote() {
+func (mod *ECTSNoteCalculatorModule) convert() {
 	// TODO: Port Python method logic
 }
 
-// CalculateAverageNote is the Go port of the Python calculateAverageNote method
-func (ect *ECTSNoteCalculatorModule) CalculateAverageNote() {
+// Calculatenote is the Go port of the Python calculateNote method
+func (mod *ECTSNoteCalculatorModule) Calculatenote() {
 	// TODO: Port Python method logic
 }
 
-// Enable is the Go port of the Python enable method
-func (ect *ECTSNoteCalculatorModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
+// Calculateaveragenote is the Go port of the Python calculateAverageNote method
+func (mod *ECTSNoteCalculatorModule) Calculateaveragenote() {
+	// TODO: Port Python method logic
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (ect *ECTSNoteCalculatorModule) retranslate() {
-	// TODO: Port Python private method logic
+func (mod *ECTSNoteCalculatorModule) retranslate() {
+	// TODO: Port Python method logic
 }
 
-// Disable is the Go port of the Python disable method
-func (ect *ECTSNoteCalculatorModule) Disable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *ECTSNoteCalculatorModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("ECTSNoteCalculatorModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *ECTSNoteCalculatorModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("ECTSNoteCalculatorModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (ect *ECTSNoteCalculatorModule) SetManager(manager *core.Manager) {
-	ect.manager = manager
+func (mod *ECTSNoteCalculatorModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// _convert is the Go port of the Python _convert function
-func _convert() {
-	// TODO: Port Python function logic
-}
-
-// CalculateNote is the Go port of the Python calculateNote function
-
-// CalculateAverageNote is the Go port of the Python calculateAverageNote function
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitECTSNoteCalculatorModule creates and returns a new ECTSNoteCalculatorModule instance
 // This is the Go equivalent of the Python init function
+func InitECTSNoteCalculatorModule() core.Module {
+	return NewECTSNoteCalculatorModule()
+}

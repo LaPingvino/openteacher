@@ -1,10 +1,11 @@
-// Package languagecodeguesser.go provides functionality ported from Python module
-// legacy/modules/org/openteacher/logic/languageCodeGuesser/languageCodeGuesser.py
+// Package languagecodeguesser provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
-package languageCodeGuesser
+package languagecodeguesser
+
 import (
 	"context"
+	"fmt"
 	"github.com/LaPingvino/openteacher/internal/core"
 )
 
@@ -17,67 +18,61 @@ type LanguageCodeGuesserModule struct {
 
 // NewLanguageCodeGuesserModule creates a new LanguageCodeGuesserModule instance
 func NewLanguageCodeGuesserModule() *LanguageCodeGuesserModule {
-	base := core.NewBaseModule("languageCodeGuesser", "languageCodeGuesser")
+	base := core.NewBaseModule("logic", "languagecodeguesser-module")
 
 	return &LanguageCodeGuesserModule{
 		BaseModule: base,
 	}
 }
 
-// GuessLanguageCode is the Go port of the Python guessLanguageCode method
-func (lan *LanguageCodeGuesserModule) GuessLanguageCode() {
+// Guesslanguagecode is the Go port of the Python guessLanguageCode method
+func (mod *LanguageCodeGuesserModule) Guesslanguagecode() {
 	// TODO: Port Python method logic
 }
 
-// GetLanguageName is the Go port of the Python getLanguageName method
-func (lan *LanguageCodeGuesserModule) GetLanguageName() {
+// Getlanguagename is the Go port of the Python getLanguageName method
+func (mod *LanguageCodeGuesserModule) Getlanguagename() {
 	// TODO: Port Python method logic
-}
-
-// Enable is the Go port of the Python enable method
-func (lan *LanguageCodeGuesserModule) Enable(ctx context.Context) error {
-	// TODO: Port Python enable logic
-	return nil
 }
 
 // retranslate is the Go port of the Python _retranslate method
-func (lan *LanguageCodeGuesserModule) retranslate() {
-	// TODO: Port Python private method logic
+func (mod *LanguageCodeGuesserModule) retranslate() {
+	// TODO: Port Python method logic
 }
 
-// Disable is the Go port of the Python disable method
-func (lan *LanguageCodeGuesserModule) Disable(ctx context.Context) error {
+// Enable activates the module
+// This is the Go equivalent of the Python enable method
+func (mod *LanguageCodeGuesserModule) Enable(ctx context.Context) error {
+	if err := mod.BaseModule.Enable(ctx); err != nil {
+		return err
+	}
+
+	// TODO: Port Python enable logic
+
+	fmt.Println("LanguageCodeGuesserModule enabled")
+	return nil
+}
+
+// Disable deactivates the module
+// This is the Go equivalent of the Python disable method
+func (mod *LanguageCodeGuesserModule) Disable(ctx context.Context) error {
+	if err := mod.BaseModule.Disable(ctx); err != nil {
+		return err
+	}
+
 	// TODO: Port Python disable logic
+
+	fmt.Println("LanguageCodeGuesserModule disabled")
 	return nil
 }
 
 // SetManager sets the module manager
-func (lan *LanguageCodeGuesserModule) SetManager(manager *core.Manager) {
-	lan.manager = manager
+func (mod *LanguageCodeGuesserModule) SetManager(manager *core.Manager) {
+	mod.manager = manager
 }
 
-// Init is the Go port of the Python init function
-func Init() {
-	// TODO: Port Python function logic
-}
-
-// __init__ is the Go port of the Python __init__ function
-func __init__() {
-	// TODO: Port Python function logic
-}
-
-// GuessLanguageCode is the Go port of the Python guessLanguageCode function
-
-// GetLanguageName is the Go port of the Python getLanguageName function
-
-// Enable is the Go port of the Python enable function
-
-// _retranslate is the Go port of the Python _retranslate function
-func _retranslate() {
-	// TODO: Port Python function logic
-}
-
-// Disable is the Go port of the Python disable function
-
-// Init creates and returns a new module instance
+// InitLanguageCodeGuesserModule creates and returns a new LanguageCodeGuesserModule instance
 // This is the Go equivalent of the Python init function
+func InitLanguageCodeGuesserModule() core.Module {
+	return NewLanguageCodeGuesserModule()
+}
