@@ -12,8 +12,10 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"path/filepath"
 
 	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/openteacher/internal/lesson"
 	qtcore "github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/gui"
 	"github.com/therecipe/qt/widgets"
@@ -22,11 +24,13 @@ import (
 // GuiModule is a Go port of the Python GuiModule class
 type GuiModule struct {
 	*core.BaseModule
-	manager    *core.Manager
-	mainWindow *widgets.QMainWindow
-	app        *widgets.QApplication
-	menuBar    *widgets.QMenuBar
-	statusBar  *widgets.QStatusBar
+	manager        *core.Manager
+	mainWindow     *widgets.QMainWindow
+	app            *widgets.QApplication
+	menuBar        *widgets.QMenuBar
+	statusBar      *widgets.QStatusBar
+	lastLoadedFile string
+	lastLoadTime   int64
 }
 
 // NewGuiModule creates a new GuiModule instance
@@ -338,11 +342,11 @@ func (mod *GuiModule) showOpenDialog() {
 			OpenFile(parent interface{}, title string, filter string) string
 		}); ok {
 			log.Printf("[SUCCESS] Calling OpenFile() on fileDialog module")
-			fileName := fileMod.OpenFile(nil, "Open Lesson File", "Lesson Files (*.ot *.xml);;All Files (*.*)")
+			fileName := fileMod.OpenFile(nil, "Open Lesson File", "Lesson Files (*.ot *.csv *.tsv *.txt *.json *.xml);;OpenTeacher Files (*.ot);;Spreadsheet Files (*.csv *.tsv);;Text Files (*.txt);;JSON Files (*.json);;All Files (*.*)")
 			if fileName != "" {
 				log.Printf("[SUCCESS] File dialog returned: %s", fileName)
 				mod.statusBar.ShowMessage(fmt.Sprintf("Selected file: %s", fileName), 5000)
-				// TODO: Load the selected file
+				mod.loadSelectedFile(fileName)
 			} else {
 				log.Printf("[INFO] File dialog was cancelled")
 				mod.statusBar.ShowMessage("File selection cancelled", 3000)
@@ -355,6 +359,105 @@ func (mod *GuiModule) showOpenDialog() {
 		log.Printf("[ERROR] No fileDialog modules found")
 		mod.statusBar.ShowMessage("Error: No file dialog modules available", 3000)
 	}
+}
+
+// loadSelectedFile loads the file selected by the user
+func (mod *GuiModule) loadSelectedFile(fileName string) {
+	log.Printf("[ACTION] GuiModule.loadSelectedFile() - loading file: %s", fileName)
+
+	// Prevent duplicate loading of the same file within 2 seconds
+	currentTime := qtcore.QDateTime_CurrentMSecsSinceEpoch()
+	if mod.lastLoadedFile == fileName && (currentTime-mod.lastLoadTime) < 2000 {
+		log.Printf("[WARNING] Ignoring duplicate load request for: %s", fileName)
+		return
+	}
+	mod.lastLoadedFile = fileName
+	mod.lastLoadTime = currentTime
+
+	// Create file loader
+	fileLoader := lesson.NewFileLoader()
+
+	// Load the lesson data
+	lessonData, err := fileLoader.LoadFile(fileName)
+	if err != nil {
+		log.Printf("[ERROR] Failed to load file '%s': %v", fileName, err)
+		mod.statusBar.ShowMessage(fmt.Sprintf("Error loading file: %v", err), 5000)
+		return
+	}
+
+	// Get file type
+	fileType := fileLoader.GetFileType(fileName)
+	log.Printf("[SUCCESS] Loaded lesson file - Type: %s, Items: %d", fileType, len(lessonData.List.Items))
+
+	// Create lesson instance
+	newLesson := lesson.NewLesson(fileType)
+	newLesson.Data = *lessonData
+	newLesson.Path = fileName
+
+	// Display lesson summary in status bar
+	wordCount := newLesson.Data.List.GetWordCount()
+	testCount := newLesson.Data.List.GetTestCount()
+	title := newLesson.Data.List.Title
+	if title == "" {
+		title = filepath.Base(fileName)
+	}
+
+	statusMsg := fmt.Sprintf("Loaded '%s': %d words", title, wordCount)
+	if testCount > 0 {
+		statusMsg += fmt.Sprintf(", %d tests", testCount)
+	}
+	mod.statusBar.ShowMessage(statusMsg, 10000)
+
+	// For now, log the lesson details
+	log.Printf("[SUCCESS] Lesson loaded successfully:")
+	log.Printf("  - Title: %s", title)
+	log.Printf("  - Question Language: %s", newLesson.Data.List.QuestionLanguage)
+	log.Printf("  - Answer Language: %s", newLesson.Data.List.AnswerLanguage)
+	log.Printf("  - Word pairs: %d", wordCount)
+	log.Printf("  - Test results: %d", testCount)
+
+	// Sample the first few words for verification
+	if len(newLesson.Data.List.Items) > 0 {
+		log.Printf("[DEBUG] Sample word pairs:")
+		maxSamples := 3
+		if len(newLesson.Data.List.Items) < maxSamples {
+			maxSamples = len(newLesson.Data.List.Items)
+		}
+		for i := 0; i < maxSamples; i++ {
+			item := newLesson.Data.List.Items[i]
+			log.Printf("  - %v → %v", item.Questions, item.Answers)
+		}
+		if len(newLesson.Data.List.Items) > maxSamples {
+			log.Printf("  - ... and %d more", len(newLesson.Data.List.Items)-maxSamples)
+		}
+	}
+
+	// TODO: Create lesson tab and display in main window
+	mod.displayLessonInTab(newLesson)
+}
+
+// displayLessonInTab creates a new tab for the lesson (placeholder for now)
+func (mod *GuiModule) displayLessonInTab(lesson *lesson.Lesson) {
+	log.Printf("[ACTION] GuiModule.displayLessonInTab() - displaying lesson in tab")
+
+	// For now, just show a message dialog with lesson info
+	title := lesson.Data.List.Title
+	if title == "" {
+		title = filepath.Base(lesson.Path)
+	}
+
+	message := fmt.Sprintf("Lesson loaded successfully!\n\nTitle: %s\nWord pairs: %d\nPath: %s",
+		title, lesson.Data.List.GetWordCount(), lesson.Path)
+
+	// Show info dialog
+	msgBox := widgets.NewQMessageBox(mod.mainWindow)
+	msgBox.SetWindowTitle("Lesson Loaded")
+	msgBox.SetText("Lesson File Loaded")
+	msgBox.SetInformativeText(message)
+	msgBox.SetIcon(widgets.QMessageBox__Information)
+	msgBox.Exec()
+
+	log.Printf("[SUCCESS] Lesson displayed - ready for Phase 3 (lesson editing/teaching)")
 }
 
 func (mod *GuiModule) showPropertiesDialog() {

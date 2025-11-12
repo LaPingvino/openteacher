@@ -53,11 +53,11 @@ func (mod *FileDialogModule) OpenFile(parent interface{}, title string, filter s
 	dialog.SetAcceptMode(widgets.QFileDialog__AcceptOpen)
 
 	if dialog.Exec() == int(widgets.QDialog__Accepted) {
-		selectedFiles := dialog.SelectedFiles()
-		if len(selectedFiles) > 0 {
-			filePath := selectedFiles[0]
-			mod.lastDir = filepath.Dir(filePath)
-			return filePath
+		// Use QFileDialog.GetOpenFileName instead of SelectedFiles to avoid type issues
+		selectedFile := widgets.QFileDialog_GetOpenFileName(parentWidget, title, mod.lastDir, filter, "", 0)
+		if selectedFile != "" {
+			mod.lastDir = filepath.Dir(selectedFile)
+			return selectedFile
 		}
 	}
 
@@ -75,7 +75,8 @@ func (mod *FileDialogModule) OpenFiles(parent *widgets.QWidget, title string, fi
 	dialog.SetAcceptMode(widgets.QFileDialog__AcceptOpen)
 
 	if dialog.Exec() == int(widgets.QDialog__Accepted) {
-		selectedFiles := dialog.SelectedFiles()
+		// Use QFileDialog.GetOpenFileNames instead for multiple files
+		selectedFiles := widgets.QFileDialog_GetOpenFileNames(parent, title, mod.lastDir, filter, "", 0)
 		if len(selectedFiles) > 0 {
 			mod.lastDir = filepath.Dir(selectedFiles[0])
 			return selectedFiles
