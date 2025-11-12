@@ -36,12 +36,19 @@ func NewFileDialogModule() *FileDialogModule {
 }
 
 // OpenFile shows an open file dialog and returns the selected file path
-func (mod *FileDialogModule) OpenFile(parent *widgets.QWidget, title string, filter string) string {
+func (mod *FileDialogModule) OpenFile(parent interface{}, title string, filter string) string {
+	// Convert parent to proper type
+	var parentWidget *widgets.QWidget
+	if parent != nil {
+		if pw, ok := parent.(*widgets.QWidget); ok {
+			parentWidget = pw
+		}
+	}
 	if filter == "" {
 		filter = mod.fileFilter
 	}
 
-	dialog := widgets.NewQFileDialog2(parent, title, mod.lastDir, filter)
+	dialog := widgets.NewQFileDialog2(parentWidget, title, mod.lastDir, filter)
 	dialog.SetFileMode(widgets.QFileDialog__ExistingFile)
 	dialog.SetAcceptMode(widgets.QFileDialog__AcceptOpen)
 
@@ -202,6 +209,7 @@ func (mod *FileDialogModule) SetManager(manager *core.Manager) {
 }
 
 // InitFileDialogModule creates and returns a new FileDialogModule instance
+// This is the Go equivalent of the Python init function
 func InitFileDialogModule() core.Module {
 	return NewFileDialogModule()
 }

@@ -8,6 +8,7 @@ package settings
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/LaPingvino/openteacher/internal/core"
 	qtcore "github.com/therecipe/qt/core"
@@ -37,7 +38,7 @@ func NewSettingsDialogModule() *SettingsDialogModule {
 // Show displays the settings dialog
 func (mod *SettingsDialogModule) Show() {
 	if mod.dialog == nil {
-		mod.createDialog()
+		mod.createDialog(nil)
 	}
 
 	if mod.dialog != nil {
@@ -49,8 +50,8 @@ func (mod *SettingsDialogModule) Show() {
 }
 
 // createDialog creates and configures the settings dialog
-func (mod *SettingsDialogModule) createDialog() {
-	mod.dialog = widgets.NewQDialog(nil, 0)
+func (mod *SettingsDialogModule) createDialog(parent *widgets.QWidget) {
+	mod.dialog = widgets.NewQDialog(parent, 0)
 	mod.dialog.SetWindowTitle("OpenTeacher Settings")
 	mod.dialog.SetFixedSize2(500, 400)
 	mod.dialog.SetWindowModality(qtcore.Qt__ApplicationModal)
@@ -259,6 +260,44 @@ func (mod *SettingsDialogModule) Disable(ctx context.Context) error {
 // SetManager sets the module manager
 func (mod *SettingsDialogModule) SetManager(manager *core.Manager) {
 	mod.manager = manager
+}
+
+// ShowSettingsDialog displays the settings dialog and returns true if settings were applied
+func (mod *SettingsDialogModule) ShowSettingsDialog() bool {
+	log.Printf("[SUCCESS] SettingsDialogModule.ShowSettingsDialog() - creating and showing settings dialog")
+
+	if mod.manager == nil {
+		log.Printf("[ERROR] SettingsDialogModule.ShowSettingsDialog() - manager is nil")
+		return false
+	}
+
+	// Get the main window as parent
+	var parentWidget *widgets.QWidget
+	uiModules := mod.manager.GetModulesByType("ui")
+	if len(uiModules) > 0 {
+		if guiMod, ok := uiModules[0].(interface{ GetMainWindow() *widgets.QMainWindow }); ok {
+			parentWidget = guiMod.GetMainWindow().QWidget_PTR()
+			log.Printf("[SUCCESS] SettingsDialogModule got parent window from GUI module")
+		}
+	}
+
+	mod.createDialog(parentWidget)
+
+	if mod.dialog != nil {
+		log.Printf("[SUCCESS] SettingsDialogModule showing dialog")
+		result := mod.dialog.Exec()
+		log.Printf("[SUCCESS] SettingsDialogModule dialog closed with result: %d", result)
+
+		// QDialog::Accepted = 1
+		if result == 1 {
+			log.Printf("[SUCCESS] Settings were accepted and applied")
+			return true
+		}
+	} else {
+		log.Printf("[ERROR] SettingsDialogModule.ShowSettingsDialog() - dialog creation failed")
+	}
+
+	return false
 }
 
 // InitSettingsDialogModule creates and returns a new SettingsDialogModule instance

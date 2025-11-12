@@ -8,6 +8,7 @@ package about
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/LaPingvino/openteacher/internal/core"
 	qtcore "github.com/therecipe/qt/core"
@@ -34,7 +35,7 @@ func NewAboutDialogModule() *AboutDialogModule {
 // Show displays the about dialog
 func (mod *AboutDialogModule) Show() {
 	if mod.dialog == nil {
-		mod.createDialog()
+		mod.createDialog(nil)
 	}
 
 	if mod.dialog != nil {
@@ -45,8 +46,8 @@ func (mod *AboutDialogModule) Show() {
 }
 
 // createDialog creates and configures the about dialog
-func (mod *AboutDialogModule) createDialog() {
-	mod.dialog = widgets.NewQDialog(nil, 0)
+func (mod *AboutDialogModule) createDialog(parent *widgets.QWidget) {
+	mod.dialog = widgets.NewQDialog(parent, 0)
 	mod.dialog.SetWindowTitle("About OpenTeacher")
 	mod.dialog.SetFixedSize2(400, 300)
 	mod.dialog.SetWindowModality(qtcore.Qt__ApplicationModal)
@@ -139,7 +140,38 @@ func (mod *AboutDialogModule) SetManager(manager *core.Manager) {
 	mod.manager = manager
 }
 
+// ShowAboutDialog displays the about dialog
+func (mod *AboutDialogModule) ShowAboutDialog() {
+	log.Printf("[SUCCESS] AboutDialogModule.ShowAboutDialog() - creating and showing about dialog")
+
+	if mod.manager == nil {
+		log.Printf("[ERROR] AboutDialogModule.ShowAboutDialog() - manager is nil")
+		return
+	}
+
+	// Get the main window as parent
+	var parentWidget *widgets.QWidget
+	uiModules := mod.manager.GetModulesByType("ui")
+	if len(uiModules) > 0 {
+		if guiMod, ok := uiModules[0].(interface{ GetMainWindow() *widgets.QMainWindow }); ok {
+			parentWidget = guiMod.GetMainWindow().QWidget_PTR()
+			log.Printf("[SUCCESS] AboutDialogModule got parent window from GUI module")
+		}
+	}
+
+	mod.createDialog(parentWidget)
+
+	if mod.dialog != nil {
+		log.Printf("[SUCCESS] AboutDialogModule showing dialog")
+		mod.dialog.Exec()
+		log.Printf("[SUCCESS] AboutDialogModule dialog closed")
+	} else {
+		log.Printf("[ERROR] AboutDialogModule.ShowAboutDialog() - dialog creation failed")
+	}
+}
+
 // InitAboutDialogModule creates and returns a new AboutDialogModule instance
+// This is the Go equivalent of the Python init function
 func InitAboutDialogModule() core.Module {
 	return NewAboutDialogModule()
 }

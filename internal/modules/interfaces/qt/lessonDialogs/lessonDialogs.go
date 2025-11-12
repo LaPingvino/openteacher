@@ -9,6 +9,7 @@ package lessonDialogs
 import (
 	"context"
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/LaPingvino/openteacher/internal/core"
@@ -36,16 +37,41 @@ func NewLessonDialogsModule() *LessonDialogsModule {
 }
 
 // ShowNewLessonDialog displays the new lesson creation dialog
-func (mod *LessonDialogsModule) ShowNewLessonDialog(parent *widgets.QWidget) map[string]interface{} {
+func (mod *LessonDialogsModule) ShowNewLessonDialog() map[string]interface{} {
+	log.Printf("[SUCCESS] LessonDialogsModule.ShowNewLessonDialog() - creating and showing new lesson dialog")
+
+	if mod.manager == nil {
+		log.Printf("[ERROR] LessonDialogsModule.ShowNewLessonDialog() - manager is nil")
+		return nil
+	}
+
+	// Get the main window as parent
+	var parentWidget *widgets.QWidget
+	uiModules := mod.manager.GetModulesByType("ui")
+	if len(uiModules) > 0 {
+		if guiMod, ok := uiModules[0].(interface{ GetMainWindow() *widgets.QMainWindow }); ok {
+			parentWidget = guiMod.GetMainWindow().QWidget_PTR()
+			log.Printf("[SUCCESS] LessonDialogsModule got parent window from GUI module")
+		}
+	}
+
 	if mod.newLessonDialog == nil {
-		mod.createNewLessonDialog(parent)
+		mod.createNewLessonDialog(parentWidget)
 	}
 
 	// Reset form
 	mod.resetNewLessonForm()
 
-	if mod.newLessonDialog.Exec() == int(widgets.QDialog__Accepted) {
-		return mod.getNewLessonData()
+	log.Printf("[SUCCESS] LessonDialogsModule showing new lesson dialog")
+	result := mod.newLessonDialog.Exec()
+	log.Printf("[SUCCESS] LessonDialogsModule dialog closed with result: %d", result)
+
+	if result == int(widgets.QDialog__Accepted) {
+		data := mod.getNewLessonData()
+		log.Printf("[SUCCESS] New lesson dialog returned data: %v", data)
+		return data
+	} else {
+		log.Printf("[INFO] New lesson dialog was cancelled")
 	}
 
 	return nil
