@@ -1,0 +1,53 @@
+# Brazilian Portuguese translation for openteacher
+# Copyright (c) 2012 Rosetta Contributors and Canonical Ltd 2012
+# This file is distributed under the same license as the openteacher package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: openteacher\n"
+"Report-Msgid-Bugs-To: openteachermaintainers@lists.launchpad.net\n"
+"POT-Creation-Date: 2017-04-22 15:54+0200\n"
+"PO-Revision-Date: 2012-09-20 10:32+0000\n"
+"Last-Translator: Adriano Steffler <Unknown>\n"
+"Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Launchpad-Export-Date: 2017-04-12 06:28+0000\n"
+"X-Generator: Launchpad (build 18343)\n"
+
+#: testViewer.py:113
+msgid "Results"
+msgstr "Resultados"
+
+#: testViewer.py:117
+msgid "Note:"
+msgstr "Nota:"
+
+#: testViewer.py:122
+msgid "yes"
+msgstr "Sim"
+
+#: testViewer.py:122
+msgid "no"
+msgstr "Não"
+
+#: testViewer.py:126
+#, python-format
+msgid "Completed: %s"
+msgstr "Completado: %s"
+
+#: testViewer.py:132
+#, python-format
+msgid "Total thinking time: %s second"
+msgid_plural "Total thinking time: %s seconds"
+msgstr[0] "Tempo total de pensamento: %s segundo"
+msgstr[1] "Tempo total de pensamento: %s segundos"
+
+#: testViewer.py:140
+#, python-format
+msgid "Total thinking time: %s minutes"
+msgstr "Tempo total de pensamento: %s minutos"

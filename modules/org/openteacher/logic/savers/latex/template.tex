@@ -1,0 +1,40 @@
+#!	Copyright 2017, Marten de Vries
+#!
+#!	This file is part of OpenTeacher.
+#!
+#!	OpenTeacher is free software: you can redistribute it and/or modify
+#!	it under the terms of the GNU General Public License as published by
+#!	the Free Software Foundation, either version 3 of the License, or
+#!	(at your option) any later version.
+#!
+#!	OpenTeacher is distributed in the hope that it will be useful,
+#!	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#!	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#!	GNU General Public License for more details.
+#!
+#!	You should have received a copy of the GNU General Public License
+#!	along with OpenTeacher.  If not, see <http://www.gnu.org/licenses/>.
+\documentclass{article}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{ltablex}
+\usepackage[table]{xcolor}
+
+\begin{document}
+<!--(if list.get('title'))-->
+\begingroup
+\centering
+\LARGE $!list['title'].encode('latex', errors='replace')!$\\[1.5em]
+\endgroup
+<!--(end)-->
+
+\rowcolors{1}{gray!25}{white}
+\begin{tabularx}{\textwidth}{X X}
+<!--(if list.get('questionLanguage') or list.get('answerLanguage'))-->
+\textbf{$!list.get('questionLanguage', '').encode('latex', errors='replace')!$} & \textbf{$!list.get('answerLanguage', '').encode('latex', errors='replace')!$}\\\hline
+<!--(end)-->
+<!--(for item in list['items'])-->
+$!compose(item.get('questions'))!$ & $!compose(item.get('answers'))!$\\
+<!--(end)-->
+\end{tabularx}
+
+\end{document}

@@ -1,0 +1,45 @@
+# Ukrainian translation for openteacher
+# Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
+# This file is distributed under the same license as the openteacher package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: openteacher\n"
+"Report-Msgid-Bugs-To: openteachermaintainers@lists.launchpad.net\n"
+"POT-Creation-Date: 2017-04-22 15:54+0200\n"
+"PO-Revision-Date: 2014-10-03 09:02+0000\n"
+"Last-Translator: Andrij Mizyk <andmizyk@gmail.com>\n"
+"Language-Team: Ukrainian <uk@li.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2017-04-12 06:30+0000\n"
+"X-Generator: Launchpad (build 18343)\n"
+
+#: lessonDialogs.py:84
+msgid "Unsaved data"
+msgstr "Незбережені дані"
+
+#: lessonDialogs.py:85
+msgid "There are unsaved items or results. Are you sure you want to close?"
+msgstr "Тут є незбережені елементи чи дані. Ви дійсно хочете закрити?"
+
+#: lessonDialogs.py:101
+msgid "Warning"
+msgstr "Застереження"
+
+#: lessonDialogs.py:103
+msgid ""
+"Are you sure you want to go back to the enter tab? This will end your lesson!"
+msgstr ""
+"Ви точно бажаєте повернутися до вкладки введення? Це завершить ваш урок!"
+
+#: lessonDialogs.py:114
+msgid "Not enough items"
+msgstr "Не достатньо елементів"
+
+#: lessonDialogs.py:115
+msgid "You need to add items to your test first"
+msgstr "Вам слід спершу додати елементи"

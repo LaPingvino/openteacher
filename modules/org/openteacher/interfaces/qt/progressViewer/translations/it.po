@@ -1,0 +1,31 @@
+# Italian translation for openteacher
+# Copyright (c) 2013 Rosetta Contributors and Canonical Ltd 2013
+# This file is distributed under the same license as the openteacher package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: openteacher\n"
+"Report-Msgid-Bugs-To: openteachermaintainers@lists.launchpad.net\n"
+"POT-Creation-Date: 2017-04-22 15:55+0200\n"
+"PO-Revision-Date: 2014-04-06 05:30+0000\n"
+"Last-Translator: Andrea Luciano Damico <lehti@live.it>\n"
+"Language-Team: Italian <it@li.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2017-04-12 06:30+0000\n"
+"X-Generator: Launchpad (build 18343)\n"
+
+#: progressViewer.py:60
+msgid "Pause"
+msgstr "Pausa"
+
+#: progressViewer.py:67
+msgid "Thinking"
+msgstr "Sta pensando"
+
+#: progressViewer.py:71
+msgid "Answering"
+msgstr "Sta rispondendo"

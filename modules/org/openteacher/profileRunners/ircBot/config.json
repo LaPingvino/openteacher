@@ -1,0 +1,13 @@
+{
+  "channels": [
+    "##PyTest"
+  ],
+  "nickname": "OTbot-dev",
+  "realname": "http://openteacher.org/",
+  "password": null,
+  "admins": [
+    "CasW!~cas@unaffiliated/casw",
+    "commandoline!~commandol@ubuntu/member/commandoline",
+    "lordnoid!(~lordnoid@52D9710B.cm-11-1b.dynamic.ziggo.nl"
+  ]
+}

@@ -1,0 +1,53 @@
+# Russian translation for openteacher
+# Copyright (c) 2012 Rosetta Contributors and Canonical Ltd 2012
+# This file is distributed under the same license as the openteacher package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: openteacher\n"
+"Report-Msgid-Bugs-To: openteachermaintainers@lists.launchpad.net\n"
+"POT-Creation-Date: 2017-04-22 15:55+0200\n"
+"PO-Revision-Date: 2012-10-26 22:34+0000\n"
+"Last-Translator: Nkolay Parukhin <parukhin@gmail.com>\n"
+"Language-Team: Russian <ru@li.org>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2017-04-12 06:27+0000\n"
+"X-Generator: Launchpad (build 18343)\n"
+
+#: inputTyping.py:111
+#, python-brace-format
+msgid "Correct answer: <b>{answers}</b> [{diff}]"
+msgstr "Правильный ответ: <b>{answers}</b> [{diff}]"
+
+#: inputTyping.py:113
+#, python-brace-format
+msgid "Correct answer: <b>{answers}</b>"
+msgstr "Правильный ответ: <b>{answers}</b>"
+
+#: inputTyping.py:126
+msgid "Check!"
+msgstr "Проверить!"
+
+#: inputTyping.py:127
+msgid "Correct anyway"
+msgstr "Всё равно верно"
+
+#: inputTyping.py:128
+msgid "Skip"
+msgstr "Пропустить"
+
+#: inputTyping.py:248
+msgid "Fade duration when wrong (milliseconds)"
+msgstr "Продолжительность исчезновения при ошибке (миллисекунд)"
+
+#: inputTyping.py:249
+msgid "Lesson"
+msgstr "Урок"
+
+#: inputTyping.py:250
+msgid "Words lesson"
+msgstr "Словарный урок"
