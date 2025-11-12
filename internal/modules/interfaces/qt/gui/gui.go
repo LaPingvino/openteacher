@@ -11,6 +11,7 @@ package gui
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/LaPingvino/openteacher/internal/core"
 	qtcore "github.com/therecipe/qt/core"
@@ -48,13 +49,16 @@ func (mod *GuiModule) Enable(ctx context.Context) error {
 	// Get Qt application from qtApp module (don't create our own)
 	qtAppModule, exists := mod.manager.GetDefaultModule("qtApp")
 	if !exists {
+		log.Printf("[ERROR] GuiModule.Enable() failed - qtApp module not found")
 		return fmt.Errorf("qtApp module not found")
 	}
 
 	// Access the QApplication through interface
 	if qtMod, ok := qtAppModule.(interface{ GetApplication() *widgets.QApplication }); ok {
 		mod.app = qtMod.GetApplication()
+		log.Printf("[SUCCESS] GuiModule got QApplication from qtApp module")
 	} else {
+		log.Printf("[ERROR] GuiModule.Enable() failed - qtApp module does not provide GetApplication method")
 		return fmt.Errorf("qtApp module does not provide GetApplication method")
 	}
 
@@ -86,6 +90,7 @@ func (mod *GuiModule) Enable(ctx context.Context) error {
 	// Show the window
 	mod.mainWindow.Show()
 
+	log.Printf("[SUCCESS] GuiModule enabled - Qt main window created and shown")
 	fmt.Println("GuiModule enabled - Main window created")
 	return nil
 }
@@ -124,9 +129,12 @@ func (mod *GuiModule) SetManager(manager *core.Manager) {
 // ShowMainWindow shows the main application window
 func (mod *GuiModule) ShowMainWindow() {
 	if mod.mainWindow != nil {
+		log.Printf("[SUCCESS] GuiModule.ShowMainWindow() - showing main window")
 		mod.mainWindow.Show()
 		mod.mainWindow.Raise()
 		mod.mainWindow.ActivateWindow()
+	} else {
+		log.Printf("[ERROR] GuiModule.ShowMainWindow() - main window is nil")
 	}
 }
 
@@ -138,8 +146,12 @@ func (mod *GuiModule) GetMainWindow() *widgets.QMainWindow {
 // RunEventLoop starts the Qt event loop (blocking call)
 func (mod *GuiModule) RunEventLoop() int {
 	if mod.app != nil {
-		return mod.app.Exec()
+		log.Printf("[SUCCESS] GuiModule.RunEventLoop() - starting Qt event loop")
+		exitCode := mod.app.Exec()
+		log.Printf("[SUCCESS] GuiModule.RunEventLoop() - Qt event loop finished with code %d", exitCode)
+		return exitCode
 	}
+	log.Printf("[ERROR] GuiModule.RunEventLoop() - QApplication is nil")
 	return 0
 }
 
@@ -276,26 +288,31 @@ func (mod *GuiModule) createWelcomeWidget() *widgets.QWidget {
 
 // Dialog helper methods
 func (mod *GuiModule) showNewLessonDialog() {
+	log.Printf("[STUB] GuiModule.showNewLessonDialog() - lesson dialog creation not implemented")
 	// TODO: Get lesson dialogs module and show new lesson dialog
 	mod.statusBar.ShowMessage("New lesson dialog requested", 3000)
 }
 
 func (mod *GuiModule) showOpenDialog() {
+	log.Printf("[STUB] GuiModule.showOpenDialog() - file dialog not implemented")
 	// TODO: Get file dialog module and show open dialog
 	mod.statusBar.ShowMessage("Open dialog requested", 3000)
 }
 
 func (mod *GuiModule) showPropertiesDialog() {
+	log.Printf("[STUB] GuiModule.showPropertiesDialog() - properties dialog not implemented")
 	// TODO: Show lesson properties dialog
 	mod.statusBar.ShowMessage("Properties dialog requested", 3000)
 }
 
 func (mod *GuiModule) showSettingsDialog() {
+	log.Printf("[STUB] GuiModule.showSettingsDialog() - settings dialog not implemented")
 	// TODO: Get settings dialog module and show it
 	mod.statusBar.ShowMessage("Settings dialog requested", 3000)
 }
 
 func (mod *GuiModule) showAboutDialog() {
+	log.Printf("[STUB] GuiModule.showAboutDialog() - about dialog not implemented")
 	// TODO: Get about dialog module and show it
 	mod.statusBar.ShowMessage("About dialog requested", 3000)
 }

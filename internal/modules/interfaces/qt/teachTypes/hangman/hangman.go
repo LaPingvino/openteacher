@@ -6,6 +6,8 @@ package hangman
 import (
 	"context"
 	"fmt"
+	"log"
+
 	"github.com/LaPingvino/openteacher/internal/core"
 	_ "github.com/therecipe/qt/widgets"
 )
@@ -45,6 +47,7 @@ func (mod *TypingTeachTypeModule) Enable(ctx context.Context) error {
 
 	// TODO: Port Python enable logic
 
+	log.Printf("[STUB] Hangman TypingTeachTypeModule enabled - hangman teaching functionality not implemented")
 	fmt.Println("TypingTeachTypeModule enabled")
 	return nil
 }
@@ -58,6 +61,7 @@ func (mod *TypingTeachTypeModule) Disable(ctx context.Context) error {
 
 	// TODO: Port Python disable logic
 
+	log.Printf("[STUB] Hangman TypingTeachTypeModule disabled - cleanup not implemented")
 	fmt.Println("TypingTeachTypeModule disabled")
 	return nil
 }

@@ -3,6 +3,7 @@ package modules
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"sync"
 
@@ -19,6 +20,7 @@ type Action struct {
 
 // NewAction creates a new Action wrapper
 func NewAction(createEvent func() core.Event, menu interface{}, qtAction interface{}) *Action {
+	log.Printf("[STUB] NewAction called - menu action creation not implemented")
 	return &Action{
 		name:        "action",
 		createEvent: createEvent,
@@ -27,6 +29,7 @@ func NewAction(createEvent func() core.Event, menu interface{}, qtAction interfa
 
 // Remove removes the action
 func (a *Action) Remove() {
+	log.Printf("[STUB] Action.Remove() called - action removal not implemented")
 	a.removed = true
 }
 
@@ -39,6 +42,7 @@ type Menu struct {
 
 // NewMenu creates a new Menu wrapper
 func NewMenu(createEvent func() core.Event, qtMenu interface{}) *Menu {
+	log.Printf("[STUB] NewMenu called - menu creation not implemented")
 	return &Menu{
 		name:        "menu",
 		createEvent: createEvent,
@@ -47,17 +51,17 @@ func NewMenu(createEvent func() core.Event, qtMenu interface{}) *Menu {
 
 // AddAction adds an action to the menu
 func (m *Menu) AddAction(action *Action) {
-	// Stub implementation
+	log.Printf("[STUB] Menu.AddAction() called - adding action '%s' not implemented", action.name)
 }
 
 // AddMenu adds a submenu
 func (m *Menu) AddMenu(menu *Menu) {
-	// Stub implementation
+	log.Printf("[STUB] Menu.AddMenu() called - adding submenu '%s' not implemented", menu.name)
 }
 
 // Remove removes the menu
 func (m *Menu) Remove() {
-	// Stub implementation
+	log.Printf("[STUB] Menu.Remove() called - menu removal not implemented")
 }
 
 // StatusViewer provides status bar functionality
@@ -68,6 +72,7 @@ type StatusViewer struct {
 
 // NewStatusViewer creates a new StatusViewer
 func NewStatusViewer(statusBar interface{}) *StatusViewer {
+	log.Printf("[STUB] NewStatusViewer called - status bar integration not implemented")
 	return &StatusViewer{}
 }
 
@@ -87,6 +92,7 @@ type FileTab struct {
 
 // NewFileTab creates a new file tab
 func NewFileTab(widget interface{}, tabWidget interface{}) *FileTab {
+	log.Printf("[STUB] NewFileTab called - file tab creation not implemented")
 	return &FileTab{
 		title: "tab",
 		index: 0,
@@ -95,6 +101,7 @@ func NewFileTab(widget interface{}, tabWidget interface{}) *FileTab {
 
 // WrapperWidget returns the wrapper widget (stub)
 func (ft *FileTab) WrapperWidget() interface{} {
+	log.Printf("[STUB] FileTab.WrapperWidget() called - widget wrapping not implemented")
 	return nil
 }
 
@@ -105,7 +112,7 @@ func (ft *FileTab) Index() int {
 
 // Close closes the tab
 func (ft *FileTab) Close() {
-	// Stub implementation
+	log.Printf("[STUB] FileTab.Close() called - tab closing not implemented")
 }
 
 // LessonFileTab represents a lesson file tab
@@ -115,6 +122,7 @@ type LessonFileTab struct {
 
 // NewLessonFileTab creates a new lesson file tab
 func NewLessonFileTab(widget interface{}, tabWidget interface{}) *LessonFileTab {
+	log.Printf("[STUB] NewLessonFileTab called - lesson tab creation not implemented")
 	baseTab := NewFileTab(widget, tabWidget)
 	return &LessonFileTab{
 		FileTab: baseTab,
@@ -123,7 +131,7 @@ func NewLessonFileTab(widget interface{}, tabWidget interface{}) *LessonFileTab 
 
 // Retranslate updates the tab text for internationalization
 func (lft *LessonFileTab) Retranslate() {
-	// Stub implementation
+	log.Printf("[STUB] LessonFileTab.Retranslate() called - tab retranslation not implemented")
 }
 
 // UIModule provides Qt-based user interface functionality
@@ -202,11 +210,14 @@ func (ui *UIModule) Enable(ctx context.Context) error {
 	// Check if we have a DISPLAY environment variable on X11 systems
 	if os.Getenv("DISPLAY") == "" && os.Getenv("WAYLAND_DISPLAY") == "" {
 		// No display available, skip GUI initialization
+		log.Printf("[WARNING] No display available (DISPLAY=%s, WAYLAND_DISPLAY=%s), GUI module remaining inactive",
+			os.Getenv("DISPLAY"), os.Getenv("WAYLAND_DISPLAY"))
 		fmt.Println("No display available, GUI module remaining inactive")
 		return nil
 	}
 
 	// Initialize Qt Application (stub implementation)
+	log.Printf("[STUB] Qt Application initialization - using stub instead of real Qt")
 	ui.app = "qt-app-stub"
 
 	// Get required modules
@@ -269,6 +280,7 @@ func (ui *UIModule) SetManager(manager *core.Manager) {
 
 // setupMainWindow initializes the main application window
 func (ui *UIModule) setupMainWindow() {
+	log.Printf("[STUB] setupMainWindow() - main window creation not implemented")
 	ui.mainWidget = "main-window-stub"
 	ui.tabWidget = "tab-widget-stub"
 	fmt.Println("Main window setup (stub implementation)")
@@ -276,6 +288,7 @@ func (ui *UIModule) setupMainWindow() {
 
 // setupMenus creates the application menus and actions
 func (ui *UIModule) setupMenus(createEvent func() core.Event) {
+	log.Printf("[STUB] setupMenus() - menu and action creation not implemented")
 	// Stub implementation
 	ui.fileMenu = NewMenu(createEvent, nil)
 	ui.editMenu = NewMenu(createEvent, nil)
@@ -304,12 +317,14 @@ func (ui *UIModule) setupMenus(createEvent func() core.Event) {
 
 // setupStatusBar creates the status bar
 func (ui *UIModule) setupStatusBar() {
+	log.Printf("[STUB] setupStatusBar() - status bar creation not implemented")
 	ui.statusBar = "status-bar-stub"
 	ui.statusViewer = NewStatusViewer(ui.statusBar)
 }
 
 // applyMetadata applies metadata to the UI
 func (ui *UIModule) applyMetadata(metadataModule core.Module) {
+	log.Printf("[STUB] applyMetadata() - metadata application not implemented")
 	// TODO: Get metadata and apply to window
 	// This would need to cast to the proper metadata interface
 	fmt.Println("Applied metadata to window (stub implementation)")
@@ -317,6 +332,7 @@ func (ui *UIModule) applyMetadata(metadataModule core.Module) {
 
 // setupSignals connects Qt signals to Go handlers
 func (ui *UIModule) setupSignals() {
+	log.Printf("[STUB] setupSignals() - Qt signal connection not implemented")
 	// Stub implementation - would connect Qt signals in real implementation
 	fmt.Println("Signals setup (stub implementation)")
 }
@@ -330,31 +346,37 @@ func (ui *UIModule) onTabChanged(index int) {
 
 // onCloseRequested handles application close requests
 func (ui *UIModule) onCloseRequested() {
+	log.Printf("[STUB] onCloseRequested() - close request handling not implemented")
 	// TODO: Handle close request (save data, etc.)
 }
 
 // Run starts the Qt application event loop
 func (ui *UIModule) Run() error {
 	if !ui.IsActive() {
+		log.Printf("[ERROR] UIModule.Run() failed - module is not active")
 		return fmt.Errorf("UI module is not active")
 	}
 
+	log.Printf("[STUB] UIModule.Run() - Qt event loop not implemented")
 	fmt.Println("Qt GUI running (stub implementation)")
 	return nil
 }
 
 // Interrupt stops the application
 func (ui *UIModule) Interrupt() {
+	log.Printf("[STUB] UIModule.Interrupt() - application interruption not implemented")
 	fmt.Println("Qt GUI interrupted (stub implementation)")
 }
 
 // SetFullscreen toggles fullscreen mode
 func (ui *UIModule) SetFullscreen(fullscreen bool) {
+	log.Printf("[STUB] UIModule.SetFullscreen(%v) - fullscreen toggle not implemented", fullscreen)
 	fmt.Printf("Fullscreen set to: %v (stub implementation)\n", fullscreen)
 }
 
 // AddFileTab adds a new file tab
 func (ui *UIModule) AddFileTab(widget interface{}, title string) *FileTab {
+	log.Printf("[STUB] UIModule.AddFileTab('%s') - file tab addition not implemented", title)
 	ui.fileTabsMu.Lock()
 	defer ui.fileTabsMu.Unlock()
 
@@ -367,12 +389,14 @@ func (ui *UIModule) AddFileTab(widget interface{}, title string) *FileTab {
 
 // AddCustomTab adds a custom tab widget
 func (ui *UIModule) AddCustomTab(widget interface{}, title string, closeable bool) int {
+	log.Printf("[STUB] UIModule.AddCustomTab('%s', closeable=%v) - custom tab addition not implemented", title, closeable)
 	fmt.Printf("Added custom tab: %s, closeable: %v (stub implementation)\n", title, closeable)
 	return 0
 }
 
 // CurrentFileTab returns the currently active file tab
 func (ui *UIModule) CurrentFileTab() *FileTab {
+	log.Printf("[STUB] UIModule.CurrentFileTab() - current tab detection not implemented")
 	ui.fileTabsMu.RLock()
 	defer ui.fileTabsMu.RUnlock()
 
@@ -385,44 +409,53 @@ func (ui *UIModule) CurrentFileTab() *FileTab {
 
 // AddStyleSheetRules adds CSS-like styling rules
 func (ui *UIModule) AddStyleSheetRules(rules string) {
+	log.Printf("[STUB] UIModule.AddStyleSheetRules() - stylesheet application not implemented")
 	fmt.Printf("Added stylesheet rules: %s (stub implementation)\n", rules)
 }
 
 // SetStyle sets the application style
 func (ui *UIModule) SetStyle(styleName string) {
+	log.Printf("[STUB] UIModule.SetStyle('%s') - application styling not implemented", styleName)
 	fmt.Printf("Set style: %s (stub implementation)\n", styleName)
 }
 
 // QtParent returns the main Qt widget for parenting other widgets
 func (ui *UIModule) QtParent() interface{} {
+	log.Printf("[STUB] UIModule.QtParent() - Qt parent widget not implemented")
 	return ui.mainWidget
 }
 
 // StartTabActive returns whether the start tab is currently active
 func (ui *UIModule) StartTabActive() bool {
-	return len(ui.fileTabs) == 0
+	result := len(ui.fileTabs) == 0
+	log.Printf("[STUB] UIModule.StartTabActive() returning %v - start tab detection not fully implemented", result)
+	return result
 }
 
 // ShowMessage displays a message to the user
 func (ui *UIModule) ShowMessage(title, message string) error {
+	log.Printf("[STUB] UIModule.ShowMessage('%s', '%s') - message dialog not implemented", title, message)
 	fmt.Printf("[%s] %s\n", title, message)
 	return nil
 }
 
 // ShowError displays an error message to the user
 func (ui *UIModule) ShowError(title, message string) error {
+	log.Printf("[STUB] UIModule.ShowError('%s', '%s') - error dialog not implemented", title, message)
 	fmt.Printf("ERROR [%s] %s\n", title, message)
 	return nil
 }
 
 // ShowWarning displays a warning message to the user
 func (ui *UIModule) ShowWarning(title, message string) error {
+	log.Printf("[STUB] UIModule.ShowWarning('%s', '%s') - warning dialog not implemented", title, message)
 	fmt.Printf("WARNING [%s] %s\n", title, message)
 	return nil
 }
 
 // ShowInfo displays an info message to the user
 func (ui *UIModule) ShowInfo(title, message string) error {
+	log.Printf("[STUB] UIModule.ShowInfo('%s', '%s') - info dialog not implemented", title, message)
 	fmt.Printf("INFO [%s] %s\n", title, message)
 	return nil
 }
