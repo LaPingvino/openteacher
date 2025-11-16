@@ -7,7 +7,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/LaPingvino/recuerdo/internal/core"
-	"github.com/therecipe/qt/widgets"
 )
 
 // PrintModule is a Go port of the Python PrintModule class

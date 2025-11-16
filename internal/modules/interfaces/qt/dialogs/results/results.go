@@ -10,14 +10,14 @@ import (
 	"fmt"
 
 	"github.com/LaPingvino/recuerdo/internal/core"
-	"github.com/therecipe/qt/widgets"
+	"github.com/mappu/miqt/qt"
 )
 
 // ResultsDialogModule is a Go port of the Python ResultsDialogModule class
 type ResultsDialogModule struct {
 	*core.BaseModule
 	manager *core.Manager
-	dialog  *widgets.QDialog
+	dialog  *qt.QDialog
 }
 
 // NewResultsDialogModule creates a new ResultsDialogModule instance
@@ -46,21 +46,21 @@ func (mod *ResultsDialogModule) Show(results map[string]interface{}) {
 
 // createDialog creates the results dialog
 func (mod *ResultsDialogModule) createDialog() {
-	mod.dialog = widgets.NewQDialog(nil, 0)
+	mod.dialog = qt.NewQDialog(nil, 0)
 	mod.dialog.SetWindowTitle("Test Results")
 	mod.dialog.SetFixedSize2(500, 400)
 
-	layout := widgets.NewQVBoxLayout()
+	layout := qt.NewQVBoxLayout()
 	mod.dialog.SetLayout(layout)
 
 	// Results display
-	resultsText := widgets.NewQTextEdit(nil)
+	resultsText := qt.NewQTextEdit(nil)
 	resultsText.SetReadOnly(true)
 	resultsText.SetObjectName("resultsText")
 	layout.AddWidget(resultsText, 1, 0)
 
 	// Close button
-	buttonBox := widgets.NewQDialogButtonBox3(widgets.QDialogButtonBox__Close, nil)
+	buttonBox := qt.NewQDialogButtonBox3(qt.QDialogButtonBox__Close, nil)
 	layout.AddWidget(buttonBox, 0, 0)
 
 	buttonBox.ConnectRejected(func() {
@@ -74,7 +74,7 @@ func (mod *ResultsDialogModule) loadResults(results map[string]interface{}) {
 		return
 	}
 
-	resultsText := widgets.NewQTextEdit(nil)
+	resultsText := qt.NewQTextEdit(nil)
 	resultsText.SetObjectName("resultsText")
 
 	// For now, just print results to console to avoid Qt API issues

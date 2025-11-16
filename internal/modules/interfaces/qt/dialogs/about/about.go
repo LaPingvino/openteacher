@@ -11,15 +11,14 @@ import (
 	"log"
 
 	"github.com/LaPingvino/recuerdo/internal/core"
-	qtcore "github.com/therecipe/qt/core"
-	"github.com/therecipe/qt/widgets"
+	"github.com/mappu/miqt/qt"
 )
 
 // AboutDialogModule is a Go port of the Python AboutDialogModule class
 type AboutDialogModule struct {
 	*core.BaseModule
 	manager *core.Manager
-	dialog  *widgets.QDialog
+	dialog  *qt.QDialog
 }
 
 // NewAboutDialogModule creates a new AboutDialogModule instance
@@ -46,44 +45,44 @@ func (mod *AboutDialogModule) Show() {
 }
 
 // createDialog creates and configures the about dialog
-func (mod *AboutDialogModule) createDialog(parent *widgets.QWidget) {
-	mod.dialog = widgets.NewQDialog(parent, 0)
+func (mod *AboutDialogModule) createDialog(parent *qt.QWidget) {
+	mod.dialog = qt.NewQDialog(parent, 0)
 	mod.dialog.SetWindowTitle("About Recuerdo")
 	mod.dialog.SetFixedSize2(400, 300)
-	mod.dialog.SetWindowModality(qtcore.Qt__ApplicationModal)
+	mod.dialog.SetWindowModality(qt.ApplicationModal)
 
 	// Create main layout
-	layout := widgets.NewQVBoxLayout()
+	layout := qt.NewQVBoxLayout()
 	mod.dialog.SetLayout(layout)
 
 	// Add Recuerdo logo/title
-	titleLabel := widgets.NewQLabel2("Recuerdo", nil, 0)
+	titleLabel := qt.NewQLabel2("Recuerdo", nil, 0)
 	titleFont := titleLabel.Font()
 	titleFont.SetPointSize(18)
 	titleFont.SetBold(true)
 	titleLabel.SetFont(titleFont)
-	titleLabel.SetAlignment(qtcore.Qt__AlignHCenter)
+	titleLabel.SetAlignment(qt.AlignHCenter)
 	layout.AddWidget(titleLabel, 0, 0)
 
 	// Add version info
-	versionLabel := widgets.NewQLabel2("Version 4.0.0-alpha", nil, 0)
-	versionLabel.SetAlignment(qtcore.Qt__AlignHCenter)
+	versionLabel := qt.NewQLabel2("Version 4.0.0-alpha", nil, 0)
+	versionLabel.SetAlignment(qt.AlignHCenter)
 	layout.AddWidget(versionLabel, 0, 0)
 
 	// Add description
-	descLabel := widgets.NewQLabel2("Recuerdo helps you learn whatever you want to learn!\nIt's designed to help you learn a foreign language,\nbut can also be used for other subjects.", nil, 0)
-	descLabel.SetAlignment(qtcore.Qt__AlignHCenter)
+	descLabel := qt.NewQLabel2("Recuerdo helps you learn whatever you want to learn!\nIt's designed to help you learn a foreign language,\nbut can also be used for other subjects.", nil, 0)
+	descLabel.SetAlignment(qt.AlignHCenter)
 	descLabel.SetWordWrap(true)
 	layout.AddWidget(descLabel, 0, 0)
 
 	// Add copyright
-	copyrightLabel := widgets.NewQLabel2("Copyright © 2025 Joop Kiefte\nBased on OpenTeacher © 2010-2023 OpenTeacher Team", nil, 0)
-	copyrightLabel.SetAlignment(qtcore.Qt__AlignHCenter)
+	copyrightLabel := qt.NewQLabel2("Copyright © 2025 Joop Kiefte\nBased on OpenTeacher © 2010-2023 OpenTeacher Team", nil, 0)
+	copyrightLabel.SetAlignment(qt.AlignHCenter)
 	layout.AddWidget(copyrightLabel, 0, 0)
 
 	// Add website link
-	websiteLabel := widgets.NewQLabel2(`<a href="http://openteacher.org">http://openteacher.org</a>`, nil, 0)
-	websiteLabel.SetAlignment(qtcore.Qt__AlignHCenter)
+	websiteLabel := qt.NewQLabel2(`<a href="http://openteacher.org">http://openteacher.org</a>`, nil, 0)
+	websiteLabel.SetAlignment(qt.AlignHCenter)
 	websiteLabel.SetOpenExternalLinks(true)
 	layout.AddWidget(websiteLabel, 0, 0)
 
@@ -91,7 +90,7 @@ func (mod *AboutDialogModule) createDialog(parent *widgets.QWidget) {
 	layout.AddStretch(1)
 
 	// Add close button
-	buttonBox := widgets.NewQDialogButtonBox3(widgets.QDialogButtonBox__Close, nil)
+	buttonBox := qt.NewQDialogButtonBox3(qt.QDialogButtonBox__Close, nil)
 	layout.AddWidget(buttonBox, 0, 0)
 
 	// Connect close button
@@ -150,10 +149,10 @@ func (mod *AboutDialogModule) ShowAboutDialog() {
 	}
 
 	// Get the main window as parent
-	var parentWidget *widgets.QWidget
+	var parentWidget *qt.QWidget
 	uiModules := mod.manager.GetModulesByType("ui")
 	if len(uiModules) > 0 {
-		if guiMod, ok := uiModules[0].(interface{ GetMainWindow() *widgets.QMainWindow }); ok {
+		if guiMod, ok := uiModules[0].(interface{ GetMainWindow() *qt.QMainWindow }); ok {
 			parentWidget = guiMod.GetMainWindow().QWidget_PTR()
 			log.Printf("[SUCCESS] AboutDialogModule got parent window from GUI module")
 		}

@@ -11,8 +11,7 @@ import (
 	"path/filepath"
 
 	"github.com/LaPingvino/recuerdo/internal/core"
-	qtcore "github.com/therecipe/qt/core"
-	"github.com/therecipe/qt/widgets"
+	"github.com/mappu/miqt/qt"
 )
 
 // FileDialogModule is a Go port of the Python FileDialogModule class
@@ -38,9 +37,9 @@ func NewFileDialogModule() *FileDialogModule {
 // OpenFile shows an open file dialog and returns the selected file path
 func (mod *FileDialogModule) OpenFile(parent interface{}, title string, filter string) string {
 	// Convert parent to proper type
-	var parentWidget *widgets.QWidget
+	var parentWidget *qt.QWidget
 	if parent != nil {
-		if pw, ok := parent.(*widgets.QWidget); ok {
+		if pw, ok := parent.(*qt.QWidget); ok {
 			parentWidget = pw
 		}
 	}
@@ -49,7 +48,7 @@ func (mod *FileDialogModule) OpenFile(parent interface{}, title string, filter s
 	}
 
 	// Use GetOpenFileName directly - single dialog approach
-	selectedFile := widgets.QFileDialog_GetOpenFileName(parentWidget, title, mod.lastDir, filter, "", 0)
+	selectedFile := qt.QFileDialog_GetOpenFileName(parentWidget, title, mod.lastDir, filter, "", 0)
 	if selectedFile != "" {
 		mod.lastDir = filepath.Dir(selectedFile)
 		return selectedFile
@@ -59,18 +58,18 @@ func (mod *FileDialogModule) OpenFile(parent interface{}, title string, filter s
 }
 
 // OpenFiles shows an open files dialog and returns the selected file paths
-func (mod *FileDialogModule) OpenFiles(parent *widgets.QWidget, title string, filter string) []string {
+func (mod *FileDialogModule) OpenFiles(parent *qt.QWidget, title string, filter string) []string {
 	if filter == "" {
 		filter = mod.fileFilter
 	}
 
-	dialog := widgets.NewQFileDialog2(parent, title, mod.lastDir, filter)
-	dialog.SetFileMode(widgets.QFileDialog__ExistingFiles)
-	dialog.SetAcceptMode(widgets.QFileDialog__AcceptOpen)
+	dialog := qt.NewQFileDialog2(parent, title, mod.lastDir, filter)
+	dialog.SetFileMode(qt.QFileDialog__ExistingFiles)
+	dialog.SetAcceptMode(qt.QFileDialog__AcceptOpen)
 
-	if dialog.Exec() == int(widgets.QDialog__Accepted) {
+	if dialog.Exec() == int(qt.QDialog__Accepted) {
 		// Use QFileDialog.GetOpenFileNames instead for multiple files
-		selectedFiles := widgets.QFileDialog_GetOpenFileNames(parent, title, mod.lastDir, filter, "", 0)
+		selectedFiles := qt.QFileDialog_GetOpenFileNames(parent, title, mod.lastDir, filter, "", 0)
 		if len(selectedFiles) > 0 {
 			mod.lastDir = filepath.Dir(selectedFiles[0])
 			return selectedFiles
@@ -81,7 +80,7 @@ func (mod *FileDialogModule) OpenFiles(parent *widgets.QWidget, title string, fi
 }
 
 // SaveFile shows a save file dialog and returns the selected file path
-func (mod *FileDialogModule) SaveFile(parent *widgets.QWidget, title string, filter string, defaultName string) string {
+func (mod *FileDialogModule) SaveFile(parent *qt.QWidget, title string, filter string, defaultName string) string {
 	if filter == "" {
 		filter = mod.fileFilter
 	}
@@ -91,12 +90,12 @@ func (mod *FileDialogModule) SaveFile(parent *widgets.QWidget, title string, fil
 		startPath = filepath.Join(mod.lastDir, defaultName)
 	}
 
-	dialog := widgets.NewQFileDialog2(parent, title, startPath, filter)
-	dialog.SetFileMode(widgets.QFileDialog__AnyFile)
-	dialog.SetAcceptMode(widgets.QFileDialog__AcceptSave)
+	dialog := qt.NewQFileDialog2(parent, title, startPath, filter)
+	dialog.SetFileMode(qt.QFileDialog__AnyFile)
+	dialog.SetAcceptMode(qt.QFileDialog__AcceptSave)
 	dialog.SetDefaultSuffix("ot")
 
-	if dialog.Exec() == int(widgets.QDialog__Accepted) {
+	if dialog.Exec() == int(qt.QDialog__Accepted) {
 		selectedFiles := dialog.SelectedFiles()
 		if len(selectedFiles) > 0 {
 			filePath := selectedFiles[0]
@@ -109,12 +108,12 @@ func (mod *FileDialogModule) SaveFile(parent *widgets.QWidget, title string, fil
 }
 
 // SelectDirectory shows a directory selection dialog
-func (mod *FileDialogModule) SelectDirectory(parent *widgets.QWidget, title string) string {
-	dialog := widgets.NewQFileDialog2(parent, title, mod.lastDir, "")
-	dialog.SetFileMode(widgets.QFileDialog__Directory)
-	dialog.SetOption(widgets.QFileDialog__ShowDirsOnly, true)
+func (mod *FileDialogModule) SelectDirectory(parent *qt.QWidget, title string) string {
+	dialog := qt.NewQFileDialog2(parent, title, mod.lastDir, "")
+	dialog.SetFileMode(qt.QFileDialog__Directory)
+	dialog.SetOption(qt.QFileDialog__ShowDirsOnly, true)
 
-	if dialog.Exec() == int(widgets.QDialog__Accepted) {
+	if dialog.Exec() == int(qt.QDialog__Accepted) {
 		selectedFiles := dialog.SelectedFiles()
 		if len(selectedFiles) > 0 {
 			dirPath := selectedFiles[0]
@@ -185,7 +184,7 @@ func (mod *FileDialogModule) Enable(ctx context.Context) error {
 	}
 
 	// Set default directory to user's home directory
-	homeDir := qtcore.QDir_HomePath()
+	homeDir := qt.QDir_HomePath()
 	if homeDir != "" {
 		mod.lastDir = homeDir
 	}

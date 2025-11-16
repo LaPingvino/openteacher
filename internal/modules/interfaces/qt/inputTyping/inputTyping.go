@@ -14,9 +14,7 @@ import (
 	"time"
 
 	"github.com/LaPingvino/recuerdo/internal/core"
-	"github.com/therecipe/qt/core"
-	"github.com/therecipe/qt/gui"
-	"github.com/therecipe/qt/widgets"
+	"github.com/mappu/miqt/qt"
 )
 
 // TypingStats holds typing statistics
@@ -33,13 +31,13 @@ type TypingStats struct {
 type InputTypingModule struct {
 	*core.BaseModule
 	manager          *core.Manager
-	widget           *widgets.QWidget
-	inputField       *widgets.QLineEdit
-	targetLabel      *widgets.QLabel
-	statsLabel       *widgets.QLabel
-	submitButton     *widgets.QPushButton
-	clearButton      *widgets.QPushButton
-	hintButton       *widgets.QPushButton
+	widget           *qt.QWidget
+	inputField       *qt.QLineEdit
+	targetLabel      *qt.QLabel
+	statsLabel       *qt.QLabel
+	submitButton     *qt.QPushButton
+	clearButton      *qt.QPushButton
+	hintButton       *qt.QPushButton
 	targetText       string
 	currentInput     string
 	startTime        time.Time
@@ -47,8 +45,8 @@ type InputTypingModule struct {
 	allowHints       bool
 	caseSensitive    bool
 	enableSpellCheck bool
-	completionModel  *gui.QStringListModel
-	completer        *widgets.QCompleter
+	completionModel  *qt.QStringListModel
+	completer        *qt.QCompleter
 }
 
 // NewInputTypingModule creates a new InputTypingModule instance
@@ -65,7 +63,7 @@ func NewInputTypingModule() *InputTypingModule {
 }
 
 // GetWidget returns the main widget for this input module
-func (mod *InputTypingModule) GetWidget() *widgets.QWidget {
+func (mod *InputTypingModule) GetWidget() *qt.QWidget {
 	if mod.widget == nil {
 		mod.createWidget()
 	}
@@ -74,12 +72,12 @@ func (mod *InputTypingModule) GetWidget() *widgets.QWidget {
 
 // createWidget creates the main typing input widget
 func (mod *InputTypingModule) createWidget() {
-	mod.widget = widgets.NewQWidget(nil, 0)
-	layout := widgets.NewQVBoxLayout()
+	mod.widget = qt.NewQWidget(nil, 0)
+	layout := qt.NewQVBoxLayout()
 	mod.widget.SetLayout(layout)
 
 	// Header
-	headerLabel := widgets.NewQLabel2("Typing Input", nil, 0)
+	headerLabel := qt.NewQLabel2("Typing Input", nil, 0)
 	headerFont := headerLabel.Font()
 	headerFont.SetBold(true)
 	headerFont.SetPointSize(14)
@@ -88,11 +86,11 @@ func (mod *InputTypingModule) createWidget() {
 	layout.AddWidget(headerLabel, 0, 0)
 
 	// Target text display
-	targetGroup := widgets.NewQGroupBox2("Target Text", nil)
-	targetLayout := widgets.NewQVBoxLayout()
+	targetGroup := qt.NewQGroupBox2("Target Text", nil)
+	targetLayout := qt.NewQVBoxLayout()
 	targetGroup.SetLayout(targetLayout)
 
-	mod.targetLabel = widgets.NewQLabel2("Type the text shown here...", nil, 0)
+	mod.targetLabel = qt.NewQLabel2("Type the text shown here...", nil, 0)
 	mod.targetLabel.SetWordWrap(true)
 	mod.targetLabel.SetAlignment(core.Qt__AlignCenter)
 	mod.targetLabel.SetStyleSheet("QLabel { background-color: #f0f0f0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }")
@@ -102,11 +100,11 @@ func (mod *InputTypingModule) createWidget() {
 	layout.AddWidget(targetGroup, 0, 0)
 
 	// Input field
-	inputGroup := widgets.NewQGroupBox2("Your Input", nil)
-	inputLayout := widgets.NewQVBoxLayout()
+	inputGroup := qt.NewQGroupBox2("Your Input", nil)
+	inputLayout := qt.NewQVBoxLayout()
 	inputGroup.SetLayout(inputLayout)
 
-	mod.inputField = widgets.NewQLineEdit(nil)
+	mod.inputField = qt.NewQLineEdit(nil)
 	mod.inputField.SetPlaceholderText("Start typing here...")
 	mod.inputField.SetStyleSheet("QLineEdit { font-size: 16px; padding: 8px; }")
 	inputLayout.AddWidget(mod.inputField, 0, 0)
@@ -126,15 +124,15 @@ func (mod *InputTypingModule) createWidget() {
 	layout.AddWidget(inputGroup, 0, 0)
 
 	// Statistics display
-	mod.statsLabel = widgets.NewQLabel2("Ready to type...", nil, 0)
+	mod.statsLabel = qt.NewQLabel2("Ready to type...", nil, 0)
 	mod.statsLabel.SetAlignment(core.Qt__AlignCenter)
 	mod.statsLabel.SetStyleSheet("QLabel { color: #666; font-style: italic; }")
 	layout.AddWidget(mod.statsLabel, 0, 0)
 
 	// Button layout
-	buttonLayout := widgets.NewQHBoxLayout()
+	buttonLayout := qt.NewQHBoxLayout()
 
-	mod.hintButton = widgets.NewQPushButton2("Show Hint", nil)
+	mod.hintButton = qt.NewQPushButton2("Show Hint", nil)
 	mod.hintButton.ConnectClicked(func(checked bool) {
 		mod.showHint()
 	})
@@ -142,13 +140,13 @@ func (mod *InputTypingModule) createWidget() {
 
 	buttonLayout.AddStretch(1)
 
-	mod.clearButton = widgets.NewQPushButton2("Clear", nil)
+	mod.clearButton = qt.NewQPushButton2("Clear", nil)
 	mod.clearButton.ConnectClicked(func(checked bool) {
 		mod.clearInput()
 	})
 	buttonLayout.AddWidget(mod.clearButton, 0, 0)
 
-	mod.submitButton = widgets.NewQPushButton2("Submit", nil)
+	mod.submitButton = qt.NewQPushButton2("Submit", nil)
 	mod.submitButton.ConnectClicked(func(checked bool) {
 		mod.onSubmit()
 	})
@@ -158,9 +156,9 @@ func (mod *InputTypingModule) createWidget() {
 	layout.AddLayout(buttonLayout, 0)
 
 	// Settings layout
-	settingsLayout := widgets.NewQHBoxLayout()
+	settingsLayout := qt.NewQHBoxLayout()
 
-	caseSensitiveCheck := widgets.NewQCheckBox2("Case sensitive", nil)
+	caseSensitiveCheck := qt.NewQCheckBox2("Case sensitive", nil)
 	caseSensitiveCheck.SetChecked(mod.caseSensitive)
 	caseSensitiveCheck.ConnectToggled(func(checked bool) {
 		mod.caseSensitive = checked
@@ -168,7 +166,7 @@ func (mod *InputTypingModule) createWidget() {
 	})
 	settingsLayout.AddWidget(caseSensitiveCheck, 0, 0)
 
-	spellCheckCheck := widgets.NewQCheckBox2("Spell checking", nil)
+	spellCheckCheck := qt.NewQCheckBox2("Spell checking", nil)
 	spellCheckCheck.SetChecked(mod.enableSpellCheck)
 	spellCheckCheck.ConnectToggled(func(checked bool) {
 		mod.enableSpellCheck = checked
@@ -207,10 +205,10 @@ func (mod *InputTypingModule) setupAutoCompletion() {
 		"after", "back", "other", "many", "then", "them", "well", "some",
 	}
 
-	mod.completionModel = gui.NewQStringListModel2(commonWords, nil)
-	mod.completer = widgets.NewQCompleter2(mod.completionModel, nil)
+	mod.completionModel = qt.NewQStringListModel2(commonWords, nil)
+	mod.completer = qt.NewQCompleter2(mod.completionModel, nil)
 	mod.completer.SetCaseSensitivity(core.Qt__CaseInsensitive)
-	mod.completer.SetCompletionMode(widgets.QCompleter__PopupCompletion)
+	mod.completer.SetCompletionMode(qt.QCompleter__PopupCompletion)
 	mod.inputField.SetCompleter(mod.completer)
 }
 
@@ -363,7 +361,7 @@ func (mod *InputTypingModule) showHint() {
 
 	currentLen := len(mod.currentInput)
 	if currentLen >= len(mod.targetText) {
-		widgets.QMessageBox_Information(mod.widget, "Hint", "You've typed the complete text!", widgets.QMessageBox__Ok, widgets.QMessageBox__Ok)
+		qt.QMessageBox_Information(mod.widget, "Hint", "You've typed the complete text!", qt.QMessageBox__Ok, qt.QMessageBox__Ok)
 		return
 	}
 
@@ -376,7 +374,7 @@ func (mod *InputTypingModule) showHint() {
 	hint := mod.targetText[:hintLen]
 	message := fmt.Sprintf("Next characters: \"%s\"", hint[currentLen:])
 
-	widgets.QMessageBox_Information(mod.widget, "Hint", message, widgets.QMessageBox__Ok, widgets.QMessageBox__Ok)
+	qt.QMessageBox_Information(mod.widget, "Hint", message, qt.QMessageBox__Ok, qt.QMessageBox__Ok)
 }
 
 // clearInput clears the input field and resets statistics
@@ -428,13 +426,13 @@ func (mod *InputTypingModule) onSubmit() {
 			float64(mod.stats.CorrectChars)/float64(mod.stats.CharsTyped)*100.0,
 			elapsed.Seconds())
 
-		widgets.QMessageBox_Information(mod.widget, "Success!", message, widgets.QMessageBox__Ok, widgets.QMessageBox__Ok)
+		qt.QMessageBox_Information(mod.widget, "Success!", message, qt.QMessageBox__Ok, qt.QMessageBox__Ok)
 
 		// Clear for next attempt
 		mod.clearInput()
 	} else {
 		// Incorrect
-		widgets.QMessageBox_Warning(mod.widget, "Not Quite Right", "Your input doesn't match the target text. Please try again.", widgets.QMessageBox__Ok, widgets.QMessageBox__Ok)
+		qt.QMessageBox_Warning(mod.widget, "Not Quite Right", "Your input doesn't match the target text. Please try again.", qt.QMessageBox__Ok, qt.QMessageBox__Ok)
 	}
 }
 

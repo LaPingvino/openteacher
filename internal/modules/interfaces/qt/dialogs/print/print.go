@@ -11,15 +11,15 @@ import (
 	"fmt"
 
 	"github.com/LaPingvino/recuerdo/internal/core"
-	"github.com/therecipe/qt/widgets"
+	"github.com/mappu/miqt/qt"
 )
 
 // PrintDialogModule is a Go port of the Python PrintDialogModule class
 type PrintDialogModule struct {
 	*core.BaseModule
 	manager     *core.Manager
-	printDialog *widgets.QPrintDialog
-	printer     *widgets.QPrinter
+	printDialog *qt.QPrintDialog
+	printer     *qt.QPrinter
 }
 
 // NewPrintDialogModule creates a new PrintDialogModule instance
@@ -33,36 +33,36 @@ func NewPrintDialogModule() *PrintDialogModule {
 }
 
 // ShowPrintDialog displays the print dialog
-func (mod *PrintDialogModule) ShowPrintDialog(parent *widgets.QWidget) bool {
+func (mod *PrintDialogModule) ShowPrintDialog(parent *qt.QWidget) bool {
 	if mod.printer == nil {
-		mod.printer = widgets.NewQPrinter(0)
+		mod.printer = qt.NewQPrinter(0)
 	}
 
 	if mod.printDialog == nil {
-		mod.printDialog = widgets.NewQPrintDialog(mod.printer, parent)
+		mod.printDialog = qt.NewQPrintDialog(mod.printer, parent)
 		mod.printDialog.SetWindowTitle("Print")
 	}
 
-	return mod.printDialog.Exec() == int(widgets.QDialog__Accepted)
+	return mod.printDialog.Exec() == int(qt.QDialog__Accepted)
 }
 
 // ShowPageSetupDialog displays the page setup dialog
-func (mod *PrintDialogModule) ShowPageSetupDialog(parent *widgets.QWidget) bool {
+func (mod *PrintDialogModule) ShowPageSetupDialog(parent *qt.QWidget) bool {
 	if mod.printer == nil {
-		mod.printer = widgets.NewQPrinter(0)
+		mod.printer = qt.NewQPrinter(0)
 	}
 
-	pageSetupDialog := widgets.NewQPageSetupDialog(mod.printer, parent)
-	return pageSetupDialog.Exec() == int(widgets.QDialog__Accepted)
+	pageSetupDialog := qt.NewQPageSetupDialog(mod.printer, parent)
+	return pageSetupDialog.Exec() == int(qt.QDialog__Accepted)
 }
 
 // ShowPrintPreview displays a print preview dialog
-func (mod *PrintDialogModule) ShowPrintPreview(content string, parent *widgets.QWidget) {
+func (mod *PrintDialogModule) ShowPrintPreview(content string, parent *qt.QWidget) {
 	if mod.printer == nil {
-		mod.printer = widgets.NewQPrinter(0)
+		mod.printer = qt.NewQPrinter(0)
 	}
 
-	previewDialog := widgets.NewQPrintPreviewDialog(mod.printer, parent, 0)
+	previewDialog := qt.NewQPrintPreviewDialog(mod.printer, parent, 0)
 	previewDialog.SetWindowTitle("Print Preview")
 
 	// Connect print request signal would go here
@@ -77,7 +77,7 @@ func (mod *PrintDialogModule) PrintDocument(content string, title string) error 
 	}
 
 	// Create a simple document for printing
-	document := widgets.NewQTextDocument(nil)
+	document := qt.NewQTextDocument(nil)
 	document.SetPlainText(content)
 	document.SetDocumentTitle(title)
 
@@ -104,7 +104,7 @@ func (mod *PrintDialogModule) GetPrinterInfo() map[string]string {
 // SetPrintOptions configures print settings
 func (mod *PrintDialogModule) SetPrintOptions(options map[string]interface{}) {
 	if mod.printer == nil {
-		mod.printer = widgets.NewQPrinter(0)
+		mod.printer = qt.NewQPrinter(0)
 	}
 
 	if copies, ok := options["copies"].(int); ok {
@@ -126,7 +126,7 @@ func (mod *PrintDialogModule) Enable(ctx context.Context) error {
 	}
 
 	// Initialize printer with default settings
-	mod.printer = widgets.NewQPrinter(0)
+	mod.printer = qt.NewQPrinter(0)
 
 	fmt.Println("PrintDialogModule enabled")
 	return nil

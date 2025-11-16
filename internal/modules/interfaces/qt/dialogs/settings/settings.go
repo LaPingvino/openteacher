@@ -11,16 +11,15 @@ import (
 	"log"
 
 	"github.com/LaPingvino/recuerdo/internal/core"
-	qtcore "github.com/therecipe/qt/core"
-	"github.com/therecipe/qt/widgets"
+	"github.com/mappu/miqt/qt"
 )
 
 // SettingsDialogModule is a Go port of the Python SettingsDialogModule class
 type SettingsDialogModule struct {
 	*core.BaseModule
 	manager      *core.Manager
-	dialog       *widgets.QDialog
-	tabWidget    *widgets.QTabWidget
+	dialog       *qt.QDialog
+	tabWidget    *qt.QTabWidget
 	settingsData map[string]interface{}
 }
 
@@ -50,18 +49,18 @@ func (mod *SettingsDialogModule) Show() {
 }
 
 // createDialog creates and configures the settings dialog
-func (mod *SettingsDialogModule) createDialog(parent *widgets.QWidget) {
-	mod.dialog = widgets.NewQDialog(parent, 0)
+func (mod *SettingsDialogModule) createDialog(parent *qt.QWidget) {
+	mod.dialog = qt.NewQDialog(parent, 0)
 	mod.dialog.SetWindowTitle("Recuerdo Settings")
 	mod.dialog.SetFixedSize2(500, 400)
-	mod.dialog.SetWindowModality(qtcore.Qt__ApplicationModal)
+	mod.dialog.SetWindowModality(qt.ApplicationModal)
 
 	// Create main layout
-	layout := widgets.NewQVBoxLayout()
+	layout := qt.NewQVBoxLayout()
 	mod.dialog.SetLayout(layout)
 
 	// Create tab widget
-	mod.tabWidget = widgets.NewQTabWidget(nil)
+	mod.tabWidget = qt.NewQTabWidget(nil)
 	layout.AddWidget(mod.tabWidget, 1, 0)
 
 	// Add tabs
@@ -70,8 +69,8 @@ func (mod *SettingsDialogModule) createDialog(parent *widgets.QWidget) {
 	mod.createInterfaceTab()
 
 	// Add button box
-	buttonBox := widgets.NewQDialogButtonBox3(
-		widgets.QDialogButtonBox__Ok|widgets.QDialogButtonBox__Cancel|widgets.QDialogButtonBox__Apply,
+	buttonBox := qt.NewQDialogButtonBox3(
+		qt.QDialogButtonBox__Ok|qt.QDialogButtonBox__Cancel|qt.QDialogButtonBox__Apply,
 		nil)
 	layout.AddWidget(buttonBox, 0, 0)
 
@@ -85,7 +84,7 @@ func (mod *SettingsDialogModule) createDialog(parent *widgets.QWidget) {
 		mod.dialog.Reject()
 	})
 
-	buttonBox.Button(widgets.QDialogButtonBox__Apply).ConnectClicked(func(checked bool) {
+	buttonBox.Button(qt.QDialogButtonBox__Apply).ConnectClicked(func(checked bool) {
 		mod.saveSettings()
 	})
 
@@ -94,27 +93,27 @@ func (mod *SettingsDialogModule) createDialog(parent *widgets.QWidget) {
 
 // createGeneralTab creates the general settings tab
 func (mod *SettingsDialogModule) createGeneralTab() {
-	generalWidget := widgets.NewQWidget(nil, 0)
-	layout := widgets.NewQFormLayout(nil)
+	generalWidget := qt.NewQWidget(nil, 0)
+	layout := qt.NewQFormLayout(nil)
 	generalWidget.SetLayout(layout)
 
 	// Auto-save checkbox
-	autoSaveCheck := widgets.NewQCheckBox2("Enable auto-save", nil)
+	autoSaveCheck := qt.NewQCheckBox2("Enable auto-save", nil)
 	layout.AddRow3("Auto-save:", autoSaveCheck)
 
 	// Save interval
-	saveIntervalSpin := widgets.NewQSpinBox(nil)
+	saveIntervalSpin := qt.NewQSpinBox(nil)
 	saveIntervalSpin.SetRange(1, 60)
 	saveIntervalSpin.SetValue(5)
 	saveIntervalSpin.SetSuffix(" minutes")
 	layout.AddRow3("Save interval:", saveIntervalSpin)
 
 	// Check for updates
-	updateCheck := widgets.NewQCheckBox2("Check for updates at startup", nil)
+	updateCheck := qt.NewQCheckBox2("Check for updates at startup", nil)
 	layout.AddRow3("Updates:", updateCheck)
 
 	// Recent files count
-	recentFilesSpin := widgets.NewQSpinBox(nil)
+	recentFilesSpin := qt.NewQSpinBox(nil)
 	recentFilesSpin.SetRange(0, 20)
 	recentFilesSpin.SetValue(10)
 	layout.AddRow3("Recent files:", recentFilesSpin)
@@ -124,12 +123,12 @@ func (mod *SettingsDialogModule) createGeneralTab() {
 
 // createLanguageTab creates the language settings tab
 func (mod *SettingsDialogModule) createLanguageTab() {
-	languageWidget := widgets.NewQWidget(nil, 0)
-	layout := widgets.NewQFormLayout(nil)
+	languageWidget := qt.NewQWidget(nil, 0)
+	layout := qt.NewQFormLayout(nil)
 	languageWidget.SetLayout(layout)
 
 	// Interface language
-	languageCombo := widgets.NewQComboBox(nil)
+	languageCombo := qt.NewQComboBox(nil)
 	languageCombo.AddItems([]string{
 		"English",
 		"Dutch",
@@ -140,7 +139,7 @@ func (mod *SettingsDialogModule) createLanguageTab() {
 	layout.AddRow3("Interface language:", languageCombo)
 
 	// Default question language
-	questionLangCombo := widgets.NewQComboBox(nil)
+	questionLangCombo := qt.NewQComboBox(nil)
 	questionLangCombo.AddItems([]string{
 		"Auto-detect",
 		"English",
@@ -152,7 +151,7 @@ func (mod *SettingsDialogModule) createLanguageTab() {
 	layout.AddRow3("Default question language:", questionLangCombo)
 
 	// Default answer language
-	answerLangCombo := widgets.NewQComboBox(nil)
+	answerLangCombo := qt.NewQComboBox(nil)
 	answerLangCombo.AddItems([]string{
 		"Auto-detect",
 		"English",
@@ -168,12 +167,12 @@ func (mod *SettingsDialogModule) createLanguageTab() {
 
 // createInterfaceTab creates the interface settings tab
 func (mod *SettingsDialogModule) createInterfaceTab() {
-	interfaceWidget := widgets.NewQWidget(nil, 0)
-	layout := widgets.NewQFormLayout(nil)
+	interfaceWidget := qt.NewQWidget(nil, 0)
+	layout := qt.NewQFormLayout(nil)
 	interfaceWidget.SetLayout(layout)
 
 	// Theme selection
-	themeCombo := widgets.NewQComboBox(nil)
+	themeCombo := qt.NewQComboBox(nil)
 	themeCombo.AddItems([]string{
 		"System Default",
 		"Light",
@@ -182,27 +181,27 @@ func (mod *SettingsDialogModule) createInterfaceTab() {
 	layout.AddRow3("Theme:", themeCombo)
 
 	// Show toolbar
-	showToolbarCheck := widgets.NewQCheckBox2("Show toolbar", nil)
+	showToolbarCheck := qt.NewQCheckBox2("Show toolbar", nil)
 	showToolbarCheck.SetChecked(true)
 	layout.AddRow3("Toolbar:", showToolbarCheck)
 
 	// Show status bar
-	showStatusCheck := widgets.NewQCheckBox2("Show status bar", nil)
+	showStatusCheck := qt.NewQCheckBox2("Show status bar", nil)
 	showStatusCheck.SetChecked(true)
 	layout.AddRow3("Status bar:", showStatusCheck)
 
 	// Window opacity
-	opacitySlider := widgets.NewQSlider(nil)
+	opacitySlider := qt.NewQSlider(nil)
 	opacitySlider.SetRange(50, 100)
 	opacitySlider.SetValue(100)
-	opacityLabel := widgets.NewQLabel2("100%", nil, 0)
+	opacityLabel := qt.NewQLabel2("100%", nil, 0)
 
 	opacitySlider.ConnectValueChanged(func(value int) {
 		opacityLabel.SetText(fmt.Sprintf("%d%%", value))
 	})
 
-	opacityWidget := widgets.NewQWidget(nil, 0)
-	opacityLayout := widgets.NewQHBoxLayout()
+	opacityWidget := qt.NewQWidget(nil, 0)
+	opacityLayout := qt.NewQHBoxLayout()
 	opacityWidget.SetLayout(opacityLayout)
 	opacityLayout.AddWidget(opacitySlider, 1, 0)
 	opacityLayout.AddWidget(opacityLabel, 0, 0)
@@ -272,10 +271,10 @@ func (mod *SettingsDialogModule) ShowSettingsDialog() bool {
 	}
 
 	// Get the main window as parent
-	var parentWidget *widgets.QWidget
+	var parentWidget *qt.QWidget
 	uiModules := mod.manager.GetModulesByType("ui")
 	if len(uiModules) > 0 {
-		if guiMod, ok := uiModules[0].(interface{ GetMainWindow() *widgets.QMainWindow }); ok {
+		if guiMod, ok := uiModules[0].(interface{ GetMainWindow() *qt.QMainWindow }); ok {
 			parentWidget = guiMod.GetMainWindow().QWidget_PTR()
 			log.Printf("[SUCCESS] SettingsDialogModule got parent window from GUI module")
 		}

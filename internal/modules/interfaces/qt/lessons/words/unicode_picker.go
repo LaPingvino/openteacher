@@ -13,8 +13,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/LaPingvino/recuerdo/internal/logging"
-	"github.com/therecipe/qt/core"
-	"github.com/therecipe/qt/widgets"
+	"github.com/mappu/miqt/qt"
 )
 
 // CharacterSet represents a named group of characters
@@ -40,32 +39,32 @@ type UnicodeBlockInfo struct {
 
 // IntegratedUnicodePicker provides an integrated Unicode character picker
 type IntegratedUnicodePicker struct {
-	*widgets.QWidget
+	*qt.QWidget
 
 	logger     *logging.Logger
 	config     *UnicodePickerConfig
-	targetEdit *widgets.QLineEdit
+	targetEdit *qt.QLineEdit
 	configPath string
 
 	// UI components (lazy loaded)
-	stackedWidget  *widgets.QStackedWidget
-	quickCharsPage *widgets.QWidget
-	browseUnicPage *widgets.QWidget
+	stackedWidget  *qt.QStackedWidget
+	quickCharsPage *qt.QWidget
+	browseUnicPage *qt.QWidget
 
 	// Browse Unicode components (lazy loaded)
-	categoryComboBox  *widgets.QComboBox
-	blockComboBox     *widgets.QComboBox
-	rangeFromEdit     *widgets.QLineEdit
-	rangeToEdit       *widgets.QLineEdit
-	searchEdit        *widgets.QLineEdit
-	browseCharsLayout *widgets.QGridLayout
-	browseScrollArea  *widgets.QScrollArea
-	browseWidget      *widgets.QWidget
+	categoryComboBox  *qt.QComboBox
+	blockComboBox     *qt.QComboBox
+	rangeFromEdit     *qt.QLineEdit
+	rangeToEdit       *qt.QLineEdit
+	searchEdit        *qt.QLineEdit
+	browseCharsLayout *qt.QGridLayout
+	browseScrollArea  *qt.QScrollArea
+	browseWidget      *qt.QWidget
 
 	// Navigation
-	modeButtons  *widgets.QButtonGroup
-	quickButton  *widgets.QPushButton
-	browseButton *widgets.QPushButton
+	modeButtons  *qt.QButtonGroup
+	quickButton  *qt.QPushButton
+	browseButton *qt.QPushButton
 
 	// Unicode data (lazy loaded)
 	unicodeBlocks  []UnicodeBlockInfo
@@ -78,9 +77,9 @@ type IntegratedUnicodePicker struct {
 }
 
 // NewIntegratedUnicodePicker creates a new integrated Unicode character picker
-func NewIntegratedUnicodePicker(configPath string, parent widgets.QWidget_ITF) *IntegratedUnicodePicker {
+func NewIntegratedUnicodePicker(configPath string, parent qt.QWidget_ITF) *IntegratedUnicodePicker {
 	picker := &IntegratedUnicodePicker{
-		QWidget:    widgets.NewQWidget(parent, 0),
+		QWidget:    qt.NewQWidget(parent, 0),
 		logger:     logging.NewLogger("IntegratedUnicodePicker"),
 		configPath: configPath,
 	}
@@ -324,21 +323,21 @@ func (up *IntegratedUnicodePicker) setupBasicUI() {
 		}
 	`)
 
-	mainLayout := widgets.NewQVBoxLayout()
+	mainLayout := qt.NewQVBoxLayout()
 	mainLayout.SetContentsMargins(8, 8, 8, 8)
 	up.SetLayout(mainLayout)
 
 	// Mode selection buttons
-	modeLayout := widgets.NewQHBoxLayout()
-	up.modeButtons = widgets.NewQButtonGroup(up)
+	modeLayout := qt.NewQHBoxLayout()
+	up.modeButtons = qt.NewQButtonGroup(up)
 
-	up.quickButton = widgets.NewQPushButton2("Quick Access", up)
+	up.quickButton = qt.NewQPushButton2("Quick Access", up)
 	up.quickButton.SetCheckable(true)
 	up.quickButton.SetChecked(true)
 	up.modeButtons.AddButton(up.quickButton, 0)
 	modeLayout.AddWidget(up.quickButton, 0, 0)
 
-	up.browseButton = widgets.NewQPushButton2("Browse Unicode", up)
+	up.browseButton = qt.NewQPushButton2("Browse Unicode", up)
 	up.browseButton.SetCheckable(true)
 	up.modeButtons.AddButton(up.browseButton, 1)
 	modeLayout.AddWidget(up.browseButton, 0, 0)
@@ -347,7 +346,7 @@ func (up *IntegratedUnicodePicker) setupBasicUI() {
 	mainLayout.AddLayout(modeLayout, 0)
 
 	// Stacked widget for different modes
-	up.stackedWidget = widgets.NewQStackedWidget(up)
+	up.stackedWidget = qt.NewQStackedWidget(up)
 	mainLayout.AddWidget(up.stackedWidget, 1, 0)
 
 	// Connect mode buttons with lazy loading
@@ -377,15 +376,15 @@ func (up *IntegratedUnicodePicker) ensureQuickAccessPageLoaded() {
 
 	up.logger.Debug("Lazy loading Quick Access page...")
 
-	up.quickCharsPage = widgets.NewQWidget(nil, 0)
+	up.quickCharsPage = qt.NewQWidget(nil, 0)
 
-	scrollArea := widgets.NewQScrollArea(up.quickCharsPage)
+	scrollArea := qt.NewQScrollArea(up.quickCharsPage)
 	scrollArea.SetWidgetResizable(true)
 	scrollArea.SetVerticalScrollBarPolicy(core.Qt__ScrollBarAsNeeded)
 	scrollArea.SetHorizontalScrollBarPolicy(core.Qt__ScrollBarAsNeeded)
 
-	scrollWidget := widgets.NewQWidget(nil, 0)
-	scrollLayout := widgets.NewQVBoxLayout()
+	scrollWidget := qt.NewQWidget(nil, 0)
+	scrollLayout := qt.NewQVBoxLayout()
 	scrollWidget.SetLayout(scrollLayout)
 
 	// Add character sets
@@ -395,13 +394,13 @@ func (up *IntegratedUnicodePicker) ensureQuickAccessPageLoaded() {
 		}
 
 		// Set title
-		titleLabel := widgets.NewQLabel2(charSet.Name, scrollWidget, 0)
+		titleLabel := qt.NewQLabel2(charSet.Name, scrollWidget, 0)
 		titleLabel.SetStyleSheet("font-weight: bold; color: #333; margin: 4px 0px 2px 0px;")
 		scrollLayout.AddWidget(titleLabel, 0, 0)
 
 		// Characters grid
-		charWidget := widgets.NewQWidget(scrollWidget, 0)
-		charLayout := widgets.NewQGridLayout2()
+		charWidget := qt.NewQWidget(scrollWidget, 0)
+		charLayout := qt.NewQGridLayout2()
 		charLayout.SetSpacing(2)
 		charWidget.SetLayout(charLayout)
 
@@ -413,7 +412,7 @@ func (up *IntegratedUnicodePicker) ensureQuickAccessPageLoaded() {
 				continue
 			}
 
-			button := widgets.NewQPushButton2(char, charWidget)
+			button := qt.NewQPushButton2(char, charWidget)
 			button.SetToolTip(fmt.Sprintf("Insert: %s (U+%04X)", char, []rune(char)[0]))
 
 			// Capture character in closure
@@ -437,7 +436,7 @@ func (up *IntegratedUnicodePicker) ensureQuickAccessPageLoaded() {
 	scrollLayout.AddStretch(0)
 	scrollArea.SetWidget(scrollWidget)
 
-	pageLayout := widgets.NewQVBoxLayout()
+	pageLayout := qt.NewQVBoxLayout()
 	pageLayout.SetContentsMargins(0, 0, 0, 0)
 	up.quickCharsPage.SetLayout(pageLayout)
 	pageLayout.AddWidget(scrollArea, 1, 0)
@@ -459,24 +458,24 @@ func (up *IntegratedUnicodePicker) ensureBrowseUnicodePageLoaded() {
 	// Ensure Unicode data is loaded
 	up.ensureUnicodeDataLoaded()
 
-	up.browseUnicPage = widgets.NewQWidget(nil, 0)
+	up.browseUnicPage = qt.NewQWidget(nil, 0)
 
-	layout := widgets.NewQVBoxLayout()
+	layout := qt.NewQVBoxLayout()
 	layout.SetContentsMargins(4, 4, 4, 4)
 	up.browseUnicPage.SetLayout(layout)
 
 	// Simple controls layout
-	controlsLayout := widgets.NewQVBoxLayout()
+	controlsLayout := qt.NewQVBoxLayout()
 
 	// Unicode codepoint input (primary method)
-	codepointLayout := widgets.NewQHBoxLayout()
-	codepointLayout.AddWidget(widgets.NewQLabel2("Unicode Codepoint:", up.browseUnicPage, 0), 0, 0)
-	up.rangeFromEdit = widgets.NewQLineEdit(up.browseUnicPage)
+	codepointLayout := qt.NewQHBoxLayout()
+	codepointLayout.AddWidget(qt.NewQLabel2("Unicode Codepoint:", up.browseUnicPage, 0), 0, 0)
+	up.rangeFromEdit = qt.NewQLineEdit(up.browseUnicPage)
 	up.rangeFromEdit.SetPlaceholderText("Enter hex code (e.g., 00E1, 1F600)")
 	up.rangeFromEdit.SetMaximumWidth(150)
 	codepointLayout.AddWidget(up.rangeFromEdit, 0, 0)
 
-	insertCodepointBtn := widgets.NewQPushButton2("Insert", up.browseUnicPage)
+	insertCodepointBtn := qt.NewQPushButton2("Insert", up.browseUnicPage)
 	insertCodepointBtn.ConnectClicked(func(checked bool) {
 		hexText := up.rangeFromEdit.Text()
 		if hexText != "" {
@@ -488,9 +487,9 @@ func (up *IntegratedUnicodePicker) ensureBrowseUnicodePageLoaded() {
 	controlsLayout.AddLayout(codepointLayout, 0)
 
 	// Unicode block selection
-	blockLayout := widgets.NewQHBoxLayout()
-	blockLayout.AddWidget(widgets.NewQLabel2("Unicode Block:", up.browseUnicPage, 0), 0, 0)
-	up.blockComboBox = widgets.NewQComboBox(up.browseUnicPage)
+	blockLayout := qt.NewQHBoxLayout()
+	blockLayout.AddWidget(qt.NewQLabel2("Unicode Block:", up.browseUnicPage, 0), 0, 0)
+	up.blockComboBox = qt.NewQComboBox(up.browseUnicPage)
 	up.blockComboBox.AddItem("Select a block...", core.NewQVariant())
 
 	// Add common blocks first
@@ -536,16 +535,16 @@ func (up *IntegratedUnicodePicker) ensureBrowseUnicodePageLoaded() {
 	layout.AddLayout(controlsLayout, 0)
 
 	// Characters display area (initially empty)
-	up.browseScrollArea = widgets.NewQScrollArea(up.browseUnicPage)
+	up.browseScrollArea = qt.NewQScrollArea(up.browseUnicPage)
 	up.browseScrollArea.SetWidgetResizable(true)
-	up.browseWidget = widgets.NewQWidget(nil, 0)
-	up.browseCharsLayout = widgets.NewQGridLayout2()
+	up.browseWidget = qt.NewQWidget(nil, 0)
+	up.browseCharsLayout = qt.NewQGridLayout2()
 	up.browseCharsLayout.SetSpacing(2)
 	up.browseWidget.SetLayout(up.browseCharsLayout)
 	up.browseScrollArea.SetWidget(up.browseWidget)
 
 	// Add placeholder text
-	placeholderLabel := widgets.NewQLabel2("Select a Unicode block above to view characters, or enter a codepoint directly.", nil, 0)
+	placeholderLabel := qt.NewQLabel2("Select a Unicode block above to view characters, or enter a codepoint directly.", nil, 0)
 	placeholderLabel.SetStyleSheet("color: #666; font-style: italic; padding: 20px; text-align: center;")
 	placeholderLabel.SetAlignment(core.Qt__AlignCenter)
 	up.browseCharsLayout.AddWidget3(placeholderLabel, 0, 0, 1, 1, 0)
@@ -639,16 +638,16 @@ func (up *IntegratedUnicodePicker) browseUnicodeBlockPaginated(blockName string,
 	}
 
 	// Display page info
-	pageInfo := widgets.NewQLabel2(fmt.Sprintf("Block: %s | Page %d of %d | Characters %d-%d of %d",
+	pageInfo := qt.NewQLabel2(fmt.Sprintf("Block: %s | Page %d of %d | Characters %d-%d of %d",
 		blockName, page+1, totalPages, startIdx+1, endIdx, totalChars), nil, 0)
 	pageInfo.SetStyleSheet("font-weight: bold; padding: 5px; background-color: #f0f0f0; border: 1px solid #ccc;")
 	up.browseCharsLayout.AddWidget3(pageInfo, 0, 0, 1, 8, 0)
 
 	// Add pagination controls if more than one page
 	if totalPages > 1 {
-		paginationLayout := widgets.NewQHBoxLayout()
+		paginationLayout := qt.NewQHBoxLayout()
 
-		prevBtn := widgets.NewQPushButton2("← Previous", nil)
+		prevBtn := qt.NewQPushButton2("← Previous", nil)
 		prevBtn.SetEnabled(page > 0)
 		if page > 0 {
 			prevBtn.ConnectClicked(func(checked bool) {
@@ -657,11 +656,11 @@ func (up *IntegratedUnicodePicker) browseUnicodeBlockPaginated(blockName string,
 		}
 		paginationLayout.AddWidget(prevBtn, 0, 0)
 
-		pageLabel := widgets.NewQLabel2(fmt.Sprintf("Page %d of %d", page+1, totalPages), nil, 0)
+		pageLabel := qt.NewQLabel2(fmt.Sprintf("Page %d of %d", page+1, totalPages), nil, 0)
 		pageLabel.SetAlignment(core.Qt__AlignCenter)
 		paginationLayout.AddWidget(pageLabel, 1, 0)
 
-		nextBtn := widgets.NewQPushButton2("Next →", nil)
+		nextBtn := qt.NewQPushButton2("Next →", nil)
 		nextBtn.SetEnabled(page < totalPages-1)
 		if page < totalPages-1 {
 			nextBtn.ConnectClicked(func(checked bool) {
@@ -670,7 +669,7 @@ func (up *IntegratedUnicodePicker) browseUnicodeBlockPaginated(blockName string,
 		}
 		paginationLayout.AddWidget(nextBtn, 0, 0)
 
-		paginationWidget := widgets.NewQWidget(nil, 0)
+		paginationWidget := qt.NewQWidget(nil, 0)
 		paginationWidget.SetLayout(paginationLayout)
 		up.browseCharsLayout.AddWidget3(paginationWidget, 1, 0, 1, 8, 0)
 	}
@@ -688,7 +687,7 @@ func (up *IntegratedUnicodePicker) browseUnicodeBlockPaginated(blockName string,
 			continue
 		}
 
-		button := widgets.NewQPushButton2(string(char), nil)
+		button := qt.NewQPushButton2(string(char), nil)
 		button.SetMinimumSize2(32, 32)
 		button.SetMaximumSize2(32, 32)
 		button.SetStyleSheet(`
@@ -918,8 +917,8 @@ func (up *IntegratedUnicodePicker) clearBrowseResults() {
 
 	// Simple approach: delete the browse widget and recreate it
 	up.browseWidget.DeleteLater()
-	up.browseWidget = widgets.NewQWidget(nil, 0)
-	up.browseCharsLayout = widgets.NewQGridLayout2()
+	up.browseWidget = qt.NewQWidget(nil, 0)
+	up.browseCharsLayout = qt.NewQGridLayout2()
 	up.browseCharsLayout.SetSpacing(2)
 	up.browseWidget.SetLayout(up.browseCharsLayout)
 	up.browseScrollArea.SetWidget(up.browseWidget)
@@ -941,7 +940,7 @@ func (up *IntegratedUnicodePicker) displayUnicodeRange(startRune, endRune rune, 
 // displaySearchResults displays a list of Unicode characters
 func (up *IntegratedUnicodePicker) displaySearchResults(chars []rune, title string) {
 	if len(chars) == 0 {
-		noResultsLabel := widgets.NewQLabel2("No characters found", up.browseWidget, 0)
+		noResultsLabel := qt.NewQLabel2("No characters found", up.browseWidget, 0)
 		noResultsLabel.SetStyleSheet("color: #666; font-style: italic; padding: 20px;")
 		up.browseCharsLayout.AddWidget3(noResultsLabel, 0, 0, 1, 1, 0)
 		return
@@ -949,7 +948,7 @@ func (up *IntegratedUnicodePicker) displaySearchResults(chars []rune, title stri
 
 	// Add title if provided
 	if title != "" {
-		titleLabel := widgets.NewQLabel2(fmt.Sprintf("%s (%d characters)", title, len(chars)), up.browseWidget, 0)
+		titleLabel := qt.NewQLabel2(fmt.Sprintf("%s (%d characters)", title, len(chars)), up.browseWidget, 0)
 		titleLabel.SetStyleSheet("font-weight: bold; color: #333; margin: 4px 0px;")
 		up.browseCharsLayout.AddWidget3(titleLabel, 0, 0, 1, 14, 0)
 	}
@@ -959,7 +958,7 @@ func (up *IntegratedUnicodePicker) displaySearchResults(chars []rune, title stri
 
 	for _, r := range chars {
 		char := string(r)
-		button := widgets.NewQPushButton2(char, up.browseWidget)
+		button := qt.NewQPushButton2(char, up.browseWidget)
 
 		// Detailed tooltip with Unicode information
 		unicodeName := up.getUnicodeCharName(r)
@@ -1088,7 +1087,7 @@ func (up *IntegratedUnicodePicker) insertCharacter(char string) {
 }
 
 // SetTargetEdit sets the target line edit for character insertion
-func (up *IntegratedUnicodePicker) SetTargetEdit(edit *widgets.QLineEdit) {
+func (up *IntegratedUnicodePicker) SetTargetEdit(edit *qt.QLineEdit) {
 	up.targetEdit = edit
 	up.logger.Debug("Set target edit widget")
 }

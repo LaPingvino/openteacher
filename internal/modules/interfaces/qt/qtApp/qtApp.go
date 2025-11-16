@@ -13,16 +13,14 @@ import (
 	"os"
 
 	"github.com/LaPingvino/recuerdo/internal/core"
-	qtcore "github.com/therecipe/qt/core"
-	"github.com/therecipe/qt/gui"
-	"github.com/therecipe/qt/widgets"
+	"github.com/mappu/miqt/qt"
 )
 
 // QtAppModule is a Go port of the Python QtAppModule class
 type QtAppModule struct {
 	*core.BaseModule
 	manager *core.Manager
-	app     *widgets.QApplication
+	app     *qt.QApplication
 }
 
 // NewQtAppModule creates a new QtAppModule instance
@@ -44,29 +42,29 @@ func (mod *QtAppModule) Enable(ctx context.Context) error {
 
 	// Initialize Qt Application if not already done
 	if mod.app == nil {
-		mod.app = widgets.NewQApplication(len(os.Args), os.Args)
+		mod.app = qt.NewQApplication(os.Args)
 
-		// Set application properties
-		mod.app.SetApplicationName("OpenTeacher")
-		mod.app.SetApplicationVersion("4.0.0")
-		mod.app.SetOrganizationName("OpenTeacher")
-		mod.app.SetOrganizationDomain("openteacher.org")
+		// Set application properties using static functions
+		qt.QCoreApplication_SetApplicationName("OpenTeacher")
+		qt.QCoreApplication_SetApplicationVersion("4.0.0")
+		qt.QCoreApplication_SetOrganizationName("OpenTeacher")
+		qt.QCoreApplication_SetOrganizationDomain("openteacher.org")
 
 		// Configure international input support
 		fmt.Println("Configuring international input and font support...")
 
 		// Set Unicode-supporting font as the default application font
-		font := gui.NewQFont()
+		font := qt.NewQFont()
 
 		// Try common Unicode-supporting fonts
 		font.SetFamily("DejaVu Sans, Liberation Sans, Arial, sans-serif")
 		font.SetPointSize(11)
 
 		// Set as default application font
-		mod.app.SetFont(font, "")
+		qt.QApplication_SetFont(font)
 
 		// Set UTF-8 encoding attributes for proper Unicode handling
-		mod.app.SetAttribute(qtcore.Qt__AA_UseHighDpiPixmaps, true)
+		qt.QCoreApplication_SetAttribute(qt.AA_UseHighDpiPixmaps)
 
 		fmt.Println("Set Unicode-supporting font for better character display")
 		fmt.Println("Configured UTF-8 and Unicode support for character picker")
@@ -88,7 +86,7 @@ func (mod *QtAppModule) Disable(ctx context.Context) error {
 
 	// Clean up Qt Application
 	if mod.app != nil {
-		mod.app.Quit()
+		qt.QCoreApplication_Quit()
 		mod.app = nil
 	}
 
@@ -102,21 +100,21 @@ func (mod *QtAppModule) SetManager(manager *core.Manager) {
 }
 
 // GetApplication returns the Qt application instance
-func (mod *QtAppModule) GetApplication() *widgets.QApplication {
+func (mod *QtAppModule) GetApplication() *qt.QApplication {
 	return mod.app
 }
 
 // ProcessEvents processes pending Qt events
 func (mod *QtAppModule) ProcessEvents() {
 	if mod.app != nil {
-		mod.app.ProcessEvents2(qtcore.QEventLoop__AllEvents, 0)
+		qt.QCoreApplication_ProcessEvents()
 	}
 }
 
 // Exec runs the Qt event loop (blocking)
 func (mod *QtAppModule) Exec() int {
 	if mod.app != nil {
-		return mod.app.Exec()
+		return qt.QApplication_Exec()
 	}
 	return 0
 }

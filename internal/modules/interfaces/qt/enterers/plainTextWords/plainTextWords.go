@@ -12,17 +12,17 @@ import (
 	"strings"
 
 	"github.com/LaPingvino/recuerdo/internal/core"
-	"github.com/therecipe/qt/widgets"
+	"github.com/mappu/miqt/qt"
 )
 
 // PlainTextWordsEntererModule is a Go port of the Python PlainTextWordsEntererModule class
 type PlainTextWordsEntererModule struct {
 	*core.BaseModule
 	manager     *core.Manager
-	widget      *widgets.QWidget
-	textEdit    *widgets.QTextEdit
-	parseButton *widgets.QPushButton
-	clearButton *widgets.QPushButton
+	widget      *qt.QWidget
+	textEdit    *qt.QTextEdit
+	parseButton *qt.QPushButton
+	clearButton *qt.QPushButton
 	wordPairs   []string
 }
 
@@ -38,7 +38,7 @@ func NewPlainTextWordsEntererModule() *PlainTextWordsEntererModule {
 }
 
 // GetWidget returns the main widget for this enterer
-func (mod *PlainTextWordsEntererModule) GetWidget() *widgets.QWidget {
+func (mod *PlainTextWordsEntererModule) GetWidget() *qt.QWidget {
 	if mod.widget == nil {
 		mod.createWidget()
 	}
@@ -47,12 +47,12 @@ func (mod *PlainTextWordsEntererModule) GetWidget() *widgets.QWidget {
 
 // createWidget creates the main plain text enterer widget
 func (mod *PlainTextWordsEntererModule) createWidget() {
-	mod.widget = widgets.NewQWidget(nil, 0)
-	layout := widgets.NewQVBoxLayout()
+	mod.widget = qt.NewQWidget(nil, 0)
+	layout := qt.NewQVBoxLayout()
 	mod.widget.SetLayout(layout)
 
 	// Header
-	headerLabel := widgets.NewQLabel2("Plain Text Word Enterer", nil, 0)
+	headerLabel := qt.NewQLabel2("Plain Text Word Enterer", nil, 0)
 	headerFont := headerLabel.Font()
 	headerFont.SetBold(true)
 	headerFont.SetPointSize(14)
@@ -60,25 +60,25 @@ func (mod *PlainTextWordsEntererModule) createWidget() {
 	layout.AddWidget(headerLabel, 0, 0)
 
 	// Instructions
-	instructionsLabel := widgets.NewQLabel2("Enter word pairs, one per line. Separate questions and answers with a tab or comma.", nil, 0)
+	instructionsLabel := qt.NewQLabel2("Enter word pairs, one per line. Separate questions and answers with a tab or comma.", nil, 0)
 	instructionsLabel.SetWordWrap(true)
 	layout.AddWidget(instructionsLabel, 0, 0)
 
 	// Text editor
-	mod.textEdit = widgets.NewQTextEdit(nil)
+	mod.textEdit = qt.NewQTextEdit(nil)
 	mod.textEdit.SetPlaceholderText("Example:\nhello\tworld\ngood morning\tguten Morgen\nhow are you?\twie geht es dir?")
 	layout.AddWidget(mod.textEdit, 1, 0)
 
 	// Button layout
-	buttonLayout := widgets.NewQHBoxLayout()
+	buttonLayout := qt.NewQHBoxLayout()
 
-	mod.parseButton = widgets.NewQPushButton2("Parse Words", nil)
+	mod.parseButton = qt.NewQPushButton2("Parse Words", nil)
 	mod.parseButton.ConnectClicked(func(checked bool) {
 		mod.parseWords()
 	})
 	buttonLayout.AddWidget(mod.parseButton, 0, 0)
 
-	mod.clearButton = widgets.NewQPushButton2("Clear All", nil)
+	mod.clearButton = qt.NewQPushButton2("Clear All", nil)
 	mod.clearButton.ConnectClicked(func(checked bool) {
 		mod.clearText()
 	})
@@ -87,7 +87,7 @@ func (mod *PlainTextWordsEntererModule) createWidget() {
 	buttonLayout.AddStretch(1)
 
 	// Status label
-	statusLabel := widgets.NewQLabel2("Enter your word list above and click 'Parse Words' to process.", nil, 0)
+	statusLabel := qt.NewQLabel2("Enter your word list above and click 'Parse Words' to process.", nil, 0)
 	statusLabel.SetObjectName("statusLabel")
 	buttonLayout.AddWidget(statusLabel, 1, 0)
 
@@ -143,13 +143,13 @@ func (mod *PlainTextWordsEntererModule) parseWords() {
 // clearText clears all text content
 func (mod *PlainTextWordsEntererModule) clearText() {
 	if mod.textEdit != nil {
-		reply := widgets.QMessageBox_Question(mod.widget,
+		reply := qt.QMessageBox_Question(mod.widget,
 			"Clear Text",
 			"Are you sure you want to clear all text?",
-			widgets.QMessageBox__Yes|widgets.QMessageBox__No,
-			widgets.QMessageBox__No)
+			qt.QMessageBox__Yes|qt.QMessageBox__No,
+			qt.QMessageBox__No)
 
-		if reply == widgets.QMessageBox__Yes {
+		if reply == qt.QMessageBox__Yes {
 			mod.textEdit.Clear()
 			mod.wordPairs = make([]string, 0)
 			mod.showStatus("Text cleared.")

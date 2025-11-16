@@ -11,16 +11,15 @@ import (
 	"fmt"
 
 	"github.com/LaPingvino/recuerdo/internal/core"
-	qtcore "github.com/therecipe/qt/core"
-	"github.com/therecipe/qt/widgets"
+	"github.com/mappu/miqt/qt"
 )
 
 // DialogShowerModule is a Go port of the Python DialogShowerModule class
 type DialogShowerModule struct {
 	*core.BaseModule
 	manager      *core.Manager
-	mainWindow   *widgets.QMainWindow
-	messageBoxes []*widgets.QMessageBox
+	mainWindow   *qt.QMainWindow
+	messageBoxes []*qt.QMessageBox
 }
 
 // NewDialogShowerModule creates a new DialogShowerModule instance
@@ -30,23 +29,23 @@ func NewDialogShowerModule() *DialogShowerModule {
 
 	return &DialogShowerModule{
 		BaseModule:   base,
-		messageBoxes: make([]*widgets.QMessageBox, 0),
+		messageBoxes: make([]*qt.QMessageBox, 0),
 	}
 }
 
 // SetMainWindow sets the main window to use as parent for dialogs
-func (mod *DialogShowerModule) SetMainWindow(window *widgets.QMainWindow) {
+func (mod *DialogShowerModule) SetMainWindow(window *qt.QMainWindow) {
 	mod.mainWindow = window
 }
 
 // ShowInformation displays an information dialog
 func (mod *DialogShowerModule) ShowInformation(title string, message string) {
-	msgBox := widgets.NewQMessageBox(mod.mainWindow)
+	msgBox := qt.NewQMessageBox(mod.mainWindow)
 	msgBox.SetWindowTitle(title)
 	msgBox.SetText(message)
-	msgBox.SetIcon(widgets.QMessageBox__Information)
-	msgBox.SetStandardButtons(widgets.QMessageBox__Ok)
-	msgBox.SetStandardButtons(widgets.QMessageBox__Ok)
+	msgBox.SetIcon(qt.QMessageBox__Information)
+	msgBox.SetStandardButtons(qt.QMessageBox__Ok)
+	msgBox.SetStandardButtons(qt.QMessageBox__Ok)
 
 	mod.messageBoxes = append(mod.messageBoxes, msgBox)
 	msgBox.Exec()
@@ -55,12 +54,12 @@ func (mod *DialogShowerModule) ShowInformation(title string, message string) {
 
 // ShowWarning displays a warning dialog
 func (mod *DialogShowerModule) ShowWarning(title string, message string) {
-	msgBox := widgets.NewQMessageBox(mod.mainWindow)
+	msgBox := qt.NewQMessageBox(mod.mainWindow)
 	msgBox.SetWindowTitle(title)
 	msgBox.SetText(message)
-	msgBox.SetIcon(widgets.QMessageBox__Warning)
-	msgBox.SetStandardButtons(widgets.QMessageBox__Ok)
-	msgBox.SetStandardButtons(widgets.QMessageBox__Ok)
+	msgBox.SetIcon(qt.QMessageBox__Warning)
+	msgBox.SetStandardButtons(qt.QMessageBox__Ok)
+	msgBox.SetStandardButtons(qt.QMessageBox__Ok)
 
 	mod.messageBoxes = append(mod.messageBoxes, msgBox)
 	msgBox.Exec()
@@ -69,12 +68,12 @@ func (mod *DialogShowerModule) ShowWarning(title string, message string) {
 
 // ShowError displays an error dialog
 func (mod *DialogShowerModule) ShowError(title string, message string) {
-	msgBox := widgets.NewQMessageBox(mod.mainWindow)
+	msgBox := qt.NewQMessageBox(mod.mainWindow)
 	msgBox.SetWindowTitle(title)
 	msgBox.SetText(message)
-	msgBox.SetIcon(widgets.QMessageBox__Critical)
-	msgBox.SetStandardButtons(widgets.QMessageBox__Ok)
-	msgBox.SetStandardButtons(widgets.QMessageBox__Ok)
+	msgBox.SetIcon(qt.QMessageBox__Critical)
+	msgBox.SetStandardButtons(qt.QMessageBox__Ok)
+	msgBox.SetStandardButtons(qt.QMessageBox__Ok)
 
 	mod.messageBoxes = append(mod.messageBoxes, msgBox)
 	msgBox.Exec()
@@ -83,38 +82,38 @@ func (mod *DialogShowerModule) ShowError(title string, message string) {
 
 // ShowQuestion displays a yes/no question dialog and returns true if Yes was clicked
 func (mod *DialogShowerModule) ShowQuestion(title string, message string) bool {
-	msgBox := widgets.NewQMessageBox(mod.mainWindow)
+	msgBox := qt.NewQMessageBox(mod.mainWindow)
 	msgBox.SetWindowTitle(title)
 	msgBox.SetText(message)
-	msgBox.SetIcon(widgets.QMessageBox__Question)
-	msgBox.SetStandardButtons(widgets.QMessageBox__Yes | widgets.QMessageBox__No)
-	msgBox.SetDefaultButton2(widgets.QMessageBox__No)
+	msgBox.SetIcon(qt.QMessageBox__Question)
+	msgBox.SetStandardButtons(qt.QMessageBox__Yes | qt.QMessageBox__No)
+	msgBox.SetDefaultButton2(qt.QMessageBox__No)
 
 	mod.messageBoxes = append(mod.messageBoxes, msgBox)
 	result := msgBox.Exec()
 	mod.removeMessageBox(msgBox)
 
-	return result == int(widgets.QMessageBox__Yes)
+	return result == int(qt.QMessageBox__Yes)
 }
 
 // ShowQuestionWithCancel displays a yes/no/cancel question dialog
 // Returns: 1 for Yes, 0 for No, -1 for Cancel
 func (mod *DialogShowerModule) ShowQuestionWithCancel(title string, message string) int {
-	msgBox := widgets.NewQMessageBox(mod.mainWindow)
+	msgBox := qt.NewQMessageBox(mod.mainWindow)
 	msgBox.SetWindowTitle(title)
 	msgBox.SetText(message)
-	msgBox.SetIcon(widgets.QMessageBox__Question)
-	msgBox.SetStandardButtons(widgets.QMessageBox__Yes | widgets.QMessageBox__No | widgets.QMessageBox__Cancel)
-	msgBox.SetDefaultButton2(widgets.QMessageBox__Cancel)
+	msgBox.SetIcon(qt.QMessageBox__Question)
+	msgBox.SetStandardButtons(qt.QMessageBox__Yes | qt.QMessageBox__No | qt.QMessageBox__Cancel)
+	msgBox.SetDefaultButton2(qt.QMessageBox__Cancel)
 
 	mod.messageBoxes = append(mod.messageBoxes, msgBox)
 	result := msgBox.Exec()
 	mod.removeMessageBox(msgBox)
 
 	switch result {
-	case int(widgets.QMessageBox__Yes):
+	case int(qt.QMessageBox__Yes):
 		return 1
-	case int(widgets.QMessageBox__No):
+	case int(qt.QMessageBox__No):
 		return 0
 	default: // Cancel or close
 		return -1
@@ -123,15 +122,15 @@ func (mod *DialogShowerModule) ShowQuestionWithCancel(title string, message stri
 
 // ShowCustomDialog displays a custom dialog with specified buttons
 func (mod *DialogShowerModule) ShowCustomDialog(title string, message string, buttons []string, defaultButton int) int {
-	msgBox := widgets.NewQMessageBox(mod.mainWindow)
+	msgBox := qt.NewQMessageBox(mod.mainWindow)
 	msgBox.SetWindowTitle(title)
 	msgBox.SetText(message)
-	msgBox.SetIcon(widgets.QMessageBox__Question)
+	msgBox.SetIcon(qt.QMessageBox__Question)
 
 	// Add custom buttons
-	buttonRefs := make([]*widgets.QPushButton, len(buttons))
+	buttonRefs := make([]*qt.QPushButton, len(buttons))
 	for i, buttonText := range buttons {
-		button := msgBox.AddButton2(buttonText, widgets.QMessageBox__ActionRole)
+		button := msgBox.AddButton2(buttonText, qt.QMessageBox__ActionRole)
 		buttonRefs[i] = button
 		if i == defaultButton {
 			msgBox.SetDefaultButton3(button)
@@ -158,22 +157,22 @@ func (mod *DialogShowerModule) ShowCustomDialog(title string, message string, bu
 // ShowInputDialog displays an input dialog and returns the entered text
 func (mod *DialogShowerModule) ShowInputDialog(title string, label string, defaultText string) (string, bool) {
 	ok := false
-	text := widgets.QInputDialog_GetText(mod.mainWindow, title, label, widgets.QLineEdit__Normal, defaultText, &ok, 0, 0)
+	text := qt.QInputDialog_GetText(mod.mainWindow, title, label, qt.QLineEdit__Normal, defaultText, &ok, 0, 0)
 	return text, ok
 }
 
 // ShowPasswordDialog displays a password input dialog
 func (mod *DialogShowerModule) ShowPasswordDialog(title string, label string) (string, bool) {
 	ok := false
-	text := widgets.QInputDialog_GetText(mod.mainWindow, title, label, widgets.QLineEdit__Password, "", &ok, 0, 0)
+	text := qt.QInputDialog_GetText(mod.mainWindow, title, label, qt.QLineEdit__Password, "", &ok, 0, 0)
 	return text, ok
 }
 
 // ShowProgressDialog creates and returns a progress dialog
-func (mod *DialogShowerModule) ShowProgressDialog(title string, label string, maximum int) *widgets.QProgressDialog {
-	progressDialog := widgets.NewQProgressDialog2(label, "Cancel", 0, maximum, mod.mainWindow, 0)
+func (mod *DialogShowerModule) ShowProgressDialog(title string, label string, maximum int) *qt.QProgressDialog {
+	progressDialog := qt.NewQProgressDialog2(label, "Cancel", 0, maximum, mod.mainWindow, 0)
 	progressDialog.SetWindowTitle(title)
-	progressDialog.SetWindowModality(qtcore.Qt__ApplicationModal)
+	progressDialog.SetWindowModality(qt.ApplicationModal)
 	progressDialog.SetMinimumDuration(0)
 	progressDialog.Show()
 	return progressDialog
@@ -182,25 +181,25 @@ func (mod *DialogShowerModule) ShowProgressDialog(title string, label string, ma
 // ShowFileDialog displays a file selection dialog
 func (mod *DialogShowerModule) ShowFileDialog(title string, filter string, save bool) string {
 	if save {
-		return widgets.QFileDialog_GetSaveFileName(mod.mainWindow, title, "", filter, "", 0)
+		return qt.QFileDialog_GetSaveFileName(mod.mainWindow, title, "", filter, "", 0)
 	} else {
-		return widgets.QFileDialog_GetOpenFileName(mod.mainWindow, title, "", filter, "", 0)
+		return qt.QFileDialog_GetOpenFileName(mod.mainWindow, title, "", filter, "", 0)
 	}
 }
 
 // ShowDirectoryDialog displays a directory selection dialog
 func (mod *DialogShowerModule) ShowDirectoryDialog(title string) string {
-	return widgets.QFileDialog_GetExistingDirectory(mod.mainWindow, title, "", 0)
+	return qt.QFileDialog_GetExistingDirectory(mod.mainWindow, title, "", 0)
 }
 
 // ShowAbout displays an about dialog with application information
 func (mod *DialogShowerModule) ShowAbout(title string, text string) {
-	widgets.QMessageBox_About(mod.mainWindow, title, text)
+	qt.QMessageBox_About(mod.mainWindow, title, text)
 }
 
 // ShowAboutQt displays the standard Qt about dialog
 func (mod *DialogShowerModule) ShowAboutQt() {
-	widgets.QMessageBox_AboutQt(mod.mainWindow, "Recuerdo")
+	qt.QMessageBox_AboutQt(mod.mainWindow, "Recuerdo")
 }
 
 // CloseAllDialogs closes all open message boxes
@@ -214,7 +213,7 @@ func (mod *DialogShowerModule) CloseAllDialogs() {
 }
 
 // removeMessageBox removes a message box from tracking
-func (mod *DialogShowerModule) removeMessageBox(msgBox *widgets.QMessageBox) {
+func (mod *DialogShowerModule) removeMessageBox(msgBox *qt.QMessageBox) {
 	for i, box := range mod.messageBoxes {
 		if box == msgBox {
 			// Remove from slice
@@ -233,7 +232,7 @@ func (mod *DialogShowerModule) Enable(ctx context.Context) error {
 	// Try to get the main window from the gui module
 	if mod.manager != nil {
 		if guiModule, exists := mod.manager.GetDefaultModule("ui"); exists {
-			if guiMod, ok := guiModule.(interface{ GetMainWindow() *widgets.QMainWindow }); ok {
+			if guiMod, ok := guiModule.(interface{ GetMainWindow() *qt.QMainWindow }); ok {
 				mod.mainWindow = guiMod.GetMainWindow()
 			}
 		}

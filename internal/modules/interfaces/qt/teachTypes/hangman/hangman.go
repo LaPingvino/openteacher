@@ -9,7 +9,6 @@ import (
 	"log"
 
 	"github.com/LaPingvino/recuerdo/internal/core"
-	_ "github.com/therecipe/qt/widgets"
 )
 
 // TypingTeachTypeModule is a Go port of the Python TypingTeachTypeModule class

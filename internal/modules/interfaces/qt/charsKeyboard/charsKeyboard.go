@@ -12,16 +12,16 @@ import (
 	"strings"
 
 	"github.com/LaPingvino/recuerdo/internal/core"
-	"github.com/therecipe/qt/widgets"
+	"github.com/mappu/miqt/qt"
 )
 
 // CharsKeyboardModule is a Go port of the Python CharsKeyboardModule class
 type CharsKeyboardModule struct {
 	*core.BaseModule
 	manager        *core.Manager
-	widget         *widgets.QWidget
-	charButtons    []*widgets.QPushButton
-	targetLineEdit *widgets.QLineEdit
+	widget         *qt.QWidget
+	charButtons    []*qt.QPushButton
+	targetLineEdit *qt.QLineEdit
 	currentChars   []string
 }
 
@@ -32,13 +32,13 @@ func NewCharsKeyboardModule() *CharsKeyboardModule {
 
 	return &CharsKeyboardModule{
 		BaseModule:   base,
-		charButtons:  make([]*widgets.QPushButton, 0),
+		charButtons:  make([]*qt.QPushButton, 0),
 		currentChars: make([]string, 0),
 	}
 }
 
 // GetWidget returns the main widget for this keyboard
-func (mod *CharsKeyboardModule) GetWidget() *widgets.QWidget {
+func (mod *CharsKeyboardModule) GetWidget() *qt.QWidget {
 	if mod.widget == nil {
 		mod.createWidget()
 	}
@@ -47,12 +47,12 @@ func (mod *CharsKeyboardModule) GetWidget() *widgets.QWidget {
 
 // createWidget creates the character keyboard widget
 func (mod *CharsKeyboardModule) createWidget() {
-	mod.widget = widgets.NewQWidget(nil, 0)
-	layout := widgets.NewQVBoxLayout()
+	mod.widget = qt.NewQWidget(nil, 0)
+	layout := qt.NewQVBoxLayout()
 	mod.widget.SetLayout(layout)
 
 	// Header
-	headerLabel := widgets.NewQLabel2("Special Characters", nil, 0)
+	headerLabel := qt.NewQLabel2("Special Characters", nil, 0)
 	headerFont := headerLabel.Font()
 	headerFont.SetBold(true)
 	headerLabel.SetFont(headerFont)
@@ -65,7 +65,7 @@ func (mod *CharsKeyboardModule) createWidget() {
 	mod.createCharacterSet("Spanish", []string{"á", "é", "í", "ó", "ú", "ñ", "¿", "¡"}, layout)
 
 	// Clear button
-	clearButton := widgets.NewQPushButton2("Clear", nil)
+	clearButton := qt.NewQPushButton2("Clear", nil)
 	clearButton.ConnectClicked(func(checked bool) {
 		mod.clearTarget()
 	})
@@ -73,13 +73,13 @@ func (mod *CharsKeyboardModule) createWidget() {
 }
 
 // createCharacterSet creates a set of character buttons
-func (mod *CharsKeyboardModule) createCharacterSet(setName string, chars []string, parentLayout *widgets.QVBoxLayout) {
-	groupBox := widgets.NewQGroupBox2(setName, nil)
-	layout := widgets.NewQHBoxLayout()
+func (mod *CharsKeyboardModule) createCharacterSet(setName string, chars []string, parentLayout *qt.QVBoxLayout) {
+	groupBox := qt.NewQGroupBox2(setName, nil)
+	layout := qt.NewQHBoxLayout()
 	groupBox.SetLayout(layout)
 
 	for _, char := range chars {
-		button := widgets.NewQPushButton2(char, nil)
+		button := qt.NewQPushButton2(char, nil)
 		button.SetFixedSize2(40, 40)
 		button.SetToolTip(fmt.Sprintf("Insert character: %s", char))
 
@@ -98,7 +98,7 @@ func (mod *CharsKeyboardModule) createCharacterSet(setName string, chars []strin
 }
 
 // SetTargetLineEdit sets the line edit widget that will receive the characters
-func (mod *CharsKeyboardModule) SetTargetLineEdit(lineEdit *widgets.QLineEdit) {
+func (mod *CharsKeyboardModule) SetTargetLineEdit(lineEdit *qt.QLineEdit) {
 	mod.targetLineEdit = lineEdit
 }
 
@@ -189,7 +189,7 @@ func (mod *CharsKeyboardModule) Disable(ctx context.Context) error {
 	if mod.widget != nil {
 		mod.widget.Close()
 		mod.widget = nil
-		mod.charButtons = make([]*widgets.QPushButton, 0)
+		mod.charButtons = make([]*qt.QPushButton, 0)
 	}
 
 	mod.targetLineEdit = nil

@@ -18,20 +18,18 @@ import (
 	"github.com/LaPingvino/recuerdo/internal/lesson"
 	"github.com/LaPingvino/recuerdo/internal/logging"
 	"github.com/LaPingvino/recuerdo/internal/modules/interfaces/qt/lessons/words"
-	qtcore "github.com/therecipe/qt/core"
-	"github.com/therecipe/qt/gui"
-	"github.com/therecipe/qt/widgets"
+	"github.com/mappu/miqt/qt"
 )
 
 // GuiModule is a Go port of the Python GuiModule class
 type GuiModule struct {
 	*core.BaseModule
 	manager        *core.Manager
-	mainWindow     *widgets.QMainWindow
-	app            *widgets.QApplication
-	menuBar        *widgets.QMenuBar
-	statusBar      *widgets.QStatusBar
-	tabWidget      *widgets.QTabWidget
+	mainWindow     *qt.QMainWindow
+	app            *qt.QApplication
+	menuBar        *qt.QMenuBar
+	statusBar      *qt.QStatusBar
+	tabWidget      *qt.QTabWidget
 	lastLoadedFile string
 	lastLoadTime   int64
 	logger         *logging.Logger
@@ -65,7 +63,7 @@ func (mod *GuiModule) Enable(ctx context.Context) error {
 	}
 
 	// Access the QApplication through interface
-	if qtMod, ok := qtAppModule.(interface{ GetApplication() *widgets.QApplication }); ok {
+	if qtMod, ok := qtAppModule.(interface{ GetApplication() *qt.QApplication }); ok {
 		mod.app = qtMod.GetApplication()
 		mod.logger.Success("Got QApplication from qtApp module")
 	} else {
@@ -74,7 +72,7 @@ func (mod *GuiModule) Enable(ctx context.Context) error {
 	}
 
 	// Create main window
-	mod.mainWindow = widgets.NewQMainWindow(nil, 0)
+	mod.mainWindow = qt.NewQMainWindow(nil, 0)
 	mod.mainWindow.SetWindowTitle("OpenTeacher 4.0")
 	mod.mainWindow.Resize2(1000, 700)
 	mod.mainWindow.SetMinimumSize2(800, 600)
@@ -87,11 +85,11 @@ func (mod *GuiModule) Enable(ctx context.Context) error {
 	mod.statusBar.ShowMessage("Ready", 0)
 
 	// Create central widget with basic layout
-	centralWidget := widgets.NewQWidget(nil, 0)
+	centralWidget := qt.NewQWidget(nil, 0)
 	mod.mainWindow.SetCentralWidget(centralWidget)
 
 	// Create main layout
-	mainLayout := widgets.NewQVBoxLayout()
+	mainLayout := qt.NewQVBoxLayout()
 	centralWidget.SetLayout(mainLayout)
 
 	// Add welcome area
@@ -193,7 +191,7 @@ func (mod *GuiModule) ShowMainWindow() {
 }
 
 // GetMainWindow returns the main window widget
-func (mod *GuiModule) GetMainWindow() *widgets.QMainWindow {
+func (mod *GuiModule) GetMainWindow() *qt.QMainWindow {
 	return mod.mainWindow
 }
 
@@ -217,14 +215,14 @@ func (mod *GuiModule) createMenuBar() {
 	fileMenu := mod.menuBar.AddMenu2("&File")
 
 	newAction := fileMenu.AddAction("&New Lesson...")
-	newAction.SetShortcut(gui.NewQKeySequence2("Ctrl+N", gui.QKeySequence__NativeText))
+	newAction.SetShortcut(qt.NewQKeySequence2("Ctrl+N", qt.QKeySequence__NativeText))
 	newAction.ConnectTriggered(func(checked bool) {
 		mod.logger.Event("New Lesson menu action triggered")
 		mod.showNewLessonDialog()
 	})
 
 	openAction := fileMenu.AddAction("&Open...")
-	openAction.SetShortcut(gui.NewQKeySequence2("Ctrl+O", gui.QKeySequence__NativeText))
+	openAction.SetShortcut(qt.NewQKeySequence2("Ctrl+O", qt.QKeySequence__NativeText))
 	openAction.ConnectTriggered(func(checked bool) {
 		mod.logger.Event("Open Lesson menu action triggered")
 		mod.showOpenDialogFrom("MENU")
@@ -233,17 +231,17 @@ func (mod *GuiModule) createMenuBar() {
 	fileMenu.AddSeparator()
 
 	saveAction := fileMenu.AddAction("&Save")
-	saveAction.SetShortcut(gui.NewQKeySequence2("Ctrl+S", gui.QKeySequence__NativeText))
+	saveAction.SetShortcut(qt.NewQKeySequence2("Ctrl+S", qt.QKeySequence__NativeText))
 	saveAction.SetEnabled(false) // Enable when lesson is loaded
 
 	saveAsAction := fileMenu.AddAction("Save &As...")
-	saveAsAction.SetShortcut(gui.NewQKeySequence2("Ctrl+Shift+S", gui.QKeySequence__NativeText))
+	saveAsAction.SetShortcut(qt.NewQKeySequence2("Ctrl+Shift+S", qt.QKeySequence__NativeText))
 	saveAsAction.SetEnabled(false)
 
 	fileMenu.AddSeparator()
 
 	exitAction := fileMenu.AddAction("E&xit")
-	exitAction.SetShortcut(gui.NewQKeySequence2("Ctrl+Q", gui.QKeySequence__NativeText))
+	exitAction.SetShortcut(qt.NewQKeySequence2("Ctrl+Q", qt.QKeySequence__NativeText))
 	exitAction.ConnectTriggered(func(checked bool) {
 		mod.logger.Event("Exit menu action triggered")
 		mod.mainWindow.Close()
@@ -278,43 +276,43 @@ func (mod *GuiModule) createMenuBar() {
 }
 
 // createWelcomeWidget creates the main welcome widget
-func (mod *GuiModule) createWelcomeWidget() *widgets.QWidget {
-	widget := widgets.NewQWidget(nil, 0)
-	layout := widgets.NewQVBoxLayout()
+func (mod *GuiModule) createWelcomeWidget() *qt.QWidget {
+	widget := qt.NewQWidget(nil, 0)
+	layout := qt.NewQVBoxLayout()
 	widget.SetLayout(layout)
 
 	// Add some spacing
 	layout.AddStretch(1)
 
 	// Main title
-	titleLabel := widgets.NewQLabel2("Welcome to OpenTeacher 4.0!", nil, 0)
+	titleLabel := qt.NewQLabel2("Welcome to OpenTeacher 4.0!", nil, 0)
 	titleFont := titleLabel.Font()
 	titleFont.SetPointSize(24)
 	titleFont.SetBold(true)
 	titleLabel.SetFont(titleFont)
-	titleLabel.SetAlignment(qtcore.Qt__AlignHCenter)
+	titleLabel.SetAlignment(qt.AlignHCenter)
 	layout.AddWidget(titleLabel, 0, 0)
 
 	// Subtitle
-	subtitleLabel := widgets.NewQLabel2("Learn whatever you want to learn", nil, 0)
+	subtitleLabel := qt.NewQLabel2("Learn whatever you want to learn", nil, 0)
 	subtitleFont := subtitleLabel.Font()
 	subtitleFont.SetPointSize(14)
 	subtitleLabel.SetFont(subtitleFont)
-	subtitleLabel.SetAlignment(qtcore.Qt__AlignHCenter)
+	subtitleLabel.SetAlignment(qt.AlignHCenter)
 	layout.AddWidget(subtitleLabel, 0, 0)
 
 	// Add some spacing
 	layout.AddSpacing(40)
 
 	// Quick action buttons
-	buttonsWidget := widgets.NewQWidget(nil, 0)
-	buttonsLayout := widgets.NewQHBoxLayout()
+	buttonsWidget := qt.NewQWidget(nil, 0)
+	buttonsLayout := qt.NewQHBoxLayout()
 	buttonsWidget.SetLayout(buttonsLayout)
 
 	buttonsLayout.AddStretch(1)
 
 	// New lesson button
-	newLessonBtn := widgets.NewQPushButton2("Create New Lesson", nil)
+	newLessonBtn := qt.NewQPushButton2("Create New Lesson", nil)
 	newLessonBtn.SetFixedSize2(200, 50)
 	newLessonBtn.ConnectClicked(func(checked bool) {
 		mod.logger.Event("Create New Lesson button clicked")
@@ -325,7 +323,7 @@ func (mod *GuiModule) createWelcomeWidget() *widgets.QWidget {
 	buttonsLayout.AddSpacing(20)
 
 	// Open lesson button
-	openLessonBtn := widgets.NewQPushButton2("Open Lesson", nil)
+	openLessonBtn := qt.NewQPushButton2("Open Lesson", nil)
 	openLessonBtn.SetFixedSize2(200, 50)
 	openLessonBtn.ConnectClicked(func(checked bool) {
 		mod.logger.Event("Open Lesson button clicked")
@@ -338,8 +336,8 @@ func (mod *GuiModule) createWelcomeWidget() *widgets.QWidget {
 	layout.AddWidget(buttonsWidget, 0, 0)
 
 	// Status info
-	statusLabel := widgets.NewQLabel2("Module system initialized successfully", nil, 0)
-	statusLabel.SetAlignment(qtcore.Qt__AlignHCenter)
+	statusLabel := qt.NewQLabel2("Module system initialized successfully", nil, 0)
+	statusLabel.SetAlignment(qt.AlignHCenter)
 	statusLabel.SetStyleSheet("color: green; font-style: italic;")
 	layout.AddWidget(statusLabel, 0, 0)
 
@@ -444,7 +442,7 @@ func (mod *GuiModule) loadSelectedFile(fileName string) {
 	mod.logger.Action("loadSelectedFile() - loading file: %s", fileName)
 
 	// Prevent duplicate loading of the same file within 2 seconds
-	currentTime := qtcore.QDateTime_CurrentMSecsSinceEpoch()
+	currentTime := qt.QDateTime_CurrentMSecsSinceEpoch()
 	if mod.lastLoadedFile == fileName && (currentTime-mod.lastLoadTime) < 2000 {
 		mod.logger.Warning("Ignoring duplicate load request for: %s (double-click protection)", fileName)
 		return
@@ -577,7 +575,7 @@ func (mod *GuiModule) displayLessonInTab(lesson *lesson.Lesson) {
 
 	// Create tab widget if it doesn't exist
 	if mod.tabWidget == nil {
-		mod.tabWidget = widgets.NewQTabWidget(mod.mainWindow)
+		mod.tabWidget = qt.NewQTabWidget(mod.mainWindow)
 		mod.mainWindow.SetCentralWidget(mod.tabWidget)
 		mod.logger.Success("Created central tab widget")
 	} else {
@@ -609,7 +607,7 @@ func (mod *GuiModule) displayLessonInTab(lesson *lesson.Lesson) {
 }
 
 // createLessonWidget creates a widget to display lesson content
-func (mod *GuiModule) createLessonWidget(lesson *lesson.Lesson) *widgets.QWidget {
+func (mod *GuiModule) createLessonWidget(lesson *lesson.Lesson) *qt.QWidget {
 	// Create the new lesson widget with Enter/Teach/Results tabs
 	lessonWidget := words.NewWordsLessonWidget(lesson, mod.mainWindow)
 
@@ -645,7 +643,7 @@ func (mod *GuiModule) showPropertiesDialog() {
 
 	// Cast to the interface we need
 	if dialogMod, ok := lessonDialogModules[0].(interface {
-		ShowPropertiesDialog(*widgets.QWidget, map[string]interface{}) map[string]interface{}
+		ShowPropertiesDialog(*qt.QWidget, map[string]interface{}) map[string]interface{}
 	}); ok {
 		mod.logger.Success("Calling ShowPropertiesDialog() on lessonDialogs module")
 

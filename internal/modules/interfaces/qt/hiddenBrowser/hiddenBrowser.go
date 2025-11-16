@@ -11,15 +11,14 @@ import (
 	"fmt"
 
 	"github.com/LaPingvino/recuerdo/internal/core"
-	"github.com/LaPingvino/recuerdo/internal/core/qtutil"
-	"github.com/therecipe/qt/widgets"
+	"github.com/mappu/miqt/qt"
 )
 
 // HiddenBrowserModule is a Go port of the Python HiddenBrowserModule class
 type HiddenBrowserModule struct {
 	*core.BaseModule
 	manager    *core.Manager
-	webView    *widgets.QWidget
+	webView    *qt.QWidget
 	isLoading  bool
 	currentUrl string
 }
@@ -42,7 +41,7 @@ func (mod *HiddenBrowserModule) LoadUrl(url string) {
 
 	// Create a minimal web view widget if not exists
 	if mod.webView == nil {
-		mod.webView = widgets.NewQWidget(nil, 0)
+		mod.webView = qt.NewQWidget(nil, 0)
 		mod.webView.SetVisible(false) // Keep it hidden
 	}
 
@@ -91,7 +90,7 @@ func (mod *HiddenBrowserModule) Enable(ctx context.Context) error {
 	}
 
 	// Initialize the hidden web view
-	mod.webView = widgets.NewQWidget(nil, 0)
+	mod.webView = qt.NewQWidget(nil, 0)
 	mod.webView.SetVisible(false)
 
 	fmt.Println("HiddenBrowserModule enabled")

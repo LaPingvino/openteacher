@@ -7,7 +7,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/LaPingvino/recuerdo/internal/core"
-	_ "github.com/therecipe/qt/widgets"
 )
 
 // RepeatAnswerTeachTypeModule is a Go port of the Python RepeatAnswerTeachTypeModule class

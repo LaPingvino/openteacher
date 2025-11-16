@@ -6,15 +6,13 @@ import (
 	"strings"
 
 	"github.com/LaPingvino/recuerdo/internal/logging"
-	"github.com/therecipe/qt/core"
-	"github.com/therecipe/qt/gui"
-	"github.com/therecipe/qt/widgets"
+	"github.com/mappu/miqt/qt"
 )
 
 // EnhancedLineEdit is a QLineEdit that handles keyboard input properly
 // by intercepting key events and processing dead keys manually
 type EnhancedLineEdit struct {
-	*widgets.QLineEdit
+	*qt.QLineEdit
 	logger          *logging.Logger
 	deadKeyState    rune
 	keyboardLayout  string
@@ -24,9 +22,9 @@ type EnhancedLineEdit struct {
 }
 
 // NewEnhancedLineEdit creates a new enhanced line edit with proper keyboard handling
-func NewEnhancedLineEdit(parent widgets.QWidget_ITF) *EnhancedLineEdit {
+func NewEnhancedLineEdit(parent qt.QWidget_ITF) *EnhancedLineEdit {
 	edit := &EnhancedLineEdit{
-		QLineEdit:       widgets.NewQLineEdit(parent),
+		QLineEdit:       qt.NewQLineEdit(parent),
 		logger:          logging.NewLogger("EnhancedLineEdit"),
 		deadKeyMappings: make(map[rune]map[rune]rune),
 		altgrMappings:   make(map[int]rune),
@@ -131,7 +129,7 @@ func (e *EnhancedLineEdit) connectKeyEventHandler() {
 }
 
 // handleKeyPress processes key press events with dead key support
-func (e *EnhancedLineEdit) handleKeyPress(event *gui.QKeyEvent) {
+func (e *EnhancedLineEdit) handleKeyPress(event *qt.QKeyEvent) {
 	key := event.Key()
 	modifiers := event.Modifiers()
 	text := event.Text()

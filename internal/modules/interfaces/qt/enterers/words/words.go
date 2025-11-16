@@ -12,9 +12,7 @@ import (
 	"strings"
 
 	"github.com/LaPingvino/recuerdo/internal/core"
-	"github.com/LaPingvino/recuerdo/internal/core/qtutil"
-	"github.com/therecipe/qt/core"
-	"github.com/therecipe/qt/widgets"
+	"github.com/mappu/miqt/qt"
 )
 
 // WordPair represents a question/answer pair
@@ -28,11 +26,11 @@ type WordPair struct {
 type WordsEntererModule struct {
 	*core.BaseModule
 	manager     *core.Manager
-	widget      *widgets.QWidget
-	tableView   *widgets.QTableWidget
-	addButton   *widgets.QPushButton
-	delButton   *widgets.QPushButton
-	clearButton *widgets.QPushButton
+	widget      *qt.QWidget
+	tableView   *qt.QTableWidget
+	addButton   *qt.QPushButton
+	delButton   *qt.QPushButton
+	clearButton *qt.QPushButton
 	wordPairs   []WordPair
 }
 
@@ -48,7 +46,7 @@ func NewWordsEntererModule() *WordsEntererModule {
 }
 
 // GetWidget returns the main widget for this enterer
-func (mod *WordsEntererModule) GetWidget() *widgets.QWidget {
+func (mod *WordsEntererModule) GetWidget() *qt.QWidget {
 	if mod.widget == nil {
 		mod.createWidget()
 	}
@@ -57,12 +55,12 @@ func (mod *WordsEntererModule) GetWidget() *widgets.QWidget {
 
 // createWidget creates the main word enterer widget
 func (mod *WordsEntererModule) createWidget() {
-	mod.widget = widgets.NewQWidget(nil, 0)
-	layout := widgets.NewQVBoxLayout()
+	mod.widget = qt.NewQWidget(nil, 0)
+	layout := qt.NewQVBoxLayout()
 	mod.widget.SetLayout(layout)
 
 	// Header
-	headerLabel := widgets.NewQLabel2("Word List Editor", nil, 0)
+	headerLabel := qt.NewQLabel2("Word List Editor", nil, 0)
 	headerFont := headerLabel.Font()
 	headerFont.SetBold(true)
 	headerFont.SetPointSize(14)
@@ -70,12 +68,12 @@ func (mod *WordsEntererModule) createWidget() {
 	layout.AddWidget(headerLabel, 0, 0)
 
 	// Instructions
-	instructionsLabel := widgets.NewQLabel2("Enter word pairs below. Click 'Add Row' to add new pairs.", nil, 0)
+	instructionsLabel := qt.NewQLabel2("Enter word pairs below. Click 'Add Row' to add new pairs.", nil, 0)
 	instructionsLabel.SetWordWrap(true)
 	layout.AddWidget(instructionsLabel, 0, 0)
 
 	// Table widget
-	mod.tableView = widgets.NewQTableWidget3(0, 3, nil)
+	mod.tableView = qt.NewQTableWidget3(0, 3, nil)
 	mod.tableView.SetHorizontalHeaderLabels([]string{"Question", "Answer", "Comment"})
 
 	// Set column widths
@@ -88,26 +86,26 @@ func (mod *WordsEntererModule) createWidget() {
 	// Enable sorting
 	mod.tableView.SetSortingEnabled(true)
 	mod.tableView.SetAlternatingRowColors(true)
-	mod.tableView.SetSelectionBehavior(widgets.QAbstractItemView__SelectRows)
+	mod.tableView.SetSelectionBehavior(qt.QAbstractItemView__SelectRows)
 
 	layout.AddWidget(mod.tableView, 1, 0)
 
 	// Button layout
-	buttonLayout := widgets.NewQHBoxLayout()
+	buttonLayout := qt.NewQHBoxLayout()
 
-	mod.addButton = widgets.NewQPushButton2("Add Row", nil)
+	mod.addButton = qt.NewQPushButton2("Add Row", nil)
 	mod.addButton.ConnectClicked(func(checked bool) {
 		mod.addWordPair()
 	})
 	buttonLayout.AddWidget(mod.addButton, 0, 0)
 
-	mod.delButton = widgets.NewQPushButton2("Delete Selected", nil)
+	mod.delButton = qt.NewQPushButton2("Delete Selected", nil)
 	mod.delButton.ConnectClicked(func(checked bool) {
 		mod.deleteSelectedRows()
 	})
 	buttonLayout.AddWidget(mod.delButton, 0, 0)
 
-	mod.clearButton = widgets.NewQPushButton2("Clear All", nil)
+	mod.clearButton = qt.NewQPushButton2("Clear All", nil)
 	mod.clearButton.ConnectClicked(func(checked bool) {
 		mod.clearAllRows()
 	})
@@ -116,13 +114,13 @@ func (mod *WordsEntererModule) createWidget() {
 	buttonLayout.AddStretch(1)
 
 	// Import/Export buttons
-	importButton := widgets.NewQPushButton2("Import from Text", nil)
+	importButton := qt.NewQPushButton2("Import from Text", nil)
 	importButton.ConnectClicked(func(checked bool) {
 		mod.showImportDialog()
 	})
 	buttonLayout.AddWidget(importButton, 0, 0)
 
-	exportButton := widgets.NewQPushButton2("Export to Text", nil)
+	exportButton := qt.NewQPushButton2("Export to Text", nil)
 	exportButton.ConnectClicked(func(checked bool) {
 		mod.showExportDialog()
 	})
@@ -151,9 +149,9 @@ func (mod *WordsEntererModule) addWordPair() {
 	mod.tableView.InsertRow(row)
 
 	// Create editable items
-	questionItem := widgets.NewQTableWidgetItem2("", 0)
-	answerItem := widgets.NewQTableWidgetItem2("", 0)
-	commentItem := widgets.NewQTableWidgetItem2("", 0)
+	questionItem := qt.NewQTableWidgetItem2("", 0)
+	answerItem := qt.NewQTableWidgetItem2("", 0)
+	commentItem := qt.NewQTableWidgetItem2("", 0)
 
 	mod.tableView.SetItem(row, 0, questionItem)
 	mod.tableView.SetItem(row, 1, answerItem)
@@ -222,13 +220,13 @@ func (mod *WordsEntererModule) clearAllRows() {
 	}
 
 	// Ask for confirmation
-	reply := widgets.QMessageBox_Question(mod.widget,
+	reply := qt.QMessageBox_Question(mod.widget,
 		"Clear All",
 		"Are you sure you want to clear all word pairs?",
-		widgets.QMessageBox__Yes|widgets.QMessageBox__No,
-		widgets.QMessageBox__No)
+		qt.QMessageBox__Yes|qt.QMessageBox__No,
+		qt.QMessageBox__No)
 
-	if reply == widgets.QMessageBox__Yes {
+	if reply == qt.QMessageBox__Yes {
 		mod.tableView.SetRowCount(0)
 		mod.wordPairs = make([]WordPair, 0)
 
@@ -256,29 +254,29 @@ func (mod *WordsEntererModule) updateWordPairFromTable(row int) {
 
 // showImportDialog shows a dialog for importing word pairs from text
 func (mod *WordsEntererModule) showImportDialog() {
-	dialog := widgets.NewQDialog(mod.widget, 0)
+	dialog := qt.NewQDialog(mod.widget, 0)
 	dialog.SetWindowTitle("Import Word Pairs")
 	dialog.SetFixedSize2(500, 400)
 	dialog.SetWindowModality(core.Qt__ApplicationModal)
 
-	layout := widgets.NewQVBoxLayout()
+	layout := qt.NewQVBoxLayout()
 	dialog.SetLayout(layout)
 
 	// Instructions
-	instructLabel := widgets.NewQLabel2("Enter word pairs, one per line, separated by tabs or commas:", nil, 0)
+	instructLabel := qt.NewQLabel2("Enter word pairs, one per line, separated by tabs or commas:", nil, 0)
 	layout.AddWidget(instructLabel, 0, 0)
 
 	// Text area
-	textEdit := widgets.NewQTextEdit(nil)
+	textEdit := qt.NewQTextEdit(nil)
 	textEdit.SetPlaceholderText("hello\tworld\tgreeting\ngoodbye\tauf wiedersehen\tparting")
 	layout.AddWidget(textEdit, 1, 0)
 
 	// Separator options
-	sepLayout := widgets.NewQHBoxLayout()
-	sepLabel := widgets.NewQLabel2("Separator:", nil, 0)
+	sepLayout := qt.NewQHBoxLayout()
+	sepLabel := qt.NewQLabel2("Separator:", nil, 0)
 	sepLayout.AddWidget(sepLabel, 0, 0)
 
-	sepCombo := widgets.NewQComboBox(nil)
+	sepCombo := qt.NewQComboBox(nil)
 	sepCombo.AddItems([]string{"Tab", "Comma", "Semicolon", "Pipe (|)"})
 	sepLayout.AddWidget(sepCombo, 0, 0)
 
@@ -286,8 +284,8 @@ func (mod *WordsEntererModule) showImportDialog() {
 	layout.AddLayout(sepLayout, 0)
 
 	// Buttons
-	buttonBox := widgets.NewQDialogButtonBox3(
-		widgets.QDialogButtonBox__Ok|widgets.QDialogButtonBox__Cancel,
+	buttonBox := qt.NewQDialogButtonBox3(
+		qt.QDialogButtonBox__Ok|qt.QDialogButtonBox__Cancel,
 		nil)
 	layout.AddWidget(buttonBox, 0, 0)
 
@@ -311,24 +309,24 @@ func (mod *WordsEntererModule) showExportDialog() {
 	mod.updateAllWordPairsFromTable()
 
 	if len(mod.wordPairs) == 0 {
-		widgets.QMessageBox_Information(mod.widget, "Export", "No word pairs to export.", widgets.QMessageBox__Ok, widgets.QMessageBox__Ok)
+		qt.QMessageBox_Information(mod.widget, "Export", "No word pairs to export.", qt.QMessageBox__Ok, qt.QMessageBox__Ok)
 		return
 	}
 
-	dialog := widgets.NewQDialog(mod.widget, 0)
+	dialog := qt.NewQDialog(mod.widget, 0)
 	dialog.SetWindowTitle("Export Word Pairs")
 	dialog.SetFixedSize2(500, 400)
 	dialog.SetWindowModality(core.Qt__ApplicationModal)
 
-	layout := widgets.NewQVBoxLayout()
+	layout := qt.NewQVBoxLayout()
 	dialog.SetLayout(layout)
 
 	// Instructions
-	instructLabel := widgets.NewQLabel2("Word pairs exported as text:", nil, 0)
+	instructLabel := qt.NewQLabel2("Word pairs exported as text:", nil, 0)
 	layout.AddWidget(instructLabel, 0, 0)
 
 	// Text area
-	textEdit := widgets.NewQTextEdit(nil)
+	textEdit := qt.NewQTextEdit(nil)
 	textEdit.SetReadOnly(true)
 
 	// Generate export text
@@ -346,19 +344,19 @@ func (mod *WordsEntererModule) showExportDialog() {
 	layout.AddWidget(textEdit, 1, 0)
 
 	// Buttons
-	buttonBox := widgets.NewQDialogButtonBox3(
-		widgets.QDialogButtonBox__Close,
+	buttonBox := qt.NewQDialogButtonBox3(
+		qt.QDialogButtonBox__Close,
 		nil)
 	layout.AddWidget(buttonBox, 0, 0)
 
 	// Add copy button
-	copyButton := widgets.NewQPushButton2("Copy to Clipboard", nil)
+	copyButton := qt.NewQPushButton2("Copy to Clipboard", nil)
 	copyButton.ConnectClicked(func(checked bool) {
-		clipboard := widgets.QApplication_Clipboard()
-		clipboard.SetText(exportText, widgets.QClipboard__Clipboard)
-		widgets.QMessageBox_Information(dialog, "Copied", "Text copied to clipboard!", widgets.QMessageBox__Ok, widgets.QMessageBox__Ok)
+		clipboard := qt.QApplication_Clipboard()
+		clipboard.SetText(exportText, qt.QClipboard__Clipboard)
+		qt.QMessageBox_Information(dialog, "Copied", "Text copied to clipboard!", qt.QMessageBox__Ok, qt.QMessageBox__Ok)
 	})
-	buttonBox.AddButton(copyButton, widgets.QDialogButtonBox__ActionRole)
+	buttonBox.AddButton(copyButton, qt.QDialogButtonBox__ActionRole)
 
 	buttonBox.ConnectRejected(func() {
 		dialog.Close()
@@ -413,9 +411,9 @@ func (mod *WordsEntererModule) importFromText(text string, separatorType string)
 		row := mod.tableView.RowCount()
 		mod.tableView.InsertRow(row)
 
-		questionItem := widgets.NewQTableWidgetItem2(pair.Question, 0)
-		answerItem := widgets.NewQTableWidgetItem2(pair.Answer, 0)
-		commentItem := widgets.NewQTableWidgetItem2(pair.Comment, 0)
+		questionItem := qt.NewQTableWidgetItem2(pair.Question, 0)
+		answerItem := qt.NewQTableWidgetItem2(pair.Answer, 0)
+		commentItem := qt.NewQTableWidgetItem2(pair.Comment, 0)
 
 		mod.tableView.SetItem(row, 0, questionItem)
 		mod.tableView.SetItem(row, 1, answerItem)
@@ -464,9 +462,9 @@ func (mod *WordsEntererModule) SetWordPairs(pairs []WordPair) {
 		row := mod.tableView.RowCount()
 		mod.tableView.InsertRow(row)
 
-		questionItem := widgets.NewQTableWidgetItem2(pair.Question, 0)
-		answerItem := widgets.NewQTableWidgetItem2(pair.Answer, 0)
-		commentItem := widgets.NewQTableWidgetItem2(pair.Comment, 0)
+		questionItem := qt.NewQTableWidgetItem2(pair.Question, 0)
+		answerItem := qt.NewQTableWidgetItem2(pair.Answer, 0)
+		commentItem := qt.NewQTableWidgetItem2(pair.Comment, 0)
 
 		mod.tableView.SetItem(row, 0, questionItem)
 		mod.tableView.SetItem(row, 1, answerItem)
