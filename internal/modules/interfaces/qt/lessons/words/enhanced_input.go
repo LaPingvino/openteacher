@@ -84,16 +84,16 @@ func (e *EnhancedLineEdit) initializeKeyboardMappings() {
 
 	// Initialize AltGr mappings (common ones)
 	e.altgrMappings = map[int]rune{
-		core.Qt__Key_2:     '@',  // AltGr + 2 = @
-		core.Qt__Key_3:     '#',  // AltGr + 3 = #
-		core.Qt__Key_4:     '€',  // AltGr + 4 = € (Euro)
-		core.Qt__Key_5:     '£',  // AltGr + 5 = £ (Pound)
-		core.Qt__Key_7:     '{',  // AltGr + 7 = {
-		core.Qt__Key_8:     '[',  // AltGr + 8 = [
-		core.Qt__Key_9:     ']',  // AltGr + 9 = ]
-		core.Qt__Key_0:     '}',  // AltGr + 0 = }
-		core.Qt__Key_Minus: '\\', // AltGr + - = \
-		core.Qt__Key_Equal: '|',  // AltGr + = = |
+		int(core.Qt__Key_2):     '@',  // AltGr + 2 = @
+		int(core.Qt__Key_3):     '#',  // AltGr + 3 = #
+		int(core.Qt__Key_4):     '€',  // AltGr + 4 = € (Euro)
+		int(core.Qt__Key_5):     '£',  // AltGr + 5 = £ (Pound)
+		int(core.Qt__Key_7):     '{',  // AltGr + 7 = {
+		int(core.Qt__Key_8):     '[',  // AltGr + 8 = [
+		int(core.Qt__Key_9):     ']',  // AltGr + 9 = ]
+		int(core.Qt__Key_0):     '}',  // AltGr + 0 = }
+		int(core.Qt__Key_Minus): '\\', // AltGr + - = \
+		int(core.Qt__Key_Equal): '|',  // AltGr + = = |
 	}
 
 	e.logger.Debug("Initialized keyboard mappings for layout: %s", e.keyboardLayout)
@@ -193,10 +193,10 @@ func (e *EnhancedLineEdit) handleKeyPress(event *gui.QKeyEvent) {
 
 	// Handle special keys
 	switch key {
-	case core.Qt__Key_Backspace:
+	case int(core.Qt__Key_Backspace):
 		e.deadKeyState = 0 // Reset dead key on backspace
 		e.QLineEdit.KeyPressEventDefault(event)
-	case core.Qt__Key_Escape, core.Qt__Key_Tab, core.Qt__Key_Return, core.Qt__Key_Enter:
+	case int(core.Qt__Key_Escape), int(core.Qt__Key_Tab), int(core.Qt__Key_Return), int(core.Qt__Key_Enter):
 		e.deadKeyState = 0 // Reset dead key on navigation
 		e.QLineEdit.KeyPressEventDefault(event)
 	default:

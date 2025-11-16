@@ -67,8 +67,8 @@ __pycache__/
 *.so
 
 # Project-specific exclusions
-recuerdo
-qtbox
+/recuerdo
+/qtbox
 test-*
 *_test_output
 sample_*.json
