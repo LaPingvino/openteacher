@@ -31,7 +31,7 @@ func NewFileDialogModule() *FileDialogModule {
 	return &FileDialogModule{
 		BaseModule: base,
 		lastDir:    "",
-		fileFilter: "All Files (*.*)",
+		fileFilter: "All Lesson Files (*.ot *.otwd *.csv *.tsv *.txt *.json *.kvtml *.anki *.anki2 *.apkg *.xml *.kgm *.ottp *.otmd);;OpenTeacher Files (*.ot *.otwd *.ottp *.otmd);;Text & CSV Files (*.txt *.csv *.tsv *.json);;Anki Files (*.anki *.anki2 *.apkg);;KDE/Educational Files (*.kvtml *.kgm);;Vocabulary Trainers (*.voc *.fq *.fmd *.dkf *.jml *.jvlt *.stp *.db);;Language Learning Apps (*.oh *.ohw *.oh4 *.ovr *.pau *.t2k *.vok2 *.wdl *.vtl3 *.wrts);;Other Formats (*.backpack *.wcu *.xml);;All Files (*.*)",
 	}
 }
 
@@ -144,9 +144,15 @@ func (mod *FileDialogModule) SetDefaultFilter(filter string) {
 // GetSupportedFormats returns supported file formats
 func (mod *FileDialogModule) GetSupportedFormats() map[string]string {
 	return map[string]string{
-		"Recuerdo/OpenTeacher Files": "*.ot",
-		"Text Files":                 "*.txt",
-		"All Files":                  "*.*",
+		"All Lesson Files":       "*.ot *.otwd *.csv *.tsv *.txt *.json *.kvtml *.anki *.anki2 *.apkg *.xml *.kgm *.ottp *.otmd",
+		"OpenTeacher Files":      "*.ot *.otwd *.ottp *.otmd",
+		"Text & CSV Files":       "*.txt *.csv *.tsv *.json",
+		"Anki Files":             "*.anki *.anki2 *.apkg",
+		"KDE/Educational Files":  "*.kvtml *.kgm",
+		"Vocabulary Trainers":    "*.voc *.fq *.fmd *.dkf *.jml *.jvlt *.stp *.db",
+		"Language Learning Apps": "*.oh *.ohw *.oh4 *.ovr *.pau *.t2k *.vok2 *.wdl *.vtl3 *.wrts",
+		"Other Formats":          "*.backpack *.wcu *.xml",
+		"All Files":              "*.*",
 	}
 }
 

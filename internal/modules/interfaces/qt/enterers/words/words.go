@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/LaPingvino/recuerdo/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core/qtutil"
 	"github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/widgets"
 )

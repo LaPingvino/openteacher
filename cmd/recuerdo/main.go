@@ -2,11 +2,14 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
+	"time"
 
 	"github.com/LaPingvino/recuerdo/internal/core"
 	"github.com/LaPingvino/recuerdo/internal/modules"
@@ -220,7 +223,48 @@ const (
 	appVersion = "4.0.0-alpha"
 )
 
+// Command-line arguments
+var (
+	commands = flag.String("commands", "", "Comma-separated list of commands to execute (e.g., 'show-properties,show-settings')")
+	listCmds = flag.Bool("list-commands", false, "List available commands and exit")
+	helpFlag = flag.Bool("help", false, "Show help message")
+)
+
 func main() {
+	// Parse command-line arguments
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, "%s %s - Language Learning Application\n\n", appName, appVersion)
+		fmt.Fprintf(os.Stderr, "Usage:\n")
+		fmt.Fprintf(os.Stderr, "  %s [options] [lesson-file]\n\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Examples:\n")
+		fmt.Fprintf(os.Stderr, "  %s                              # Start normally\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "  %s lesson.ot                    # Load lesson file\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "  %s --commands=show-properties   # Execute command\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "  %s lesson.ot --commands=show-properties  # Load file and show properties\n\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Options:\n")
+		flag.PrintDefaults()
+	}
+
+	flag.Parse()
+
+	// Handle help flag first
+	if *helpFlag {
+		flag.Usage()
+		return
+	}
+
+	// Handle list commands
+	if *listCmds {
+		listAvailableCommands()
+		return
+	}
+
+	// Get lesson file from positional argument
+	var lessonFile string
+	if flag.NArg() > 0 {
+		lessonFile = flag.Arg(0)
+	}
+
 	// Setup logging
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
@@ -261,7 +305,7 @@ func main() {
 	fmt.Println("All modules enabled successfully")
 
 	// Start the main application
-	if err := runApplication(ctx, manager); err != nil {
+	if err := runApplication(ctx, manager, lessonFile, *commands); err != nil {
 		log.Fatalf("Application error: %v", err)
 	}
 
@@ -1772,7 +1816,7 @@ func registerAllModules(manager *core.Manager) error {
 	return nil
 }
 
-func runApplication(ctx context.Context, manager *core.Manager) error {
+func runApplication(ctx context.Context, manager *core.Manager, lessonFile, commands string) error {
 	// Get the GUI module and show the main window
 	guiModule, exists := manager.GetDefaultModule("ui")
 	if exists {
@@ -1781,6 +1825,24 @@ func runApplication(ctx context.Context, manager *core.Manager) error {
 		// Show the main window
 		if guiMod, ok := guiModule.(interface{ ShowMainWindow() }); ok {
 			guiMod.ShowMainWindow()
+
+			// Load lesson file if specified
+			if lessonFile != "" {
+				fmt.Printf("Loading lesson file: %s\n", lessonFile)
+				if err := loadLessonFile(manager, lessonFile); err != nil {
+					fmt.Printf("Error loading lesson file: %v\n", err)
+				}
+			}
+
+			// Execute commands if specified
+			if commands != "" {
+				fmt.Printf("Executing commands: %s\n", commands)
+				go func() {
+					// Wait a bit for GUI to fully initialize
+					time.Sleep(1 * time.Second)
+					executeCommands(manager, commands)
+				}()
+			}
 		} else {
 			fmt.Println("Warning: GUI module does not support ShowMainWindow()")
 		}
@@ -1830,4 +1892,125 @@ func runApplication(ctx context.Context, manager *core.Manager) error {
 	}
 
 	return nil
+}
+
+// listAvailableCommands lists all available commands
+func listAvailableCommands() {
+	fmt.Println("Available Commands:")
+	fmt.Println("  show-properties   - Show lesson properties dialog")
+	fmt.Println("  show-settings     - Show application settings dialog")
+	fmt.Println("  show-about        - Show about dialog")
+	fmt.Println("  new-lesson        - Create a new lesson")
+	fmt.Println("  open-file         - Show open file dialog")
+	fmt.Println("  exit              - Exit the application")
+	fmt.Println()
+	fmt.Println("Example usage:")
+	fmt.Println("  ./recuerdo sample.ot --commands=show-properties")
+	fmt.Println("  ./recuerdo --commands=new-lesson,show-settings")
+	fmt.Println("  ./recuerdo --list-commands")
+}
+
+// loadLessonFile loads a lesson file using the GUI module
+func loadLessonFile(manager *core.Manager, lessonFile string) error {
+	// Check if file exists
+	if _, err := os.Stat(lessonFile); os.IsNotExist(err) {
+		return fmt.Errorf("lesson file does not exist: %s", lessonFile)
+	}
+
+	// Get the GUI module
+	guiModule, exists := manager.GetDefaultModule("ui")
+	if !exists {
+		return fmt.Errorf("no GUI module found")
+	}
+
+	// Try to load the file using the GUI module's LoadSelectedFile method
+	if guiMod, ok := guiModule.(interface{ LoadSelectedFile(string) error }); ok {
+		return guiMod.LoadSelectedFile(lessonFile)
+	}
+
+	return fmt.Errorf("GUI module does not support file loading")
+}
+
+// executeCommands executes a comma-separated list of commands
+func executeCommands(manager *core.Manager, commands string) {
+	if commands == "" {
+		return
+	}
+
+	// Simple command parsing - split by comma
+	cmdList := strings.Split(commands, ",")
+
+	// Execute each command
+	for _, cmd := range cmdList {
+		cmd = strings.TrimSpace(cmd)
+		if cmd == "" {
+			continue
+		}
+
+		fmt.Printf("Executing command: %s\n", cmd)
+		if err := executeCommand(manager, cmd); err != nil {
+			fmt.Printf("Error executing command '%s': %v\n", cmd, err)
+		} else {
+			fmt.Printf("Command '%s' executed successfully\n", cmd)
+		}
+
+		// Wait between commands to allow GUI updates
+		time.Sleep(500 * time.Millisecond)
+	}
+}
+
+// executeCommand executes a single command
+func executeCommand(manager *core.Manager, command string) error {
+	// Get the GUI module
+	guiModule, exists := manager.GetDefaultModule("ui")
+	if !exists {
+		return fmt.Errorf("no GUI module found")
+	}
+
+	switch command {
+	case "show-properties":
+		if guiMod, ok := guiModule.(interface{ ShowPropertiesDialog() }); ok {
+			guiMod.ShowPropertiesDialog()
+			return nil
+		}
+		return fmt.Errorf("GUI module does not support ShowPropertiesDialog")
+
+	case "show-settings":
+		if guiMod, ok := guiModule.(interface{ ShowSettingsDialog() }); ok {
+			guiMod.ShowSettingsDialog()
+			return nil
+		}
+		return fmt.Errorf("GUI module does not support ShowSettingsDialog")
+
+	case "show-about":
+		if guiMod, ok := guiModule.(interface{ ShowAboutDialog() }); ok {
+			guiMod.ShowAboutDialog()
+			return nil
+		}
+		return fmt.Errorf("GUI module does not support ShowAboutDialog")
+
+	case "new-lesson":
+		if guiMod, ok := guiModule.(interface{ ShowNewLessonDialog() }); ok {
+			guiMod.ShowNewLessonDialog()
+			return nil
+		}
+		return fmt.Errorf("GUI module does not support ShowNewLessonDialog")
+
+	case "open-file":
+		if guiMod, ok := guiModule.(interface{ ShowOpenDialog() }); ok {
+			guiMod.ShowOpenDialog()
+			return nil
+		}
+		return fmt.Errorf("GUI module does not support ShowOpenDialog")
+
+	case "exit":
+		if guiMod, ok := guiModule.(interface{ Exit() }); ok {
+			guiMod.Exit()
+			return nil
+		}
+		return fmt.Errorf("GUI module does not support Exit")
+
+	default:
+		return fmt.Errorf("unknown command: %s", command)
+	}
 }

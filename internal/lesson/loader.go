@@ -33,10 +33,16 @@ func (fl *FileLoader) LoadFile(filePath string) (*LessonData, error) {
 		return fl.loadCSV(filePath)
 	case ".txt":
 		return fl.loadTextFile(filePath)
-	case ".ot":
+	case ".ot", ".otwd":
 		return fl.loadOpenTeacherFile(filePath)
 	case ".json":
 		return fl.loadJSONFile(filePath)
+	case ".kvtml":
+		return fl.loadKVTMLFile(filePath)
+	case ".anki":
+		return fl.loadAnkiFile(filePath)
+	case ".xml":
+		return fl.loadXMLFile(filePath)
 	default:
 		// Try to auto-detect format by content
 		return fl.loadAutoDetect(filePath)
@@ -50,8 +56,18 @@ func (fl *FileLoader) GetFileType(filePath string) string {
 	switch ext {
 	case ".csv", ".tsv", ".txt", ".ot", ".json":
 		return "words"
-	case ".kgm":
+	case ".anki", ".anki2", ".apkg", ".backpack", ".wcu", ".voc", ".fq", ".fmd":
+		return "words"
+	case ".dkf", ".jml", ".jvlt", ".kvtml", ".stp", ".db", ".oh", ".ohw", ".oh4":
+		return "words"
+	case ".ovr", ".pau", ".vok2", ".wdl", ".vtl3", ".wrts", ".xml", ".otwd":
+		return "words"
+	case ".kgm", ".ottp":
 		return "topo"
+	case ".t2k":
+		return "words" // Can be both words and topo, defaulting to words
+	case ".otmd":
+		return "media"
 	default:
 		return "words" // Default to words for unknown formats
 	}
@@ -384,9 +400,183 @@ func (fl *FileLoader) parseWordString(input string) []string {
 	return words
 }
 
+// loadKVTMLFile loads KVTML (KDE Vocabulary Document) files
+func (fl *FileLoader) loadKVTMLFile(filePath string) (*LessonData, error) {
+	log.Printf("[ACTION] FileLoader.loadKVTMLFile() - parsing KVTML file")
+
+	file, err := os.Open(filePath)
+	if err != nil {
+		log.Printf("[ERROR] Failed to open KVTML file: %v", err)
+		return nil, err
+	}
+	defer file.Close()
+
+	// KVTML XML structure
+	type KVTMLTranslation struct {
+		ID   string `xml:"id,attr"`
+		Text string `xml:"text"`
+	}
+
+	type KVTMLEntry struct {
+		ID           string             `xml:"id,attr"`
+		Translations []KVTMLTranslation `xml:"translation"`
+	}
+
+	type KVTMLIdentifier struct {
+		ID   string `xml:"id,attr"`
+		Name string `xml:"name"`
+	}
+
+	type KVTMLInformation struct {
+		Title   string `xml:"title"`
+		Author  string `xml:"author"`
+		Comment string `xml:"comment"`
+	}
+
+	type KVTMLRoot struct {
+		XMLName     xml.Name          `xml:"kvtml"`
+		Version     string            `xml:"version,attr"`
+		Information KVTMLInformation  `xml:"information"`
+		Identifiers []KVTMLIdentifier `xml:"identifiers>identifier"`
+		Entries     []KVTMLEntry      `xml:"entries>entry"`
+	}
+
+	var root KVTMLRoot
+	decoder := xml.NewDecoder(file)
+	if err := decoder.Decode(&root); err != nil {
+		log.Printf("[ERROR] Failed to parse KVTML XML: %v", err)
+		return nil, err
+	}
+
+	lessonData := NewLessonData()
+	lessonData.List.Title = root.Information.Title
+	if lessonData.List.Title == "" {
+		lessonData.List.Title = filepath.Base(filePath)
+	}
+
+	// Set language names if available
+	if len(root.Identifiers) >= 2 {
+		lessonData.List.QuestionLanguage = root.Identifiers[0].Name
+		lessonData.List.AnswerLanguage = root.Identifiers[1].Name
+	}
+
+	// Process entries
+	for i, entry := range root.Entries {
+		var questions, answers []string
+
+		// Find question and answer translations
+		for _, translation := range entry.Translations {
+			if translation.ID == "0" && translation.Text != "" {
+				questions = fl.parseWordString(translation.Text)
+			} else if translation.ID == "1" && translation.Text != "" {
+				answers = fl.parseWordString(translation.Text)
+			}
+		}
+
+		if len(questions) > 0 && len(answers) > 0 {
+			item := WordItem{
+				ID:        i,
+				Questions: questions,
+				Answers:   answers,
+				Comment:   "",
+			}
+			lessonData.List.Items = append(lessonData.List.Items, item)
+		}
+	}
+
+	log.Printf("[SUCCESS] FileLoader.loadKVTMLFile() - loaded %d word pairs", len(lessonData.List.Items))
+	return lessonData, nil
+}
+
+// loadAnkiFile loads Anki database files
+func (fl *FileLoader) loadAnkiFile(filePath string) (*LessonData, error) {
+	log.Printf("[ACTION] FileLoader.loadAnkiFile() - parsing Anki file")
+
+	// Placeholder implementation - would need SQLite support for full functionality
+	lessonData := NewLessonData()
+	lessonData.List.Title = filepath.Base(filePath)
+
+	log.Printf("[WARNING] FileLoader.loadAnkiFile() - Anki format not fully implemented yet")
+	return lessonData, nil
+}
+
+// loadXMLFile loads XML files (including ABBYY format)
+func (fl *FileLoader) loadXMLFile(filePath string) (*LessonData, error) {
+	log.Printf("[ACTION] FileLoader.loadXMLFile() - parsing XML file")
+
+	file, err := os.Open(filePath)
+	if err != nil {
+		log.Printf("[ERROR] Failed to open XML file: %v", err)
+		return nil, err
+	}
+	defer file.Close()
+
+	// Basic XML structure for simple word lists
+	type XMLWord struct {
+		XMLName xml.Name `xml:"word"`
+		Known   string   `xml:"known"`
+		Foreign string   `xml:"foreign"`
+		Text    string   `xml:",chardata"`
+	}
+
+	type XMLRoot struct {
+		XMLName xml.Name  `xml:"root"`
+		Title   string    `xml:"title"`
+		Words   []XMLWord `xml:"word"`
+	}
+
+	// Try to parse as simple XML word list
+	var root XMLRoot
+	decoder := xml.NewDecoder(file)
+	if err := decoder.Decode(&root); err != nil {
+		// If XML parsing fails, try as text file
+		log.Printf("[WARNING] XML parsing failed, trying as text file: %v", err)
+		return fl.loadTextFile(filePath)
+	}
+
+	lessonData := NewLessonData()
+	lessonData.List.Title = root.Title
+	if lessonData.List.Title == "" {
+		lessonData.List.Title = filepath.Base(filePath)
+	}
+
+	for i, word := range root.Words {
+		var questions, answers []string
+
+		if word.Known != "" {
+			questions = fl.parseWordString(word.Known)
+		}
+		if word.Foreign != "" {
+			answers = fl.parseWordString(word.Foreign)
+		}
+		if word.Text != "" && len(questions) == 0 {
+			questions = fl.parseWordString(word.Text)
+		}
+
+		if len(questions) > 0 || len(answers) > 0 {
+			item := WordItem{
+				ID:        i,
+				Questions: questions,
+				Answers:   answers,
+				Comment:   "",
+			}
+			lessonData.List.Items = append(lessonData.List.Items, item)
+		}
+	}
+
+	log.Printf("[SUCCESS] FileLoader.loadXMLFile() - loaded %d word pairs", len(lessonData.List.Items))
+	return lessonData, nil
+}
+
 // GetSupportedExtensions returns a list of supported file extensions
 func (fl *FileLoader) GetSupportedExtensions() []string {
-	return []string{".csv", ".tsv", ".txt", ".ot", ".json"}
+	return []string{
+		".csv", ".tsv", ".txt", ".ot", ".json", ".kvtml", ".anki", ".anki2",
+		".apkg", ".backpack", ".wcu", ".voc", ".fq", ".fmd", ".dkf", ".jml",
+		".jvlt", ".stp", ".db", ".oh", ".ohw", ".oh4", ".ovr", ".pau",
+		".t2k", ".vok2", ".wdl", ".vtl3", ".wrts", ".xml", ".kgm", ".ottp",
+		".otmd", ".otwd",
+	}
 }
 
 // GetFormatName returns a human-readable name for a file extension
@@ -402,6 +592,60 @@ func (fl *FileLoader) GetFormatName(ext string) string {
 		return "OpenTeacher 2.x"
 	case ".json":
 		return "JSON Lesson File"
+	case ".kvtml":
+		return "KDE Vocabulary Document"
+	case ".anki":
+		return "Anki Database"
+	case ".anki2":
+		return "Anki 2.0 Database"
+	case ".apkg":
+		return "Anki Package"
+	case ".backpack":
+		return "Backpack File"
+	case ".wcu":
+		return "CueCard File"
+	case ".voc":
+		return "Vocabulary File"
+	case ".fq":
+		return "FlashQard File"
+	case ".fmd":
+		return "FM Dictionary"
+	case ".dkf":
+		return "Granule Deck"
+	case ".jml":
+		return "JMemorize Lesson"
+	case ".jvlt":
+		return "JVLT File"
+	case ".stp":
+		return "Ludem File"
+	case ".db":
+		return "Database File"
+	case ".oh", ".ohw", ".oh4":
+		return "Overhoor File"
+	case ".ovr":
+		return "Overhoringsprogramma Talen"
+	case ".pau":
+		return "Pauker File"
+	case ".t2k":
+		return "Teach2000 File"
+	case ".vok2":
+		return "Teachmaster File"
+	case ".wdl":
+		return "Oriente Voca File"
+	case ".vtl3":
+		return "VokabelTrainer File"
+	case ".wrts":
+		return "WRTS File"
+	case ".xml":
+		return "XML File"
+	case ".kgm":
+		return "KGeography Map"
+	case ".ottp":
+		return "OpenTeaching Topography"
+	case ".otmd":
+		return "OpenTeaching Media"
+	case ".otwd":
+		return "OpenTeaching Words"
 	default:
 		return "Unknown Format"
 	}

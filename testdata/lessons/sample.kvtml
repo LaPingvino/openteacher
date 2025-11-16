@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kvtml version="2.0">
+  <information>
+    <generator>Recuerdo Test</generator>
+    <title>Basic German Vocabulary</title>
+    <author>Test Author</author>
+    <comment>Sample KVTML file for testing</comment>
+  </information>
+  <identifiers>
+    <identifier id="0">
+      <name>English</name>
+    </identifier>
+    <identifier id="1">
+      <name>German</name>
+    </identifier>
+  </identifiers>
+  <entries>
+    <entry id="0">
+      <translation id="0">
+        <text>hello</text>
+      </translation>
+      <translation id="1">
+        <text>hallo</text>
+      </translation>
+    </entry>
+    <entry id="1">
+      <translation id="0">
+        <text>goodbye</text>
+      </translation>
+      <translation id="1">
+        <text>auf wiedersehen</text>
+      </translation>
+    </entry>
+    <entry id="2">
+      <translation id="0">
+        <text>thank you</text>
+      </translation>
+      <translation id="1">
+        <text>danke</text>
+      </translation>
+    </entry>
+    <entry id="3">
+      <translation id="0">
+        <text>yes</text>
+      </translation>
+      <translation id="1">
+        <text>ja</text>
+      </translation>
+    </entry>
+    <entry id="4">
+      <translation id="0">
+        <text>no</text>
+      </translation>
+      <translation id="1">
+        <text>nein</text>
+      </translation>
+    </entry>
+  </entries>
+</kvtml>

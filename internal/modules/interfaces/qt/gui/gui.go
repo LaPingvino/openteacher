@@ -31,6 +31,7 @@ type GuiModule struct {
 	app            *widgets.QApplication
 	menuBar        *widgets.QMenuBar
 	statusBar      *widgets.QStatusBar
+	tabWidget      *widgets.QTabWidget
 	lastLoadedFile string
 	lastLoadTime   int64
 	logger         *logging.Logger
@@ -124,6 +125,9 @@ func (mod *GuiModule) Disable(ctx context.Context) error {
 		mod.mainWindow = nil
 	}
 
+	// Clean up tab widget
+	mod.tabWidget = nil
+
 	// Don't quit the app - that's managed by qtApp module
 	mod.app = nil
 
@@ -132,6 +136,46 @@ func (mod *GuiModule) Disable(ctx context.Context) error {
 }
 
 // SetManager sets the module manager
+// Public methods for command-line interface
+
+// ShowNewLessonDialog is a public wrapper for showNewLessonDialog
+func (mod *GuiModule) ShowNewLessonDialog() {
+	mod.showNewLessonDialog()
+}
+
+// ShowPropertiesDialog is a public wrapper for showPropertiesDialog
+func (mod *GuiModule) ShowPropertiesDialog() {
+	mod.showPropertiesDialog()
+}
+
+// ShowSettingsDialog is a public wrapper for showSettingsDialog
+func (mod *GuiModule) ShowSettingsDialog() {
+	mod.showSettingsDialog()
+}
+
+// ShowAboutDialog is a public wrapper for showAboutDialog
+func (mod *GuiModule) ShowAboutDialog() {
+	mod.showAboutDialog()
+}
+
+// ShowOpenDialog is a public wrapper for showOpenDialog
+func (mod *GuiModule) ShowOpenDialog() {
+	mod.showOpenDialog()
+}
+
+// LoadSelectedFile is a public wrapper for loadSelectedFile
+func (mod *GuiModule) LoadSelectedFile(fileName string) error {
+	mod.loadSelectedFile(fileName)
+	return nil
+}
+
+// Exit closes the application
+func (mod *GuiModule) Exit() {
+	if mod.mainWindow != nil {
+		mod.mainWindow.Close()
+	}
+}
+
 func (mod *GuiModule) SetManager(manager *core.Manager) {
 	mod.manager = manager
 }
@@ -373,7 +417,7 @@ func (mod *GuiModule) showOpenDialogFrom(source string) {
 		}); ok {
 			mod.logger.Success("Calling OpenFile() on fileDialog module")
 			mod.logger.Debug("TRACKING: About to call OpenFile() - call stack marker A")
-			fileName := fileMod.OpenFile(nil, "Open Lesson File", "Lesson Files (*.ot *.csv *.tsv *.txt *.json *.xml);;OpenTeacher Files (*.ot);;Spreadsheet Files (*.csv *.tsv);;Text Files (*.txt);;JSON Files (*.json);;All Files (*.*)")
+			fileName := fileMod.OpenFile(nil, "Open Lesson File", "")
 			mod.logger.Debug("TRACKING: OpenFile() returned - call stack marker B")
 			if fileName != "" {
 				mod.logger.Success("File dialog returned: %s", fileName)
@@ -532,18 +576,16 @@ func (mod *GuiModule) displayLessonInTab(lesson *lesson.Lesson) {
 	}()
 
 	// Create tab widget if it doesn't exist
-	var tabWidget *widgets.QTabWidget
-	centralWidget := mod.mainWindow.CentralWidget()
-	if centralWidget == nil {
-		tabWidget = widgets.NewQTabWidget(mod.mainWindow)
-		mod.mainWindow.SetCentralWidget(tabWidget)
+	if mod.tabWidget == nil {
+		mod.tabWidget = widgets.NewQTabWidget(mod.mainWindow)
+		mod.mainWindow.SetCentralWidget(mod.tabWidget)
 		mod.logger.Success("Created central tab widget")
 	} else {
-		// For now, just create a new tab widget and replace
-		// TODO: Properly check if existing widget is already a tab widget
-		tabWidget = widgets.NewQTabWidget(mod.mainWindow)
-		mod.mainWindow.SetCentralWidget(tabWidget)
-		mod.logger.Success("Replaced central widget with tab widget")
+		// Tab widget already exists, just update the central widget if needed
+		if mod.mainWindow.CentralWidget() != mod.tabWidget.QWidget_PTR() {
+			mod.mainWindow.SetCentralWidget(mod.tabWidget)
+			mod.logger.Success("Replaced central widget with tab widget")
+		}
 	}
 
 	// Create lesson content widget
@@ -556,8 +598,8 @@ func (mod *GuiModule) displayLessonInTab(lesson *lesson.Lesson) {
 	}
 
 	// Add the tab
-	tabIndex := tabWidget.AddTab(lessonWidget, title)
-	tabWidget.SetCurrentIndex(tabIndex)
+	tabIndex := mod.tabWidget.AddTab(lessonWidget, title)
+	mod.tabWidget.SetCurrentIndex(tabIndex)
 
 	// Update status bar
 	statusMsg := fmt.Sprintf("Opened '%s' - %d words", title, lesson.Data.List.GetWordCount())
@@ -581,17 +623,46 @@ func (mod *GuiModule) createLessonWidget(lesson *lesson.Lesson) *widgets.QWidget
 }
 
 func (mod *GuiModule) showPropertiesDialog() {
-	mod.logger.Stub("showPropertiesDialog", "legacy/modules/org/openteacher/interfaces/qt/dialogs/", "properties dialog not implemented")
+	mod.logger.Action("showPropertiesDialog() - attempting to show lesson properties dialog")
 
-	// Try to find properties dialog module
-	propertiesDialogModules := mod.manager.GetModulesByType("propertiesDialog")
-	if len(propertiesDialogModules) > 0 {
-		mod.logger.Debug("Found %d propertiesDialog modules", len(propertiesDialogModules))
-	} else {
-		mod.logger.DeadEnd("propertiesDialog system", "No propertiesDialog modules found", "legacy/modules/org/openteacher/interfaces/qt/dialogs/")
+	// Get the current lesson data
+	currentLessonData := mod.getCurrentLessonData()
+	if currentLessonData == nil {
+		mod.logger.Error("No current lesson to show properties for")
+		mod.statusBar.ShowMessage("No lesson open to show properties", 3000)
+		return
 	}
 
-	mod.statusBar.ShowMessage("Properties dialog requested", 3000)
+	// Try to find lesson dialog module which handles properties
+	lessonDialogModules := mod.manager.GetModulesByType("lessonDialogs")
+	if len(lessonDialogModules) == 0 {
+		mod.logger.DeadEnd("lessonDialogs system", "No lessonDialogs modules found", "internal/modules/interfaces/qt/lessonDialogs/")
+		mod.statusBar.ShowMessage("Properties dialog not available", 3000)
+		return
+	}
+
+	mod.logger.Success("Found %d lessonDialogs modules, using first one", len(lessonDialogModules))
+
+	// Cast to the interface we need
+	if dialogMod, ok := lessonDialogModules[0].(interface {
+		ShowPropertiesDialog(*widgets.QWidget, map[string]interface{}) map[string]interface{}
+	}); ok {
+		mod.logger.Success("Calling ShowPropertiesDialog() on lessonDialogs module")
+
+		// Show the properties dialog and get the result
+		updatedData := dialogMod.ShowPropertiesDialog(mod.mainWindow.QWidget_PTR(), currentLessonData)
+
+		if updatedData != nil {
+			mod.logger.Success("Properties dialog returned updated data")
+			mod.updateCurrentLessonData(updatedData)
+			mod.statusBar.ShowMessage("Lesson properties updated", 3000)
+		} else {
+			mod.logger.Info("Properties dialog was cancelled or no changes made")
+		}
+	} else {
+		mod.logger.Error("lessonDialogs module doesn't have ShowPropertiesDialog method")
+		mod.statusBar.ShowMessage("Properties dialog not available", 3000)
+	}
 }
 
 func (mod *GuiModule) showSettingsDialog() {
@@ -645,6 +716,54 @@ func (mod *GuiModule) showAboutDialog() {
 		mod.logger.DeadEnd("aboutDialog system", "No aboutDialog modules found", "legacy/modules/org/openteacher/interfaces/qt/dialogs/about/")
 		mod.statusBar.ShowMessage("Error: No about dialog modules available", 3000)
 	}
+}
+
+// getCurrentLessonData gets the current lesson data for the properties dialog
+func (mod *GuiModule) getCurrentLessonData() map[string]interface{} {
+	if mod.tabWidget == nil {
+		return nil
+	}
+
+	currentIndex := mod.tabWidget.CurrentIndex()
+	if currentIndex < 0 {
+		return nil
+	}
+
+	tabText := mod.tabWidget.TabText(currentIndex)
+
+	// Extract lesson information from the current tab
+	// This is a simplified implementation - in a full version you'd get the actual lesson data
+	lessonData := make(map[string]interface{})
+	lessonData["name"] = tabText
+	lessonData["description"] = ""
+	lessonData["author"] = ""
+	lessonData["version"] = "1.0"
+	lessonData["itemCount"] = 0 // TODO: Get actual count from lesson
+
+	mod.logger.Debug("Retrieved current lesson data for: %s", tabText)
+
+	return lessonData
+}
+
+// updateCurrentLessonData updates the current lesson with new property data
+func (mod *GuiModule) updateCurrentLessonData(data map[string]interface{}) {
+	if mod.tabWidget == nil || data == nil {
+		return
+	}
+
+	currentIndex := mod.tabWidget.CurrentIndex()
+	if currentIndex < 0 {
+		return
+	}
+
+	// Update tab title if name changed
+	if name, ok := data["name"].(string); ok && name != "" {
+		mod.tabWidget.SetTabText(currentIndex, name)
+		mod.logger.Info("Updated lesson name to: %s", name)
+	}
+
+	// TODO: Update actual lesson data in the lesson widget
+	mod.logger.Info("Lesson properties updated successfully")
 }
 
 // InitGuiModule creates and returns a new GuiModule instance

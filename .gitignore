@@ -68,6 +68,7 @@ __pycache__/
 
 # Project-specific exclusions
 /recuerdo
+cmd/recuerdo/recuerdo
 /qtbox
 test-*
 *_test_output
