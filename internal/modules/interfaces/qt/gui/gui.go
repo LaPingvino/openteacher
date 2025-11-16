@@ -319,8 +319,18 @@ func (mod *GuiModule) showNewLessonDialog() {
 			lessonData := lessonMod.ShowNewLessonDialog()
 			if lessonData != nil {
 				log.Printf("[SUCCESS] New lesson dialog returned data: %v", lessonData)
+
+				// Create actual lesson from returned data
+				newLesson, err := mod.CreateLessonFromDialogData(lessonData)
+				if err != nil {
+					mod.logger.Error("Failed to create lesson from dialog data: %v", err)
+					mod.statusBar.ShowMessage("Error creating lesson: "+err.Error(), 5000)
+					return
+				}
+
+				// Display lesson in new tab
+				mod.displayLessonInTab(newLesson)
 				mod.statusBar.ShowMessage("New lesson created successfully", 3000)
-				// TODO: Create actual lesson from returned data
 			} else {
 				log.Printf("[INFO] New lesson dialog was cancelled")
 				mod.statusBar.ShowMessage("New lesson creation cancelled", 3000)
@@ -458,6 +468,53 @@ func (mod *GuiModule) loadSelectedFile(fileName string) {
 
 	// Create lesson tab and display in main window
 	mod.displayLessonInTab(newLesson)
+}
+
+// CreateLessonFromDialogData creates a new lesson from dialog data
+func (mod *GuiModule) CreateLessonFromDialogData(data map[string]interface{}) (*lesson.Lesson, error) {
+	mod.logger.Action("CreateLessonFromDialogData() - creating lesson from dialog data")
+
+	// Extract lesson information
+	name, _ := data["name"].(string)
+	description, _ := data["description"].(string)
+	lessonType, _ := data["type"].(string)
+	questionLang, _ := data["questionLanguage"].(string)
+	answerLang, _ := data["answerLanguage"].(string)
+
+	// Set defaults if missing
+	if name == "" {
+		name = "New Lesson"
+	}
+	if lessonType == "" {
+		lessonType = "words"
+	}
+	if questionLang == "" {
+		questionLang = "English"
+	}
+	if answerLang == "" {
+		answerLang = "English"
+	}
+
+	// Create new lesson
+	newLesson := lesson.NewLesson(lessonType)
+	newLesson.Data.List.Title = name
+	newLesson.Data.List.QuestionLanguage = questionLang
+	newLesson.Data.List.AnswerLanguage = answerLang
+
+	// Add description as metadata if provided
+	if description != "" {
+		if newLesson.Data.Resources == nil {
+			newLesson.Data.Resources = make(map[string]interface{})
+		}
+		newLesson.Data.Resources["description"] = description
+	}
+
+	// Set path for new lesson (unsaved initially)
+	newLesson.Path = fmt.Sprintf("*%s", name) // * indicates unsaved
+	newLesson.Data.Changed = true
+
+	mod.logger.Success("Created new lesson: %s (%s -> %s)", name, questionLang, answerLang)
+	return newLesson, nil
 }
 
 // displayLessonInTab creates a new tab for the lesson
