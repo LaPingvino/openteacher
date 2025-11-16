@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 	qtcore "github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/widgets"
 )
@@ -144,9 +144,9 @@ func (mod *FileDialogModule) SetDefaultFilter(filter string) {
 // GetSupportedFormats returns supported file formats
 func (mod *FileDialogModule) GetSupportedFormats() map[string]string {
 	return map[string]string{
-		"OpenTeacher Files": "*.ot",
-		"Text Files":        "*.txt",
-		"All Files":         "*.*",
+		"Recuerdo/OpenTeacher Files": "*.ot",
+		"Text Files":                 "*.txt",
+		"All Files":                  "*.*",
 	}
 }
 

@@ -8,7 +8,7 @@ package topo
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 	"github.com/therecipe/qt/widgets"
 )
 

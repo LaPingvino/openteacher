@@ -6,7 +6,7 @@ package flashqard
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // FlashQardLoaderModule is a Go port of the Python FlashQardLoaderModule class

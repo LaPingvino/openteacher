@@ -8,7 +8,7 @@ package businesscard
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 	"image"
 	"image/color"
 	"image/draw"

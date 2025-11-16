@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 	qtcore "github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/widgets"
 )
@@ -48,7 +48,7 @@ func (mod *AboutDialogModule) Show() {
 // createDialog creates and configures the about dialog
 func (mod *AboutDialogModule) createDialog(parent *widgets.QWidget) {
 	mod.dialog = widgets.NewQDialog(parent, 0)
-	mod.dialog.SetWindowTitle("About OpenTeacher")
+	mod.dialog.SetWindowTitle("About Recuerdo")
 	mod.dialog.SetFixedSize2(400, 300)
 	mod.dialog.SetWindowModality(qtcore.Qt__ApplicationModal)
 
@@ -56,8 +56,8 @@ func (mod *AboutDialogModule) createDialog(parent *widgets.QWidget) {
 	layout := widgets.NewQVBoxLayout()
 	mod.dialog.SetLayout(layout)
 
-	// Add OpenTeacher logo/title
-	titleLabel := widgets.NewQLabel2("OpenTeacher", nil, 0)
+	// Add Recuerdo logo/title
+	titleLabel := widgets.NewQLabel2("Recuerdo", nil, 0)
 	titleFont := titleLabel.Font()
 	titleFont.SetPointSize(18)
 	titleFont.SetBold(true)
@@ -71,13 +71,13 @@ func (mod *AboutDialogModule) createDialog(parent *widgets.QWidget) {
 	layout.AddWidget(versionLabel, 0, 0)
 
 	// Add description
-	descLabel := widgets.NewQLabel2("OpenTeacher helps you learn whatever you want to learn!\nIt's designed to help you learn a foreign language,\nbut can also be used for other subjects.", nil, 0)
+	descLabel := widgets.NewQLabel2("Recuerdo helps you learn whatever you want to learn!\nIt's designed to help you learn a foreign language,\nbut can also be used for other subjects.", nil, 0)
 	descLabel.SetAlignment(qtcore.Qt__AlignHCenter)
 	descLabel.SetWordWrap(true)
 	layout.AddWidget(descLabel, 0, 0)
 
 	// Add copyright
-	copyrightLabel := widgets.NewQLabel2("Copyright © 2010-2023 OpenTeacher Team", nil, 0)
+	copyrightLabel := widgets.NewQLabel2("Copyright © 2025 Joop Kiefte\nBased on OpenTeacher © 2010-2023 OpenTeacher Team", nil, 0)
 	copyrightLabel.SetAlignment(qtcore.Qt__AlignHCenter)
 	layout.AddWidget(copyrightLabel, 0, 0)
 
@@ -105,7 +105,7 @@ func (mod *AboutDialogModule) createDialog(parent *widgets.QWidget) {
 // retranslate updates dialog text for localization
 func (mod *AboutDialogModule) retranslate() {
 	if mod.dialog != nil {
-		mod.dialog.SetWindowTitle("About OpenTeacher")
+		mod.dialog.SetWindowTitle("About Recuerdo")
 	}
 }
 

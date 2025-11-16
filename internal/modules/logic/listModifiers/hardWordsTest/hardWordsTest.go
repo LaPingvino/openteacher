@@ -5,7 +5,7 @@
 package hardWordsTest
 import (
 	"context"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // HardWordsTestCase is a Go port of the Python HardWordsTestCase class

@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 func TestNewBusinessCardGeneratorModule(t *testing.T) {

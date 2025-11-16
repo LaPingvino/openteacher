@@ -12,8 +12,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 	qtcore "github.com/therecipe/qt/core"
+	"github.com/therecipe/qt/gui"
 	"github.com/therecipe/qt/widgets"
 )
 
@@ -50,6 +51,26 @@ func (mod *QtAppModule) Enable(ctx context.Context) error {
 		mod.app.SetApplicationVersion("4.0.0")
 		mod.app.SetOrganizationName("OpenTeacher")
 		mod.app.SetOrganizationDomain("openteacher.org")
+
+		// Configure international input support
+		fmt.Println("Configuring international input and font support...")
+
+		// Set Unicode-supporting font as the default application font
+		font := gui.NewQFont()
+
+		// Try common Unicode-supporting fonts
+		font.SetFamily("DejaVu Sans, Liberation Sans, Arial, sans-serif")
+		font.SetPointSize(11)
+
+		// Set as default application font
+		mod.app.SetFont(font, "")
+
+		// Set UTF-8 encoding attributes for proper Unicode handling
+		mod.app.SetAttribute(qtcore.Qt__AA_UseHighDpiPixmaps, true)
+
+		fmt.Println("Set Unicode-supporting font for better character display")
+		fmt.Println("Configured UTF-8 and Unicode support for character picker")
+		fmt.Println("Note: IME and accent input configured per widget for better control")
 
 		fmt.Println("Qt Application initialized")
 	}

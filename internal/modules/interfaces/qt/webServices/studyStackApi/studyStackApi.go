@@ -11,7 +11,7 @@ package studystackapi
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // StudystackapiModule is a Go port of the Python StudystackapiModule class

@@ -7,7 +7,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // LessonTrackerModule is a Go port of the Python LessonTrackerModule class

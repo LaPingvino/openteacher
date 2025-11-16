@@ -5,7 +5,7 @@
 package testsViewer
 import (
 	"context"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // TestsViewerModule is a Go port of the Python TestsViewerModule class

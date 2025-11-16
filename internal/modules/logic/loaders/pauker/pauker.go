@@ -8,7 +8,7 @@ package pauker
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // PaukerLoaderModule is a Go port of the Python PaukerLoaderModule class

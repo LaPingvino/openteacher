@@ -11,7 +11,7 @@ package uploader
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // UploaderModule is a Go port of the Python UploaderModule class

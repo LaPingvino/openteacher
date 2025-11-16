@@ -6,7 +6,7 @@ package sum
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // JSSumModule is a Go port of the Python JSSumModule class

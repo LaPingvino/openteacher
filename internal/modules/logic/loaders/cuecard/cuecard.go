@@ -6,7 +6,7 @@ package cuecard
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // CueCardLoaderModule is a Go port of the Python CueCardLoaderModule class

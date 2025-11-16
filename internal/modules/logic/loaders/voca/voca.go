@@ -6,7 +6,7 @@ package voca
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // VocaLoaderModule is a Go port of the Python VocaLoaderModule class

@@ -9,7 +9,7 @@ package datatypeicons
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // DataTypeIconsModule is a Go port of the Python DataTypeIconsModule class

@@ -6,7 +6,7 @@ package studentatschool
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // ProfileDescriptionModule is a Go port of the Python ProfileDescriptionModule class

@@ -87,7 +87,7 @@ var globalLogger *Logger
 
 // init initializes the global logger
 func init() {
-	globalLogger = NewLogger("OpenTeacher")
+	globalLogger = NewLogger("Recuerdo")
 }
 
 // NewLogger creates a new logger instance for a specific module

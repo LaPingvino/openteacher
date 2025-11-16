@@ -11,7 +11,7 @@ package txt
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // TxtModule is a Go port of the Python TxtModule class

@@ -6,7 +6,7 @@ package words
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // WordsReverserModule is a Go port of the Python WordsReverserModule class

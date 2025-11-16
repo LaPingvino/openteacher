@@ -6,13 +6,13 @@ import (
 	"log"
 	"time"
 
-	"github.com/LaPingvino/openteacher/internal/core"
-	"github.com/LaPingvino/openteacher/internal/modules/logic/event"
-	"github.com/LaPingvino/openteacher/internal/modules/logic/settings"
+	"github.com/LaPingvino/recuerdo/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/modules/logic/event"
+	"github.com/LaPingvino/recuerdo/internal/modules/logic/settings"
 )
 
 func main() {
-	fmt.Println("OpenTeacher Core Test - Starting...")
+	fmt.Println("Recuerdo Core Test - Starting...")
 
 	// Create a new manager
 	manager := core.NewManager()
@@ -69,7 +69,7 @@ func main() {
 	fmt.Printf("  Total registered: %d\n", manager.RegisteredCount())
 	fmt.Printf("  Total enabled: %d\n", manager.EnabledCount())
 
-	fmt.Println("\n🎉 SUCCESS: OpenTeacher core system is working!")
+	fmt.Println("\n🎉 SUCCESS: Recuerdo core system is working!")
 	fmt.Println("   - Module registration: ✓")
 	fmt.Println("   - Module enabling: ✓")
 	fmt.Println("   - Module discovery: ✓")

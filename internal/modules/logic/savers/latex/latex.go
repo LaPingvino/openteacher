@@ -6,7 +6,7 @@ package latex
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // LaTeXSaverModule is a Go port of the Python LaTeXSaverModule class

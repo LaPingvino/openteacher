@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // ExecuteModule controls the main application lifecycle and execution flow.

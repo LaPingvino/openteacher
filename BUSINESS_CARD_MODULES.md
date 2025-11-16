@@ -4,7 +4,7 @@ This document describes the business card generation modules that have been port
 
 ## Overview
 
-The business card generation functionality allows OpenTeacher to create promotional "business card" images that can be used to promote the software. This feature was originally implemented in Python using PyQt5 for graphics rendering and has been ported to Go using the standard `image` package.
+The business card generation functionality allows Recuerdo to create promotional "business card" images that can be used to promote the software. This feature was originally implemented in Python using PyQt5 for graphics rendering in OpenTeacher and has been ported to Go using the standard `image` package.
 
 ## Ported Modules
 
@@ -17,7 +17,7 @@ The business card generation functionality allows OpenTeacher to create promotio
 - Generates 640x320 pixel business card images
 - Combines background image with promotional text
 - Saves output as PNG files
-- Includes OpenTeacher branding and contact information
+- Includes Recuerdo branding and contact information
 
 **Dependencies**:
 - `backgroundImageGenerator` - for background graphics
@@ -39,7 +39,7 @@ The business card generation functionality allows OpenTeacher to create promotio
 **Key Features**:
 - Generates branded background images (1000x5000 pixels)
 - Creates gradient backgrounds with rounded rectangles
-- Renders OpenTeacher logo and application name
+- Renders Recuerdo logo and application name
 - Supports HSV color customization based on theme
 
 **Dependencies**:
@@ -91,14 +91,14 @@ The Go port uses the standard library:
 The original Python code renders HTML-styled text with:
 ```html
 <div>
-    <strong style='font-size: 19pt;'>OpenTeacher</strong><br />
-    Free open source exam training software<br /><br />
+    <strong style='font-size: 19pt;'>Recuerdo</strong><br />
+    Language learning software based on OpenTeacher<br /><br />
     
-    Get it here:<br />
-    http://openteacher.org/<br /><br />
+    Copyright © 2025 Joop Kiefte<br />
+    Based on OpenTeacher by OpenTeacher Team<br /><br />
     
-    Or contact us at:<br />
-    info@openteacher.org
+    Original OpenTeacher:<br />
+    http://openteacher.org/
 </div>
 ```
 
@@ -126,7 +126,7 @@ The modules follow the established Go pattern:
 Once fully implemented, the business card generator can be used via command line:
 
 ```bash
-./openteacher generate-business-card output.png
+./recuerdo generate-business-card output.png
 ```
 
 This will:
@@ -162,7 +162,7 @@ To test the current implementation:
 1. Build the project:
 ```bash
 cd openteacher
-go build ./cmd/openteacher
+go build ./cmd/recuerdo
 ```
 
 2. The modules will be registered and can be enabled/disabled through the module manager, but full functionality requires completing the TODO items above.
@@ -174,4 +174,4 @@ go build ./cmd/openteacher
 3. **Interface Compatibility**: Maintaining similar public interfaces to ease potential future integration
 4. **Progressive Enhancement**: Basic functionality works with placeholders, advanced features can be added incrementally
 
-This port represents the foundational structure needed for business card generation in OpenTeacher Go, with the major graphics rendering work remaining to be implemented.
+This port represents the foundational structure needed for business card generation in Recuerdo Go, with the major graphics rendering work remaining to be implemented.

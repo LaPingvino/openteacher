@@ -1,10 +1,10 @@
-# OpenTeacher Go
+# Recuerdo
 
-A modern rewrite of OpenTeacher in Go, maintaining the original modular architecture while adding type safety and improved performance.
+A modern language learning application in Go, based on OpenTeacher. Recuerdo maintains the original modular architecture while adding type safety and improved performance.
 
 ## Overview
 
-OpenTeacher is an educational application for creating and managing language learning exercises. This Go version preserves the plugin-based architecture of the original Python application while modernizing the codebase.
+Recuerdo is an educational application for creating and managing language learning exercises. This Go version preserves the plugin-based architecture of the original Python OpenTeacher application while modernizing the codebase.
 
 ## Architecture
 
@@ -137,7 +137,7 @@ func (m *MyModule) Enable(ctx context.Context) error {
 - **Concurrent safety**: All tests verify thread safety
 - **Error conditions**: Comprehensive error case coverage
 
-## Migration from Python
+## Based on OpenTeacher
 
 This project maintains architectural compatibility with the original Python OpenTeacher:
 
@@ -156,7 +156,10 @@ This project maintains architectural compatibility with the original Python Open
 
 ## License
 
-OpenTeacher is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Recuerdo is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Copyright © 2025 Joop Kiefte
+Based on OpenTeacher © 2010-2023 OpenTeacher Team
 
 ## Documentation
 

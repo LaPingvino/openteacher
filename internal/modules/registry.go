@@ -1,9 +1,9 @@
 package modules
 
 import (
-	"github.com/LaPingvino/openteacher/internal/core"
-	"github.com/LaPingvino/openteacher/internal/modules/data/profiledescriptions"
-	"github.com/LaPingvino/openteacher/internal/modules/profilerunners/backgroundimage"
+	"github.com/LaPingvino/recuerdo/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/modules/data/profiledescriptions"
+	"github.com/LaPingvino/recuerdo/internal/modules/profilerunners/backgroundimage"
 )
 
 // ModuleRegistry holds all available module initializers

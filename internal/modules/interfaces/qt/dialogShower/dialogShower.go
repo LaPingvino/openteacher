@@ -10,7 +10,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 	qtcore "github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/widgets"
 )
@@ -200,7 +200,7 @@ func (mod *DialogShowerModule) ShowAbout(title string, text string) {
 
 // ShowAboutQt displays the standard Qt about dialog
 func (mod *DialogShowerModule) ShowAboutQt() {
-	widgets.QMessageBox_AboutQt(mod.mainWindow, "OpenTeacher")
+	widgets.QMessageBox_AboutQt(mod.mainWindow, "Recuerdo")
 }
 
 // CloseAllDialogs closes all open message boxes

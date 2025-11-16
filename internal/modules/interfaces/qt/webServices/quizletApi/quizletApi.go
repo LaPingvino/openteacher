@@ -11,7 +11,7 @@ package quizletapi
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // QuizletapiModule is a Go port of the Python QuizletapiModule class

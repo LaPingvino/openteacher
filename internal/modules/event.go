@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // Event represents a concrete implementation of the Event interface

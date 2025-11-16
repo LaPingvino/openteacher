@@ -330,5 +330,5 @@ InMind, Hangman, RepeatAnswer modules exist but are stubs
 ---
 
 **Contributors:** AI Assistant with Human Oversight  
-**Repository:** https://github.com/LaPingvino/openteacher  
+**Repository:** https://github.com/LaPingvino/recuerdo  
 **License:** GPL v3+

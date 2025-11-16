@@ -10,7 +10,7 @@ package cyrillic
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // CyrillicModule is a Go port of the Python CyrillicModule class

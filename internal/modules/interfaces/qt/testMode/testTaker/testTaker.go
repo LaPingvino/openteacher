@@ -5,7 +5,7 @@
 package testTaker
 import (
 	"context"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // TestModeTestTakerModule is a Go port of the Python TestModeTestTakerModule class

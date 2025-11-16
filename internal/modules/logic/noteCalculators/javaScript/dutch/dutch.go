@@ -6,7 +6,7 @@ package dutch
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // DutchNoteCalculatorModule is a Go port of the Python DutchNoteCalculatorModule class

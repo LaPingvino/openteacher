@@ -6,7 +6,7 @@ package overhoor
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // OverhoorLoaderModule is a Go port of the Python OverhoorLoaderModule class

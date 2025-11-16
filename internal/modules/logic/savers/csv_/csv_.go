@@ -6,7 +6,7 @@ package csv
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // CsvSaverModule is a Go port of the Python CsvSaverModule class

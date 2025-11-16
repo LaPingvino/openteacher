@@ -11,7 +11,7 @@ package cli
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // CliModule is a Go port of the Python CliModule class

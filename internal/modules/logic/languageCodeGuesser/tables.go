@@ -7,7 +7,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // LanguagecodeguessertablesModule is a Go port of the Python LanguagecodeguessertablesModule class

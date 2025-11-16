@@ -6,7 +6,7 @@ package ects
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // ECTSNoteCalculatorModule is a Go port of the Python ECTSNoteCalculatorModule class

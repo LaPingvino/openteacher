@@ -11,7 +11,7 @@ package rosettaupdater
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // RosettaupdaterModule is a Go port of the Python RosettaupdaterModule class

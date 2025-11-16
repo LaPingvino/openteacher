@@ -8,7 +8,7 @@ package profiledescriptions
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // ProfileDescription represents a profile description with its metadata

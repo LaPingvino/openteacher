@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 	qtcore "github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/widgets"
 )
@@ -52,7 +52,7 @@ func (mod *SettingsDialogModule) Show() {
 // createDialog creates and configures the settings dialog
 func (mod *SettingsDialogModule) createDialog(parent *widgets.QWidget) {
 	mod.dialog = widgets.NewQDialog(parent, 0)
-	mod.dialog.SetWindowTitle("OpenTeacher Settings")
+	mod.dialog.SetWindowTitle("Recuerdo Settings")
 	mod.dialog.SetFixedSize2(500, 400)
 	mod.dialog.SetWindowModality(qtcore.Qt__ApplicationModal)
 
@@ -227,7 +227,7 @@ func (mod *SettingsDialogModule) saveSettings() {
 // retranslate updates dialog text for localization
 func (mod *SettingsDialogModule) retranslate() {
 	if mod.dialog != nil {
-		mod.dialog.SetWindowTitle("OpenTeacher Settings")
+		mod.dialog.SetWindowTitle("Recuerdo Settings")
 	}
 }
 

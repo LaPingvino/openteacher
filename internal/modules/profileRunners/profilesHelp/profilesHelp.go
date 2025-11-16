@@ -11,7 +11,7 @@ package profileshelp
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // ProfileshelpModule is a Go port of the Python ProfileshelpModule class

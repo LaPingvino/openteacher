@@ -11,7 +11,7 @@ package translator
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // TranslatorModule is a Go port of the Python TranslatorModule class

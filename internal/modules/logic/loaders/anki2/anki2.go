@@ -12,7 +12,7 @@ package anki2
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // Anki2LoaderModule is a Go port of the Python Anki2LoaderModule class

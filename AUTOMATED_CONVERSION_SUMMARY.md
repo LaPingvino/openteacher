@@ -154,7 +154,7 @@ package <name>
 import (
     "context"
     "fmt"
-    "github.com/LaPingvino/openteacher/internal/core"
+    "github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // <ModuleName> is a Go port of the Python <OriginalClass> class

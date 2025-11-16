@@ -11,7 +11,7 @@ package pyinstallerinterface
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // PyinstallerInterfaceModule is a Go port of the Python PyinstallerInterfaceModule class

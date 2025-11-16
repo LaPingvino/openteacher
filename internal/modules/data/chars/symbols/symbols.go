@@ -10,7 +10,7 @@ package symbols
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // SymbolsModule is a Go port of the Python SymbolsModule class

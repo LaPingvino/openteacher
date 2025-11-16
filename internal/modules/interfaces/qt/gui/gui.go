@@ -13,11 +13,11 @@ import (
 	"fmt"
 	"log"
 	"path/filepath"
-	"strings"
 
-	"github.com/LaPingvino/openteacher/internal/core"
-	"github.com/LaPingvino/openteacher/internal/lesson"
-	"github.com/LaPingvino/openteacher/internal/logging"
+	"github.com/LaPingvino/recuerdo/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/lesson"
+	"github.com/LaPingvino/recuerdo/internal/logging"
+	"github.com/LaPingvino/recuerdo/internal/modules/interfaces/qt/lessons/words"
 	qtcore "github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/gui"
 	"github.com/therecipe/qt/widgets"
@@ -511,61 +511,16 @@ func (mod *GuiModule) displayLessonInTab(lesson *lesson.Lesson) {
 
 // createLessonWidget creates a widget to display lesson content
 func (mod *GuiModule) createLessonWidget(lesson *lesson.Lesson) *widgets.QWidget {
-	// Create main widget
-	widget := widgets.NewQWidget(mod.mainWindow, 0)
-	layout := widgets.NewQVBoxLayout()
-	widget.SetLayout(layout)
+	// Create the new lesson widget with Enter/Teach/Results tabs
+	lessonWidget := words.NewWordsLessonWidget(lesson, mod.mainWindow)
 
-	// Lesson info section
-	infoGroup := widgets.NewQGroupBox2("Lesson Information", widget)
-	infoLayout := widgets.NewQFormLayout(infoGroup)
+	// TODO: Connect lesson change signal to update window title and status
+	// This will be implemented when proper Qt signal system is in place
+	mod.logger.LegacyReminder("Qt signal connection for lesson changes", "legacy/modules/org/openteacher/interfaces/qt/gui/gui.py", "proper signal handling needed")
+	mod.logger.Info("Created lesson widget for: %s", lesson.Path)
 
-	titleLabel := widgets.NewQLabel2(lesson.Data.List.Title, widget, 0)
-	infoLayout.AddRow3("Title:", titleLabel)
-
-	if lesson.Data.List.QuestionLanguage != "" {
-		qLangLabel := widgets.NewQLabel2(lesson.Data.List.QuestionLanguage, widget, 0)
-		infoLayout.AddRow3("Question Language:", qLangLabel)
-	}
-
-	if lesson.Data.List.AnswerLanguage != "" {
-		aLangLabel := widgets.NewQLabel2(lesson.Data.List.AnswerLanguage, widget, 0)
-		infoLayout.AddRow3("Answer Language:", aLangLabel)
-	}
-
-	wordCountLabel := widgets.NewQLabel2(fmt.Sprintf("%d", len(lesson.Data.List.Items)), widget, 0)
-	infoLayout.AddRow3("Word Pairs:", wordCountLabel)
-
-	layout.AddWidget(infoGroup, 0, 0)
-
-	// Word list section
-	wordsGroup := widgets.NewQGroupBox2("Word Pairs", widget)
-	wordsLayout := widgets.NewQVBoxLayout()
-	wordsGroup.SetLayout(wordsLayout)
-
-	// Create table widget for words
-	table := widgets.NewQTableWidget2(len(lesson.Data.List.Items), 3, widget)
-	table.SetHorizontalHeaderLabels([]string{"Questions", "Answers", "Comment"})
-
-	// Populate table with word data
-	for i, item := range lesson.Data.List.Items {
-		questionsText := strings.Join(item.Questions, "; ")
-		answersText := strings.Join(item.Answers, "; ")
-
-		questionItem := widgets.NewQTableWidgetItem2(questionsText, 0)
-		answerItem := widgets.NewQTableWidgetItem2(answersText, 0)
-		commentItem := widgets.NewQTableWidgetItem2(item.Comment, 0)
-
-		table.SetItem(i, 0, questionItem)
-		table.SetItem(i, 1, answerItem)
-		table.SetItem(i, 2, commentItem)
-	}
-
-	table.ResizeColumnsToContents()
-	wordsLayout.AddWidget(table, 0, 0)
-	layout.AddWidget(wordsGroup, 0, 0)
-
-	return widget
+	mod.logger.Success("Created lesson widget with Enter/Teach/Results tabs")
+	return lessonWidget.QWidget
 }
 
 func (mod *GuiModule) showPropertiesDialog() {

@@ -6,7 +6,7 @@ package backpack
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // BackpackLoaderModule is a Go port of the Python BackpackLoaderModule class

@@ -11,7 +11,7 @@ package uicontroller
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // UicontrollerModule is a Go port of the Python UicontrollerModule class

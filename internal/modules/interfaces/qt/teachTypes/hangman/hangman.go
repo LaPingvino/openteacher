@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 	_ "github.com/therecipe/qt/widgets"
 )
 

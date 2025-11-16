@@ -6,7 +6,7 @@ package vtraintxt
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // VTrainTxtLoaderModule is a Go port of the Python VTrainTxtLoaderModule class

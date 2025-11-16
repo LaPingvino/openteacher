@@ -7,7 +7,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // Action represents a menu action that can be triggered

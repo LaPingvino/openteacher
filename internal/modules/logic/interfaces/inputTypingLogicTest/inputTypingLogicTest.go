@@ -5,7 +5,7 @@
 package inputTypingLogicTest
 import (
 	"context"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // CheckCall is a Go port of the Python CheckCall class

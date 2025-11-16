@@ -6,7 +6,7 @@ package sylk
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // SylkSaverModule is a Go port of the Python SylkSaverModule class

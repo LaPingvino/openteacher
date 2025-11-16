@@ -6,7 +6,7 @@ package libreofficeformats
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // LibreofficeFormatsSaverModule is a Go port of the Python LibreofficeFormatsSaverModule class

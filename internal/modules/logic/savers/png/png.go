@@ -6,7 +6,7 @@ package png
 import (
 	"context"
 	"fmt"
-	"github.com/LaPingvino/openteacher/internal/core"
+	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
 // PngSaverModule is a Go port of the Python PngSaverModule class
