@@ -1,11 +1,12 @@
-// Package main provides functionality ported from Python module
+// Package typingtutor provides functionality ported from Python module
 //
 // This is an automated port - implementation may be incomplete.
-package main
+package typingtutor
 
 import (
 	"context"
 	"fmt"
+
 	"github.com/LaPingvino/recuerdo/internal/core"
 )
 
